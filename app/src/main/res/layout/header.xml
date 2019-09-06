@@ -4,6 +4,4 @@
     android:layout_height="250dp"
     android:id="@+id/img_header"
     android:scaleType="centerCrop"
-    android:background="@drawable/gambar"
-    >
-</ImageView>
+    android:background="@drawable/gambar"/>

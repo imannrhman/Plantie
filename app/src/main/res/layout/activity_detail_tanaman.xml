@@ -73,6 +73,33 @@
             </LinearLayout>
         </LinearLayout>
 
+    </androidx.cardview.widget.CardView>
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginHorizontal="16dp"
+        android:layout_marginTop="26dp"
+        android:elevation="6dp"
+        app:cardBackgroundColor="@color/colorPrimary"
+        app:cardCornerRadius="10dp">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Cara Menanam"
+                android:textColor="#fff"
+                android:textSize="18sp"
+                android:fontFamily="@font/montserratsemibold"
+                android:layout_centerInParent="true"/>
+
+        </RelativeLayout>
 
     </androidx.cardview.widget.CardView>
 

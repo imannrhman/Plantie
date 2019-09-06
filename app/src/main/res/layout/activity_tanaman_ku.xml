@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ImageView
+        android:id="@+id/daunBottom"
+        android:layout_width="248dp"
+        android:layout_height="207dp"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:background="@drawable/vector_daun_bottom"/>
+
+    <ImageView
+        android:id="@+id/middleImage"
+        android:layout_width="219dp"
+        android:layout_height="166dp"
+        android:layout_centerInParent="true"
+        android:background="@drawable/undraw_social_strategy_1wuq" />
+
+    <TextView
+        android:id="@+id/middleTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/middleImage"
+        android:layout_centerHorizontal="true"
+        android:text="Anda belum memiliki tanaman apapun :("
+        android:textSize="16sp"
+        android:fontFamily="@font/montserrat"
+        android:layout_marginTop="20dp"/>
+
+</RelativeLayout>

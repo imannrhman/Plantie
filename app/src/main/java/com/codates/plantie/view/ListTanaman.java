@@ -73,5 +73,13 @@ public class ListTanaman extends AppCompatActivity {
         rvTanaman.setAdapter(tanamanAdapter);
         rvTanaman.setLayoutManager(new LinearLayoutManager(this));
 
+        tanamanAdapter.setOnItemClickCallback(new TanamanAdapter.OnItemClickCallback() {
+            @Override
+            public void onItemClicked(Tanaman tanaman) {
+                Intent intent = new Intent(getApplicationContext(),DetailTanaman.class);
+                startActivity(intent);
+            }
+        });
+
     }
 }

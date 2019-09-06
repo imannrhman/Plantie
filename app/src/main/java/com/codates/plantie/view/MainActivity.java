@@ -91,6 +91,15 @@ public class MainActivity extends AppCompatActivity {
         TanamanAdapter tanamanAdapter = new TanamanAdapter(list);
         rvTanaman.setAdapter(tanamanAdapter);
         rvTanaman.setLayoutManager(new LinearLayoutManager(this,LinearLayoutManager.HORIZONTAL,false));
+
+
+        tanamanAdapter.setOnItemClickCallback(new TanamanAdapter.OnItemClickCallback() {
+            @Override
+            public void onItemClicked(Tanaman tanaman) {
+                Intent intent = new Intent(getApplicationContext(),DetailTanaman.class);
+                startActivity(intent);
+            }
+        });
     }
 
     @Override

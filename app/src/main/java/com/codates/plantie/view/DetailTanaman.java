@@ -5,7 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 
 import com.codates.plantie.R;
-
+import com.manuelpeinado.fadingactionbar.FadingActionBarHelper;
 public class DetailTanaman extends AppCompatActivity {
 
     @Override

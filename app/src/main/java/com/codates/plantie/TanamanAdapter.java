@@ -12,6 +12,15 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 
 public class TanamanAdapter extends RecyclerView.Adapter<TanamanAdapter.ViewHolder> {
+    private OnItemClickCallback onItemClickCallback;
+
+    public void setOnItemClickCallback(OnItemClickCallback onItemClickCallback) {
+        this.onItemClickCallback = onItemClickCallback;
+    }
+
+    public interface OnItemClickCallback{
+        void onItemClicked(Tanaman tanaman);
+    }
     private ArrayList<Tanaman> listTanaman;
 
     public TanamanAdapter(ArrayList<Tanaman> list){this.listTanaman = list;}
@@ -23,12 +32,17 @@ public class TanamanAdapter extends RecyclerView.Adapter<TanamanAdapter.ViewHold
     }
 
     @Override
-    public void onBindViewHolder(@NonNull TanamanAdapter.ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull final TanamanAdapter.ViewHolder holder, int position) {
         Tanaman tanaman = listTanaman.get(position);
         holder.tvName.setText(tanaman.getNamaTanaman());
         holder.tvHari.setText(tanaman.getHari());
         holder.imgGambar.setImageResource(tanaman.getGambar());
-
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onItemClickCallback.onItemClicked(listTanaman.get(holder.getAdapterPosition()));
+            }
+        });
     }
 
     @Override

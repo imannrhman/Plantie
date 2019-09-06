@@ -6,56 +6,28 @@
     android:layout_height="match_parent"
     android:background="#fff"
     tools:context=".view.ListTanaman">
-    <View
-        android:id="@+id/vector"
-        android:layout_width="248dp"
-        android:layout_height="207dp"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentStart="true"
-        android:background="@drawable/vector_daun_up"
-        />
-    <FrameLayout
-        android:id="@+id/logo"
-        android:layout_marginTop="150dp"
-        android:layout_centerHorizontal="true"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
-        <ImageView
-            android:id="@+id/img_logo"
-            android:layout_width="184dp"
-            android:layout_height="184dp"
-            android:src="@drawable/logo"
-            android:layout_gravity="center"
-            />
-        <TextView
-            android:layout_gravity="bottom|center"
-            android:layout_below="@id/img_logo"
-            android:id="@+id/tv_plantie"
-            android:layout_centerInParent="true"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Plantie"
-            android:textColor="@color/colorAccent"
-            android:fontFamily="@font/segoepr"
-            android:textSize="20pt" />
-    </FrameLayout>
-    <ImageButton
-        android:layout_marginTop="26dp"
-        android:id="@+id/btn_google"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/logo"
-        android:layout_centerHorizontal="true"
-        android:background="@drawable/btn_google" />
-    <ImageButton
-        android:layout_marginTop="26dp"
-        android:id="@+id/btn_facebook"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/btn_google"
-        android:layout_centerHorizontal="true"
-        android:background="@drawable/btn_facebook" />
 
+    <com.github.florent37.awesomebar.AwesomeBar
+        android:id="@+id/bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:bar_actionsColor="@color/colorPrimary"
+        android:background="@android:color/white"
+        app:bar_primaryColor="@android:color/white"
+        app:bar_primaryDarkColor="@color/colorPrimary"
+        android:elevation="4dp" />
+
+    <ImageView
+        android:visibility="invisible"
+        android:id="@+id/searchbar"
+        android:layout_marginTop="20dp"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@+id/bar"
+        android:elevation="4dp"
+        android:layout_marginHorizontal="26dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:src="@drawable/searchbar"/>
 
     <View
         android:id="@+id/vector2"
@@ -64,5 +36,14 @@
         android:layout_alignParentBottom="true"
         android:layout_alignParentEnd="true"
         android:background="@drawable/vector_daun_bottom"
+        />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:layout_marginTop="20dp"
+        android:layout_below="@+id/searchbar"
+        android:id="@+id/recycler_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:listitem="@layout/item_tanaman"
         />
 </RelativeLayout>

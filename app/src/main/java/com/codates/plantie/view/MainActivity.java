@@ -1,9 +1,13 @@
 package com.codates.plantie.view;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.os.Bundle;
 
 import com.codates.plantie.R;
+import com.codates.plantie.Tanaman;
+import com.codates.plantie.TanamanAdapter;
+import com.codates.plantie.TanamanData;
 import com.github.florent37.awesomebar.ActionItem;
 import com.github.florent37.awesomebar.AwesomeBar;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -24,12 +28,19 @@ import androidx.drawerlayout.widget.DrawerLayout;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.Menu;
+import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.Toast;
 
-public class MainActivity extends AppCompatActivity {
+import java.util.ArrayList;
 
+public class MainActivity extends AppCompatActivity {
+    private RecyclerView rvTanaman;
+    private ArrayList<Tanaman> list = new ArrayList<>();
     private AppBarConfiguration mAppBarConfiguration;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,16 +48,17 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         AwesomeBar bar = findViewById(R.id.bar);
+
         bar.getSettings().setAnimateMenu(false);
 
         bar.addAction(R.drawable.ic_add_black_24dp,"Add");
 
 
-
         bar.setActionItemClickListener(new AwesomeBar.ActionItemClickListener() {
             @Override
             public void onActionItemClicked(int position, ActionItem actionItem) {
-                Toast.makeText(getBaseContext(), actionItem.getText()+" clicked", Toast.LENGTH_LONG).show();
+                Intent intent = new Intent(MainActivity.this, ListTanaman.class);
+                startActivity(intent);
             }
         });
         bar.setOverflowActionItemClickListener(new AwesomeBar.OverflowActionItemClickListener() {
@@ -68,7 +80,17 @@ public class MainActivity extends AppCompatActivity {
         });
 
         bar.displayHomeAsUpEnabled(false);
+        rvTanaman = findViewById(R.id.recycler_view);
+        rvTanaman.setHasFixedSize(true);
+        list.addAll(TanamanData.getListData());
+        showRecyclerList();
 
+    }
+
+    private void showRecyclerList() {
+        TanamanAdapter tanamanAdapter = new TanamanAdapter(list);
+        rvTanaman.setAdapter(tanamanAdapter);
+        rvTanaman.setLayoutManager(new LinearLayoutManager(this,LinearLayoutManager.HORIZONTAL,false));
     }
 
     @Override

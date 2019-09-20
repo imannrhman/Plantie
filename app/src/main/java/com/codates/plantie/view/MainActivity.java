@@ -22,6 +22,7 @@ import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 
@@ -123,6 +124,13 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
             @Override
             public void onItemClicked(Tanaman tanaman) {
                 Intent intent = new Intent(getApplicationContext(),DetailTanaman.class);
+               String value = String.valueOf(tanaman.getGambar());
+                Log.d("sds",value);
+                intent.putExtra(DetailTanaman.GAMBAR,"sdsd");
+                intent.putExtra(DetailTanaman.HARI, tanaman.getHari());
+                intent.putExtra(DetailTanaman.NAMA_TANAMAN,tanaman.getNamaTanaman());
+
+
                 startActivity(intent);
             }
         });
@@ -158,8 +166,8 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
             GoogleSignInAccount account = result.getSignInAccount();
             tvName.setText(account.getDisplayName());
             tvEmail.setText(account.getEmail());
-            if(imgProfile != null){
-                imgProfile.setImageURI(account.getPhotoUrl());
+            if(account.getPhotoUrl() != null){
+               Glide.with(this).load(account.getPhotoUrl()).into(imgProfile);
                  }else{
                 imgProfile.setImageResource(R.mipmap.ic_logo);
             }

@@ -11,6 +11,7 @@
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
         <activity android:name=".view.DetailTanaman"></activity>
+        <activity android:name=".view.DetailTugas"></activity>
         <activity
             android:name=".view.ListTanaman"
             android:theme="@style/MainActivity" />

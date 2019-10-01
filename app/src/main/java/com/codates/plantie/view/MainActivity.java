@@ -7,7 +7,7 @@ import android.os.Bundle;
 import com.bumptech.glide.Glide;
 import com.codates.plantie.R;
 import com.codates.plantie.Tanaman;
-import com.codates.plantie.TanamanAdapter;
+import com.codates.plantie.adapter.TanamanAdapter;
 import com.codates.plantie.TanamanData;
 import com.github.florent37.awesomebar.ActionItem;
 import com.github.florent37.awesomebar.AwesomeBar;
@@ -19,32 +19,23 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.OptionalPendingResult;
 import com.google.android.gms.common.api.ResultCallback;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.snackbar.Snackbar;
 
-import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.ActionBarDrawerToggle;
-import androidx.navigation.NavController;
-import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
-import androidx.navigation.ui.NavigationUI;
 
 import com.google.android.material.navigation.NavigationView;
 
 import androidx.drawerlayout.widget.DrawerLayout;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.Menu;
 import android.widget.ImageView;
-import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -124,13 +115,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
             @Override
             public void onItemClicked(Tanaman tanaman) {
                 Intent intent = new Intent(getApplicationContext(),DetailTanaman.class);
-               String value = String.valueOf(tanaman.getGambar());
-                Log.d("sds",value);
-                intent.putExtra(DetailTanaman.GAMBAR,"sdsd");
-                intent.putExtra(DetailTanaman.HARI, tanaman.getHari());
-                intent.putExtra(DetailTanaman.NAMA_TANAMAN,tanaman.getNamaTanaman());
-
-
+                intent.putExtra(DetailTanaman.EXTRA_TANAMAN,tanaman);
                 startActivity(intent);
             }
         });

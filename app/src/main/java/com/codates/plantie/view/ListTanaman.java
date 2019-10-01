@@ -8,11 +8,10 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.Toast;
 
 import com.codates.plantie.R;
 import com.codates.plantie.Tanaman;
-import com.codates.plantie.TanamanAdapter;
+import com.codates.plantie.adapter.TanamanAdapter;
 import com.codates.plantie.TanamanData;
 import com.github.florent37.awesomebar.ActionItem;
 import com.github.florent37.awesomebar.AwesomeBar;
@@ -77,6 +76,7 @@ public class ListTanaman extends AppCompatActivity {
             @Override
             public void onItemClicked(Tanaman tanaman) {
                 Intent intent = new Intent(getApplicationContext(),DetailTanaman.class);
+                intent.putExtra(DetailTanaman.EXTRA_TANAMAN,tanaman);
                 startActivity(intent);
             }
         });

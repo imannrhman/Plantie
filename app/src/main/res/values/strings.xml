@@ -1,4 +1,7 @@
 <resources>
+    <style name="web_client_id">
+        120039102516-evo8r5e0htlib4di6n7lfm251i4k33fp.apps.googleusercontent.com
+    </style>
     <string name="app_name">Plantie</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
@@ -6,6 +9,9 @@
     <string name="nav_header_subtitle">android.studio@android.com</string>
     <string name="nav_header_desc">Navigation header</string>
     <string name="action_settings">Settings</string>
+
     <string name="menu_home">Home</string>
-    <style name="web_client_id">120039102516-evo8r5e0htlib4di6n7lfm251i4k33fp.apps.googleusercontent.com</style>
+
+    <string name="drawer_open">Open navigation drawer</string>
+    <string name="drawer_close">Close navigation drawer</string>
 </resources>

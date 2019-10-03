@@ -1,6 +1,7 @@
 package com.codates.plantie.view;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 
@@ -22,6 +23,7 @@ import com.google.android.gms.common.api.ResultCallback;
 
 import android.util.Log;
 import android.view.Gravity;
+import android.view.MenuItem;
 import android.view.View;
 
 import androidx.annotation.NonNull;
@@ -47,14 +49,17 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
     private ArrayList<Tanaman> list = new ArrayList<>();
     private AppBarConfiguration mAppBarConfiguration;
    TextView tvName,tvEmail;
+   Intent home, myPlant, contactUs;
    ImageView imgProfile;
    private GoogleApiClient googleApiClient;
    private GoogleSignInOptions gso;
+   Context context;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        context = this;
 
         AwesomeBar bar = findViewById(R.id.bar);
 
@@ -76,7 +81,6 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
             }
         });
 
-
         final DrawerLayout drawer = findViewById(R.id.drawer_layout);
 
         bar.setOnMenuClickedListener(new View.OnClickListener() {
@@ -93,6 +97,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
         list.addAll(TanamanData.getListData());
         showRecyclerList();
         NavigationView navigationView = findViewById(R.id.nav_view);
+        setupNavDrawer(navigationView);
         tvName = navigationView.getHeaderView(0).findViewById(R.id.tv_name);
         tvEmail = navigationView.getHeaderView(0).findViewById(R.id.tv_email);
         imgProfile = navigationView.getHeaderView(0).findViewById(R.id.img_profile);
@@ -104,6 +109,26 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
                 .addApi(Auth.GOOGLE_SIGN_IN_API,gso)
                 .build();
 
+    }
+
+    private void setupNavDrawer(NavigationView navigationView){
+        navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
+
+                switch (menuItem.getItemId()){
+                    case R.id.nav_home:
+                        home = new Intent(context, MainActivity.class);
+                        startActivity(home);
+                        break;
+                    case R.id.nav_my_plant:
+                        myPlant = new Intent(MainActivity.this, tanamanKu.class);
+                        startActivity(myPlant);
+                        break;
+                }
+                return true;
+            }
+        });
     }
 
     private void showRecyclerList() {

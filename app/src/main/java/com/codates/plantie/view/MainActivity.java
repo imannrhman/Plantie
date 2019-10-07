@@ -113,22 +113,43 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
 
     private void setupNavDrawer(NavigationView navigationView){
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
+            @SuppressLint("WrongConstant")
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
+
+                final DrawerLayout drawer = findViewById(R.id.drawer_layout);
 
                 switch (menuItem.getItemId()){
                     case R.id.nav_home:
                         home = new Intent(context, MainActivity.class);
                         startActivity(home);
+                        onBackPressed();
                         break;
                     case R.id.nav_my_plant:
                         myPlant = new Intent(MainActivity.this, tanamanKu.class);
                         startActivity(myPlant);
+                        onBackPressed();
                         break;
                 }
                 return true;
             }
         });
+    }
+
+    @SuppressLint("WrongConstant")
+    @Override
+    public void onBackPressed() {
+        final DrawerLayout drawer = findViewById(R.id.drawer_layout);
+        final NavigationView navigationView = findViewById(R.id.nav_view);
+
+        if (drawer.isDrawerOpen(Gravity.START)){
+            drawer.closeDrawer(Gravity.START);
+//            if (navigationView.isClickable()){
+//                navigationView.;
+//            }
+        }else {
+            super.onBackPressed();
+        }
     }
 
     private void showRecyclerList() {

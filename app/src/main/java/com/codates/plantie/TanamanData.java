@@ -8,23 +8,23 @@ import java.util.ArrayList;
 public class TanamanData {
     public static String[][] data = new String[][]{
             {"Tanaman Cabe Rawit",
-                    "30d",
+                    "30hari",
                     String.valueOf(R.drawable.gambar),
             },
             {"Tanaman Bawang Daun",
-                    "20d",
+                    "20hari",
                     String.valueOf(R.drawable.bawang_daun),
             },
             {"Tanaman Tomat",
-                    "10d",
+                    "10hari",
                     String.valueOf(R.drawable.buah_tomat),
             },
             {"Tanaman Jahe",
-                    "40d",
+                    "40hari",
                     String.valueOf(R.drawable.jahe),
             },
             {"Tanaman Sledri",
-                    "20d",
+                    "20hari",
                     String.valueOf(R.drawable.daun_seledri)
             }
 

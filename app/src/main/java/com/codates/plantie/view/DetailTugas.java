@@ -14,6 +14,7 @@ public class DetailTugas extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail_tugas);
+        getSupportActionBar().hide();
         int position = getIntent().getIntExtra(EXTRA_POSISITION,0);
 
 

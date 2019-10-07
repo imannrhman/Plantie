@@ -51,7 +51,7 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_horizontal"
                         android:fontFamily="@font/montserratsemibold"
-                        android:text="30d"
+                        android:text="30hari"
                         android:textColor="@android:color/white"
                         android:textSize="36sp" />
                 </LinearLayout>

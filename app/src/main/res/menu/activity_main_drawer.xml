@@ -8,7 +8,7 @@
             android:id="@+id/nav_home"
             android:iconTint="@color/colorPrimary"
             android:icon="@drawable/ic_home_black_24dp"
-            android:title="@string/menu_home" />
+            android:title="Beranda" />
         <item
             android:id="@+id/nav_my_plant"
             android:icon="@drawable/logo"
@@ -19,7 +19,7 @@
             android:id="@+id/nav_contact_us"
             android:icon="@drawable/ic_mail_black_24dp"
             android:iconTint="@color/colorPrimary"
-            android:title="Contact Us"
+            android:title="Hubungi Kami"
             />
     </group>
 </menu>

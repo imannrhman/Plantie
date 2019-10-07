@@ -65,7 +65,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
 
         bar.getSettings().setAnimateMenu(false);
 
-        bar.addAction(R.drawable.ic_add_black_24dp,"Add");
+        bar.addAction(R.drawable.ic_add_black_24dp,"Tambah");
 
         bar.setActionItemClickListener(new AwesomeBar.ActionItemClickListener() {
             @Override

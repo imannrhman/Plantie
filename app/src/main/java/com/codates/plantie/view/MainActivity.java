@@ -3,6 +3,7 @@ package com.codates.plantie.view;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 
 import com.bumptech.glide.Glide;
@@ -38,6 +39,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.Menu;
+import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -117,8 +119,6 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
 
-                final DrawerLayout drawer = findViewById(R.id.drawer_layout);
-
                 switch (menuItem.getItemId()){
                     case R.id.nav_home:
                         home = new Intent(context, MainActivity.class);
@@ -130,6 +130,23 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
                         startActivity(myPlant);
                         onBackPressed();
                         break;
+                    case R.id.nav_contact_us:
+                        Intent intent = new Intent(Intent.ACTION_SENDTO, Uri.fromParts(
+                                "mailto", "codatescompany@gmail.com", null
+                        ));
+//                        intent.setType("text/plain");
+//                        startActivity(Intent.createChooser(intent, "Kritik & Saran"));
+                        intent.putExtra(Intent.EXTRA_EMAIL, new String[] {"codatescompany@gmail.com"});
+                        intent.putExtra(Intent.EXTRA_CC, new String[] {tvEmail.getText().toString()});
+                        intent.putExtra(Intent.EXTRA_SUBJECT, "Kritik & Saran");
+                        intent.putExtra(Intent.EXTRA_TEXT, "");
+
+                        try {
+                            startActivity(Intent.createChooser(intent, "Ingin Mengirim Email ?"));
+                        } catch (android.content.ActivityNotFoundException ex) {
+                            ex.printStackTrace();
+                        }
+                        break;
                 }
                 return true;
             }
@@ -140,13 +157,10 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
     @Override
     public void onBackPressed() {
         final DrawerLayout drawer = findViewById(R.id.drawer_layout);
-        final NavigationView navigationView = findViewById(R.id.nav_view);
+        drawer.setDescendantFocusability(ViewGroup.FOCUS_BLOCK_DESCENDANTS);
 
         if (drawer.isDrawerOpen(Gravity.START)){
-            drawer.closeDrawer(Gravity.START);
-//            if (navigationView.isClickable()){
-//                navigationView.;
-//            }
+            drawer.closeDrawers();
         }else {
             super.onBackPressed();
         }

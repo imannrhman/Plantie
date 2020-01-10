@@ -51,7 +51,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
     private ArrayList<Tanaman> list = new ArrayList<>();
     private AppBarConfiguration mAppBarConfiguration;
    TextView tvName,tvEmail;
-   Intent home, myPlant, contactUs;
+   Intent home, myPlant, setting;
    ImageView imgProfile;
    private GoogleApiClient googleApiClient;
    private GoogleSignInOptions gso;
@@ -128,6 +128,11 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
                     case R.id.nav_my_plant:
                         myPlant = new Intent(MainActivity.this, tanamanKu.class);
                         startActivity(myPlant);
+                        onBackPressed();
+                        break;
+                    case R.id.nav_setting:
+                        setting = new Intent(MainActivity.this, DetailTugas.class);
+                        startActivity(setting);
                         onBackPressed();
                         break;
                     case R.id.nav_contact_us:

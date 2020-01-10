@@ -2,7 +2,10 @@ package com.codates.plantie.view;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
@@ -16,6 +19,7 @@ public class DetailTanaman extends AppCompatActivity {
     public static final String EXTRA_TANAMAN = "extra_tanaman";
     ImageView gambar;
     RecyclerView rvMinggu;
+    RelativeLayout rlCaraMenanam;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -23,9 +27,17 @@ public class DetailTanaman extends AppCompatActivity {
         setContentView(R.layout.activity_detail_tanaman);
         gambar = findViewById(R.id.img_header);
         rvMinggu = findViewById(R.id.recycler_view_minggu);
+        rlCaraMenanam = findViewById(R.id.btnCaraMenanam);
         Tanaman tanaman = getIntent().getParcelableExtra(EXTRA_TANAMAN);
         gambar.setImageResource(tanaman.getGambar());
         showRecyclerList();
+
+        rlCaraMenanam.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(getApplicationContext(),"Sudah di Click",Toast.LENGTH_SHORT).show();
+            }
+        });
 
     }
 

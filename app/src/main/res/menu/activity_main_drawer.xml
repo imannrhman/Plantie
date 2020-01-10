@@ -16,6 +16,12 @@
             android:title="Tanaman Ku"
             />
         <item
+            android:id="@+id/nav_setting"
+            android:icon="@drawable/ic_settings_black_24dp"
+            android:iconTint="@color/colorPrimary"
+            android:title="Pengaturan"
+            />
+        <item
             android:id="@+id/nav_contact_us"
             android:icon="@drawable/ic_mail_black_24dp"
             android:iconTint="@color/colorPrimary"

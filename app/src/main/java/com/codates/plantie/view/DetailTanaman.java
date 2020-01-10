@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.codates.plantie.R;
 import com.codates.plantie.Tanaman;
 import com.codates.plantie.adapter.MingguAdapter;
+import com.github.florent37.awesomebar.AwesomeBar;
 
 public class DetailTanaman extends AppCompatActivity {
     public static final String EXTRA_TANAMAN = "extra_tanaman";
@@ -36,6 +37,19 @@ public class DetailTanaman extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Toast.makeText(getApplicationContext(),"Sudah di Click",Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        getSupportActionBar().hide();
+        AwesomeBar bar = findViewById(R.id.bar);
+        int position = getIntent().getIntExtra(EXTRA_TANAMAN,0);
+        bar.getSettings().setAnimateMenu(false);
+        bar.displayHomeAsUpEnabled(true);
+
+        bar.setOnMenuClickedListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressed();
             }
         });
 

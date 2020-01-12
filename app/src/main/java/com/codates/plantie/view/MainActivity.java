@@ -95,7 +95,6 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
         bar.displayHomeAsUpEnabled(false);
         rvTanaman = findViewById(R.id.recycler_view);
         rvTanaman.setHasFixedSize(true);
-        list.addAll(TanamanData.getListData());
         showRecyclerList();
         NavigationView navigationView = findViewById(R.id.nav_view);
         setupNavDrawer(navigationView);

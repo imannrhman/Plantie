@@ -1,13 +1,18 @@
 package com.codates.plantie.view;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
+import android.content.res.ColorStateList;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import com.codates.plantie.R;
 import com.codates.plantie.Tanaman;
@@ -15,13 +20,24 @@ import com.codates.plantie.adapter.TanamanAdapter;
 import com.codates.plantie.TanamanData;
 import com.github.florent37.awesomebar.ActionItem;
 import com.github.florent37.awesomebar.AwesomeBar;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.android.material.snackbar.Snackbar;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
+import java.util.List;
+
+import id.arieridwan.lib.PageLoader;
 
 public class ListTanaman extends AppCompatActivity {
     private RecyclerView rvTanaman;
     boolean muncul =true;
     private ArrayList<Tanaman> list = new ArrayList<>();
+    FirebaseFirestore db = FirebaseFirestore.getInstance();
+
 
     @Override
     public boolean onSupportNavigateUp() {
@@ -34,7 +50,35 @@ public class ListTanaman extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list_tanaman);
         AwesomeBar bar = findViewById(R.id.bar);
-       final ImageView search = findViewById(R.id.searchbar);
+        final PageLoader pageLoader = findViewById(R.id.progress_bar);
+        setPageLoader(pageLoader);
+        db.collection("tanaman").get().addOnCompleteListener(
+                new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            pageLoader.stopProgress();
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                Log.d("MyTag", document.getId() + " => " + document.getData());
+                                Tanaman tanaman = document.toObject(Tanaman.class);
+                                list.add(tanaman);
+                            }
+                            try{
+                                showRecyclerList(list);
+                            }catch (Exception e){
+                                Toast.makeText(getApplicationContext(),e.getMessage(),Toast.LENGTH_SHORT).show();
+                            }
+
+                          } else {
+                            Log.d("Main", "Error getting documents: ", task.getException());
+                        }
+                    }
+                }
+        );
+
+
+        final ImageView search = findViewById(R.id.searchbar);
+
 
         bar.getSettings().setAnimateMenu(false);
         bar.displayHomeAsUpEnabled(true);
@@ -62,16 +106,26 @@ public class ListTanaman extends AppCompatActivity {
         });
 
         rvTanaman = findViewById(R.id.recycler_view);
-        rvTanaman.setHasFixedSize(true);
-        list.addAll(TanamanData.getListData());
-        showRecyclerList();
+        System.out.println("list kosong" + list.isEmpty());
+
     }
 
-    private void showRecyclerList() {
-        TanamanAdapter tanamanAdapter = new TanamanAdapter(list);
+    private void setPageLoader(PageLoader pageLoader) {
+        pageLoader.setImageLoading(R.drawable.logo);
+        pageLoader.setLoadingAnimationMode("flip");
+        pageLoader.setTextLoading("Tunggu");
+        pageLoader.setTextSize(0);
+        pageLoader.setLoadingImageWidth(250);
+        pageLoader.setLoadingImageHeight(250);
+        pageLoader.setTextColor(ColorStateList.valueOf(0));
+        pageLoader.startProgress();
+    }
+
+    private void showRecyclerList(ArrayList<Tanaman> tanaman) {
+        TanamanAdapter tanamanAdapter = new TanamanAdapter(tanaman);
         rvTanaman.setAdapter(tanamanAdapter);
         rvTanaman.setLayoutManager(new LinearLayoutManager(this));
-
+        rvTanaman.setHasFixedSize(true);
         tanamanAdapter.setOnItemClickCallback(new TanamanAdapter.OnItemClickCallback() {
             @Override
             public void onItemClicked(Tanaman tanaman) {

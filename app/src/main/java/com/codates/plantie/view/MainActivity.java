@@ -22,7 +22,6 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.OptionalPendingResult;
 import com.google.android.gms.common.api.ResultCallback;
 
-import android.util.Log;
 import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
@@ -131,7 +130,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
                         onBackPressed();
                         break;
                     case R.id.nav_setting:
-                        setting = new Intent(MainActivity.this, DetailTugas.class);
+                        setting = new Intent(MainActivity.this, Setting.class);
                         startActivity(setting);
                         onBackPressed();
                         break;

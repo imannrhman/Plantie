@@ -3,6 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.codates.plantie">
 
+    <uses-permission android:name="android.permission.INTERNET" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_logo"
@@ -10,25 +12,31 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".view.tanamanKu"
-            android:resizeableActivity="false">
-        </activity>
-        <activity android:name=".view.DetailTanaman"
-            android:resizeableActivity="false"/>
-        <activity android:name=".view.DetailTugas"
-            android:resizeableActivity="false"/>
+        <activity
+            android:name=".view.Laporan"
+            android:label="@string/title_activity_laporan"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
+        <activity
+            android:name=".view.tanamanKu"
+            android:resizeableActivity="false"></activity>
+        <activity
+            android:name=".view.DetailTanaman"
+            android:resizeableActivity="false" />
+        <activity
+            android:name=".view.Setting"
+            android:resizeableActivity="false" />
         <activity
             android:name=".view.ListTanaman"
-            android:theme="@style/MainActivity"
-            android:resizeableActivity="false"/>
+            android:resizeableActivity="false"
+            android:theme="@style/MainActivity" />
         <activity
             android:name=".view.LoginActivity"
-            android:theme="@style/AppTheme.NoActionBar"
-            android:resizeableActivity="false"/>
+            android:resizeableActivity="false"
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".view.SplashScreen"
-            android:theme="@style/SplashScreen"
-            android:resizeableActivity="false">
+            android:resizeableActivity="false"
+            android:theme="@style/SplashScreen">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -37,14 +45,12 @@
         </activity>
         <activity
             android:name=".view.MainActivity"
-            android:theme="@style/MainActivity"
-            android:resizeableActivity="false"/>
+            android:resizeableActivity="false"
+            android:theme="@style/MainActivity" />
 
         <meta-data
             android:name="preloaded_fonts"
             android:resource="@array/preloaded_fonts" />
     </application>
-
-    <uses-permission android:name="android.permission.INTERNET" />
 
 </manifest>

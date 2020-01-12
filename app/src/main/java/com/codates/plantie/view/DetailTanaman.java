@@ -62,8 +62,8 @@ public class DetailTanaman extends AppCompatActivity {
         mingguAdapter.setOnItemClickCallback(new MingguAdapter.OnItemClickCallback() {
             @Override
             public void onItemClicked(int posisition) {
-                    Intent intent = new Intent(getApplicationContext(),DetailTugas.class);
-                    intent.putExtra(DetailTugas.EXTRA_POSISITION,posisition);
+                    Intent intent = new Intent(getApplicationContext(), Laporan.class);
+                    intent.putExtra(Laporan.EXTRA_POSITION,posisition);
                     startActivity(intent);
             }
         });

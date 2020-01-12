@@ -1,7 +1,8 @@
 <resources>
+
     <style name="web_client_id">
-        120039102516-evo8r5e0htlib4di6n7lfm251i4k33fp.apps.googleusercontent.com
-    </style>
+        120039102516-evo8r5e0htlib4di6n7lfm251i4k33fp.apps.googleusercontent.com</style>
+
     <string name="app_name">Plantie</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
@@ -14,4 +15,7 @@
 
     <string name="drawer_open">Open navigation drawer</string>
     <string name="drawer_close">Close navigation drawer</string>
+    <string name="title_activity_laporan">Laporan</string>
+    <string name="tab_text_1">Tab 1</string>
+    <string name="tab_text_2">Tab 2</string>
 </resources>

@@ -5,8 +5,8 @@ import android.os.Parcelable;
 
 public class Tanaman implements Parcelable {
     String namaTanaman;
-    String hari;
-    int gambar;
+    String minggu;
+    String gambar;
 
     public String getNamaTanaman() {
         return namaTanaman;
@@ -16,19 +16,19 @@ public class Tanaman implements Parcelable {
         this.namaTanaman = namaTanaman;
     }
 
-    public String getHari() {
-        return hari;
+    public String getMinggu() {
+        return minggu;
     }
 
-    public void setHari(String hari) {
-        this.hari = hari;
+    public void setMinggu(String minggu) {
+        this.minggu = minggu;
     }
 
-    public int getGambar() {
+    public String getGambar() {
         return gambar;
     }
 
-    public void setGambar(int gambar) {
+    public void setGambar(String gambar) {
         this.gambar = gambar;
     }
 
@@ -40,17 +40,18 @@ public class Tanaman implements Parcelable {
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(this.namaTanaman);
-        dest.writeString(this.hari);
-        dest.writeInt(this.gambar);
+        dest.writeString(this.minggu);
+        dest.writeString(this.gambar);
     }
 
     public Tanaman() {
+
     }
 
     protected Tanaman(Parcel in) {
         this.namaTanaman = in.readString();
-        this.hari = in.readString();
-        this.gambar = in.readInt();
+        this.minggu = in.readString();
+        this.gambar = in.readString();
     }
 
     public static final Parcelable.Creator<Tanaman> CREATOR = new Parcelable.Creator<Tanaman>() {

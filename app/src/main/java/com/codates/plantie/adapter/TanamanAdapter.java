@@ -1,5 +1,6 @@
 package com.codates.plantie.adapter;
 
+import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,6 +10,8 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.codates.plantie.R;
 import com.codates.plantie.Tanaman;
 
@@ -38,8 +41,9 @@ public class TanamanAdapter extends RecyclerView.Adapter<TanamanAdapter.ViewHold
     public void onBindViewHolder(@NonNull final TanamanAdapter.ViewHolder holder, int position) {
         Tanaman tanaman = listTanaman.get(position);
         holder.tvName.setText(tanaman.getNamaTanaman());
-        holder.tvHari.setText(tanaman.getHari());
-        holder.imgGambar.setImageResource(tanaman.getGambar());
+        holder.tvHari.setText(tanaman.getMinggu() + " minggu ");
+        Glide.with(holder.itemView.getContext()).load(tanaman.getGambar())
+                .into(holder.imgGambar);
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

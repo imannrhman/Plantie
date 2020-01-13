@@ -1,6 +1,7 @@
 package com.codates.plantie.view;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
@@ -16,6 +17,8 @@ import com.codates.plantie.Tanaman;
 import com.codates.plantie.adapter.MingguAdapter;
 import com.github.florent37.awesomebar.AwesomeBar;
 
+import javax.annotation.Nullable;
+
 public class DetailTanaman extends AppCompatActivity {
     public static final String EXTRA_TANAMAN = "extra_tanaman";
     ImageView gambar;
@@ -30,7 +33,7 @@ public class DetailTanaman extends AppCompatActivity {
         rvMinggu = findViewById(R.id.recycler_view_minggu);
         rlCaraMenanam = findViewById(R.id.btnCaraMenanam);
         Tanaman tanaman = getIntent().getParcelableExtra(EXTRA_TANAMAN);
-        gambar.setImageResource(tanaman.getGambar());
+        gambar.setImageURI(Uri.parse(tanaman.getGambar()));
         showRecyclerList();
 
         rlCaraMenanam.setOnClickListener(new View.OnClickListener() {

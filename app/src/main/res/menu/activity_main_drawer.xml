@@ -16,6 +16,12 @@
             android:title="Tanaman Ku"
             />
         <item
+            android:id="@+id/nav_hama"
+            android:icon="@drawable/ic_bug_black_24dp"
+            android:iconTint="@color/colorPrimary"
+            android:title="Hama/Penyakit"
+            />
+        <item
             android:id="@+id/nav_setting"
             android:icon="@drawable/ic_settings_black_24dp"
             android:iconTint="@color/colorPrimary"

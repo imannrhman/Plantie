@@ -5,8 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#fff"
-    tools:context=".view.ListTanaman">
+    tools:context=".view.TanamanKuActivity">
 
     <com.github.florent37.awesomebar.AwesomeBar
         android:id="@+id/bar"
@@ -42,16 +41,9 @@
     <androidx.recyclerview.widget.RecyclerView
         android:layout_marginTop="20dp"
         android:layout_below="@+id/searchbar"
-        android:id="@+id/recycler_view"
+        android:id="@+id/recycler_view_tanamanku"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:listitem="@layout/item_tanaman"
-        />
-    <id.arieridwan.lib.PageLoader
-        android:id="@+id/progress_bar"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_centerInParent="true"
-        app:setLoadingImage="@drawable/logo"
-        />
+        tools:listitem="@layout/item_tanamanku" />
+
 </RelativeLayout>

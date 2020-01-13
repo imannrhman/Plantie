@@ -42,7 +42,7 @@
                 android:layout_width="60dp"
                 android:layout_height="60dp"
                 android:layout_marginTop="10dp"
-                android:layout_marginLeft="20dp"
+                android:layout_marginLeft="16dp"
                 android:layout_alignParentStart="true"
                 android:layout_alignParentTop="true"
                 android:background="@drawable/vector_watering_can" />
@@ -52,9 +52,10 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentTop="true"
-                android:layout_centerHorizontal="true"
+                android:layout_toRightOf="@id/watering_picture_2"
+                android:layout_alignParentEnd="true"
                 android:layout_marginTop="30dp"
-                android:text="Waktunya Menyiram"
+                android:text="Waktu Menyiram Pagi"
                 android:textSize="18sp"
                 android:fontFamily="@font/montserratsemibold"/>
 
@@ -63,9 +64,18 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
-                android:text="16.30"
+                android:text="07.00"
                 android:textSize="40sp"
                 android:fontFamily="@font/montserratmedium"/>
+
+            <Spinner
+                android:id="@+id/spinnerWaktuPagi"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_centerInParent="true"
+                android:layout_marginLeft="10dp"
+                android:layout_toRightOf="@id/tv_waktu_2"
+                android:spinnerMode="dropdown"/>
 
         </RelativeLayout>
 
@@ -81,7 +91,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:cardCornerRadius="20dp"
         android:layout_marginHorizontal="30dp"
-        android:layout_marginBottom="100dp">
+        android:layout_marginBottom="80dp">
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -92,7 +102,7 @@
                 android:layout_width="60dp"
                 android:layout_height="60dp"
                 android:layout_marginTop="10dp"
-                android:layout_marginLeft="20dp"
+                android:layout_marginLeft="16dp"
                 android:layout_alignParentStart="true"
                 android:layout_alignParentTop="true"
                 android:background="@drawable/vector_watering_can" />
@@ -102,9 +112,10 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentTop="true"
-                android:layout_centerHorizontal="true"
+                android:layout_toRightOf="@id/watering_picture_1"
+                android:layout_alignParentEnd="true"
                 android:layout_marginTop="30dp"
-                android:text="Waktunya Menyiram"
+                android:text="Waktu Menyiram Sore"
                 android:textSize="18sp"
                 android:fontFamily="@font/montserratsemibold"/>
 
@@ -113,16 +124,25 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
-                android:text="16.30"
+                android:text="15.00"
                 android:textSize="40sp"
                 android:fontFamily="@font/montserratmedium"/>
+
+            <Spinner
+                android:id="@+id/spinnerWaktuSore"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_centerInParent="true"
+                android:layout_marginLeft="10dp"
+                android:layout_toRightOf="@id/tv_waktu_1"
+                android:spinnerMode="dropdown"/>
 
         </RelativeLayout>
 
     </androidx.cardview.widget.CardView>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/btnchecklist"
+        android:id="@+id/btnSetting"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:fabCustomSize="60dp"

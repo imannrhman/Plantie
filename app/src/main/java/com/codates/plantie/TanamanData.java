@@ -2,6 +2,15 @@ package com.codates.plantie;
 
 import android.util.Log;
 
+import androidx.annotation.NonNull;
+
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
+
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 
@@ -29,21 +38,18 @@ public class TanamanData {
             }
 
 
-
     };
 
-    public static ArrayList<Tanaman> getListData(){
-        ArrayList<Tanaman> list = new ArrayList<>();
-        int[] gambar = {R.drawable.gambar,R.drawable.bawang_daun,R.drawable.buah_tomat,R.drawable.jahe,R.drawable.daun_seledri};
-        for (String[] aData : data){
-            Tanaman tanaman = new Tanaman();
-            tanaman.setNamaTanaman(aData[0]);
-            tanaman.setHari(aData[1]);
-            tanaman.setGambar(Integer.parseInt(aData[2]));
+    public static ArrayList<Tanaman> getListData() {
+        final ArrayList<Tanaman> list = new ArrayList<>();
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        Task<QuerySnapshot> querySnapshot = db.collection("tanaman").get();
+        querySnapshot.addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
 
-            list.add(tanaman);
-        }
-
+            }
+        });
         return list;
     }
 }

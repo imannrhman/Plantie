@@ -12,7 +12,10 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".view.TanamanKuActivity"></activity>
+        <activity android:name=".view.PengembanganActivity">
+
+        </activity>
+      <activity android:name=".view.TanamanKuActivity"></activity>
         <activity
             android:name=".view_menanam.MenanamActivity"
             android:label="@string/title_activity_menanam"

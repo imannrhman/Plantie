@@ -50,7 +50,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
     private ArrayList<Tanaman> list = new ArrayList<>();
     private AppBarConfiguration mAppBarConfiguration;
    TextView tvName,tvEmail;
-   Intent home, myPlant, setting;
+   Intent home, myPlant, setting, hama;
    ImageView imgProfile;
    private GoogleApiClient googleApiClient;
    private GoogleSignInOptions gso;
@@ -95,7 +95,6 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
         bar.displayHomeAsUpEnabled(false);
         rvTanaman = findViewById(R.id.recycler_view);
         rvTanaman.setHasFixedSize(true);
-        list.addAll(TanamanData.getListData());
         showRecyclerList();
         NavigationView navigationView = findViewById(R.id.nav_view);
         setupNavDrawer(navigationView);
@@ -127,6 +126,11 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
                     case R.id.nav_my_plant:
                         myPlant = new Intent(MainActivity.this, tanamanKu.class);
                         startActivity(myPlant);
+                        onBackPressed();
+                        break;
+                    case R.id.nav_hama:
+                        hama = new Intent(MainActivity.this, PengembanganActivity.class);
+                        startActivity(hama);
                         onBackPressed();
                         break;
                     case R.id.nav_setting:

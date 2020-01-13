@@ -34,7 +34,7 @@ public class ListTanaman extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list_tanaman);
         AwesomeBar bar = findViewById(R.id.bar);
-       final ImageView search = findViewById(R.id.searchbar);
+        final ImageView search = findViewById(R.id.searchbar);
 
         bar.getSettings().setAnimateMenu(false);
         bar.displayHomeAsUpEnabled(true);

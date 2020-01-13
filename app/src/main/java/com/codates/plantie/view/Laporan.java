@@ -13,6 +13,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
 
 import com.codates.plantie.view.ui.main.SectionsPagerAdapter;
 
@@ -30,6 +31,14 @@ public class Laporan extends AppCompatActivity {
         TabLayout tabs = findViewById(R.id.tabs);
         tabs.setupWithViewPager(viewPager);
         tabs.setTabMode(TabLayout.MODE_SCROLLABLE);
+
+        ImageView Arrowback = findViewById(R.id.ArrowBack);
+        Arrowback.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressed();
+            }
+        });
 
         FloatingActionButton fab = findViewById(R.id.btnchecklistLaporan);
 

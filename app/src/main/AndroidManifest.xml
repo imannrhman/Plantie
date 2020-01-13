@@ -12,13 +12,16 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
+        <activity android:name=".view.PengembanganActivity">
+
+        </activity>
         <activity
             android:name=".view.Laporan"
             android:label="@string/title_activity_laporan"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".view.tanamanKu"
-            android:resizeableActivity="false"></activity>
+            android:resizeableActivity="false" />
         <activity
             android:name=".view.DetailTanaman"
             android:resizeableActivity="false" />

@@ -1,4 +1,4 @@
-package com.codates.plantie.view;
+package com.codates.plantie.view_menanam;
 
 import android.os.Bundle;
 
@@ -13,34 +13,23 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ImageView;
 
-import com.codates.plantie.view.ui.main.SectionsPagerAdapter;
+import com.codates.plantie.view_menanam.ui.main.SectionsPagerAdapter;
 
-public class Laporan extends AppCompatActivity {
+public class MenanamActivity extends AppCompatActivity {
 
     public static final String EXTRA_POSITION = "extra_position";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_laporan);
+        setContentView(R.layout.activity_menanam);
         SectionsPagerAdapter sectionsPagerAdapter = new SectionsPagerAdapter(this, getSupportFragmentManager());
         ViewPager viewPager = findViewById(R.id.view_pager);
         viewPager.setAdapter(sectionsPagerAdapter);
         TabLayout tabs = findViewById(R.id.tabs);
         tabs.setupWithViewPager(viewPager);
-        tabs.setTabMode(TabLayout.MODE_SCROLLABLE);
-
-        ImageView Arrowback = findViewById(R.id.ArrowBack);
-        Arrowback.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onBackPressed();
-            }
-        });
-
-        FloatingActionButton fab = findViewById(R.id.btnchecklistLaporan);
+        FloatingActionButton fab = findViewById(R.id.btnchecklistTutorial);
 
         fab.setOnClickListener(new View.OnClickListener() {
             @Override

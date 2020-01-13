@@ -23,6 +23,7 @@ import com.codates.plantie.Tanaman;
 import com.codates.plantie.adapter.MingguAdapter;
 import com.google.android.material.appbar.CollapsingToolbarLayout;
 
+
 public class DetailTanaman extends AppCompatActivity {
     public static final String EXTRA_TANAMAN = "extra_tanaman";
     ImageView gambar;
@@ -63,7 +64,6 @@ public class DetailTanaman extends AppCompatActivity {
         Glide.with(this).load(tanaman.getGambar())
                 .into(gambar);
         showRecyclerList();
-
 
         rlCaraMenanam.setOnClickListener(new View.OnClickListener() {
             @Override

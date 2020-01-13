@@ -1,18 +1,21 @@
 package com.codates.plantie.view;
 
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+
 import android.os.Bundle;
 import android.view.View;
 
 import com.codates.plantie.R;
 import com.github.florent37.awesomebar.AwesomeBar;
+import com.google.android.material.appbar.AppBarLayout;
 
-public class tanamanKu extends AppCompatActivity {
+public class PengembanganActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_tanaman_ku);
+        setContentView(R.layout.activity_pengembangan);
         getSupportActionBar().hide();
 
         AwesomeBar bar = findViewById(R.id.bar);
@@ -25,5 +28,6 @@ public class tanamanKu extends AppCompatActivity {
                 onBackPressed();
             }
         });
+
     }
 }

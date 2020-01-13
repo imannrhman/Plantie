@@ -15,20 +15,23 @@
         <activity
             android:name=".view.Laporan"
             android:label="@string/title_activity_laporan"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar"/>
         <activity
             android:name=".view.tanamanKu"
-            android:resizeableActivity="false"></activity>
+            android:resizeableActivity="false"/>
         <activity
             android:name=".view.DetailTanaman"
-            android:resizeableActivity="false" />
+            android:resizeableActivity="false"
+            android:theme="@style/DetailTanaman"
+            />
         <activity
             android:name=".view.Setting"
             android:resizeableActivity="false" />
         <activity
             android:name=".view.ListTanaman"
             android:resizeableActivity="false"
-            android:theme="@style/MainActivity" />
+            android:theme="@style/AppTheme.NoActionBar" />
+        <!--NANANG-->
         <activity
             android:name=".view.LoginActivity"
             android:resizeableActivity="false"

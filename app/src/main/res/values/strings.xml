@@ -10,13 +10,12 @@
     <string name="nav_header_subtitle">android.studio@android.com</string>
     <string name="nav_header_desc">Navigation header</string>
     <string name="action_settings">Settings</string>
-
     <string name="menu_home">Home</string>
-
     <string name="drawer_open">Open navigation drawer</string>
     <string name="drawer_close">Close navigation drawer</string>
     <string name="title_activity_laporan">Laporan</string>
     <string name="tab_text_1">Alat dan Bahan</string>
     <string name="tab_text_2">Cara Menanam</string>
     <string name="title_activity_menanam">MenanamActivity</string>
+    <string name="minggu">Minggu</string>
 </resources>

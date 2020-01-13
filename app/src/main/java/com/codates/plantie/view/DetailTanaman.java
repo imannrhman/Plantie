@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.codates.plantie.R;
 import com.codates.plantie.Tanaman;
 import com.codates.plantie.adapter.MingguAdapter;
+import com.codates.plantie.view_menanam.MenanamActivity;
 import com.github.florent37.awesomebar.AwesomeBar;
 
 public class DetailTanaman extends AppCompatActivity {
@@ -36,7 +37,8 @@ public class DetailTanaman extends AppCompatActivity {
         rlCaraMenanam.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(getApplicationContext(),"Sudah di Click",Toast.LENGTH_SHORT).show();
+                Intent mulaiTanamIntent = new Intent(DetailTanaman.this, MenanamActivity.class);
+                startActivity(mulaiTanamIntent);
             }
         });
 

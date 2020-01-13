@@ -15,6 +15,11 @@
         <activity android:name=".view.PengembanganActivity">
 
         </activity>
+      <activity android:name=".view.TanamanKuActivity"></activity>
+        <activity
+            android:name=".view_menanam.MenanamActivity"
+            android:label="@string/title_activity_menanam"
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".view.Laporan"
             android:label="@string/title_activity_laporan"

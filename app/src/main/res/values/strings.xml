@@ -16,6 +16,7 @@
     <string name="drawer_open">Open navigation drawer</string>
     <string name="drawer_close">Close navigation drawer</string>
     <string name="title_activity_laporan">Laporan</string>
-    <string name="tab_text_1">Tab 1</string>
-    <string name="tab_text_2">Tab 2</string>
+    <string name="tab_text_1">Alat dan Bahan</string>
+    <string name="tab_text_2">Cara Menanam</string>
+    <string name="title_activity_menanam">MenanamActivity</string>
 </resources>

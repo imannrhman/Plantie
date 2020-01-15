@@ -2,6 +2,7 @@ package com.codates.plantie.view;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
@@ -20,8 +21,10 @@ import com.bumptech.glide.Glide;
 import com.codates.plantie.R;
 import com.codates.plantie.model.Tanaman;
 import com.codates.plantie.adapter.MingguAdapter;
+import com.codates.plantie.model.Tutorial;
 import com.codates.plantie.view_menanam.MenanamActivity;
 import com.google.android.material.appbar.CollapsingToolbarLayout;
+import com.google.firebase.firestore.DocumentReference;
 
 
 public class DetailTanaman extends AppCompatActivity {
@@ -32,7 +35,7 @@ public class DetailTanaman extends AppCompatActivity {
     Toolbar toolbar;
     CollapsingToolbarLayout collapsingToolbarLayout;
     TextView tvMinggu;
-
+    Tanaman tanaman;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -44,27 +47,27 @@ public class DetailTanaman extends AppCompatActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setHomeButtonEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_keyboard_arrow_left_black_24dp);
+        getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_arrow_left_black_24dp);
 
         collapsingToolbarLayout = findViewById(R.id.collapsing_toolbar);
         collapsingToolbarLayout.setCollapsedTitleTextColor(
                 ContextCompat.getColor(this, R.color.white)
         );
+
         collapsingToolbarLayout.setExpandedTitleColor(
                 ContextCompat.getColor(this, R.color.white)
         );
 
-
         gambar = findViewById(R.id.gambar_header);
         rvMinggu = findViewById(R.id.recycler_view_minggu);
         rlCaraMenanam = findViewById(R.id.btnCaraMenanam);
-        Tanaman tanaman = getIntent().getParcelableExtra(EXTRA_TANAMAN);
-
+        this.tanaman = getIntent().getParcelableExtra(EXTRA_TANAMAN);
         assert tanaman != null;
-        try{
-            Toast.makeText(this, tanaman.getIdTutorial().getId(), Toast.LENGTH_LONG).show();
-        }catch (Exception e){
-            Toast.makeText(this,e.getMessage(), Toast.LENGTH_LONG).show();
+        Tutorial documentReference = tanaman.getIdTutorial();
+        try {
+            Toast.makeText(this, documentReference + "", Toast.LENGTH_LONG).show();
+        } catch (Exception e) {
+            Toast.makeText(this, e.getMessage(), Toast.LENGTH_LONG).show();
         }
         tvMinggu.setText(tanaman.getMinggu() + " minggu");
         collapsingToolbarLayout.setTitle(tanaman.getNamaTanaman());
@@ -75,9 +78,12 @@ public class DetailTanaman extends AppCompatActivity {
         rlCaraMenanam.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-               Intent intent = new Intent(getApplicationContext(), MenanamActivity.class);
-                startActivity(intent);
-
+//                Toast.makeText(getApplicationContext(), "Sudah di Click", Toast.LENGTH_SHORT).show();
+                System.out.println(tanaman.getIdTutorial());
+                Intent mulaiMenanam = new Intent(DetailTanaman.this, MenanamActivity.class);
+                Log.d("tanamam",tanaman.getIdTutorial() + "");
+                mulaiMenanam.putExtra(MenanamActivity.EXTRA_POSITION, tanaman);
+                startActivity(mulaiMenanam);
             }
         });
     }
@@ -99,7 +105,7 @@ public class DetailTanaman extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        switch (item.getItemId()){
+        switch (item.getItemId()) {
             case android.R.id.home:
                 onBackPressed();
                 return true;

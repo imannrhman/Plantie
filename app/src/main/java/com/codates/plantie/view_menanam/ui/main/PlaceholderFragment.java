@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -34,14 +35,18 @@ public class PlaceholderFragment extends Fragment {
     private PageViewModel pageViewModel;
     RecyclerView rvTutorial;
     ArrayList<String> list;
-
-    public PlaceholderFragment(ArrayList<String> list) {
+    String text;
+    int gambar;
+    public PlaceholderFragment(ArrayList<String> list,int gambar,String text) {
         this.list = list;
+        this.gambar = gambar;
+        this.text = text;
     }
 
-    public static PlaceholderFragment newInstance(int index,ArrayList<String> list) {
-        PlaceholderFragment fragment = new PlaceholderFragment(list);
+    public static PlaceholderFragment newInstance(int index,ArrayList<String> list,int gambar ,String text) {
+        PlaceholderFragment fragment = new PlaceholderFragment(list,gambar,text);
         Bundle bundle = new Bundle();
+
         bundle.putInt(ARG_SECTION_NUMBER, index);
         fragment.setArguments(bundle);
         return fragment;
@@ -65,7 +70,14 @@ public class PlaceholderFragment extends Fragment {
         View root = inflater.inflate(R.layout.fragment_menanam, container, false);
         final TextView textView = root.findViewById(R.id.section_label);
         rvTutorial = root.findViewById(R.id.rv_tutorial);
-        showRecyclerList(list);
+        ImageView imageView = root.findViewById(R.id.img_alat);
+        TextView textViewAlat = root.findViewById(R.id.textview_alat);
+        textViewAlat.setText(text);
+        imageView.setImageResource(gambar);
+
+        if(list != null){
+            showRecyclerList(list);
+        }
         pageViewModel.getText().observe(this, new Observer<String>() {
             @Override
             public void onChanged(@Nullable String s) {

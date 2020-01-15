@@ -56,8 +56,8 @@ public class ListTanaman extends AppCompatActivity {
                             pageLoader.stopProgress();
                             for (QueryDocumentSnapshot document : task.getResult()) {
                                 Log.d("MyTag", document.getId() + " => " + document.getData());
-
                                 Tanaman tanaman = document.toObject(Tanaman.class);
+                                System.out.println(tanaman.getIdTutorial());
                                 list.add(tanaman);
                             }
                             try {

@@ -11,30 +11,26 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.codates.plantie.R;
-import com.codates.plantie.Tanaman;
+import com.codates.plantie.model.Tanaman;
 import com.codates.plantie.adapter.TanamanAdapter;
-import com.codates.plantie.TanamanData;
 import com.github.florent37.awesomebar.ActionItem;
 import com.github.florent37.awesomebar.AwesomeBar;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import id.arieridwan.lib.PageLoader;
 
 public class ListTanaman extends AppCompatActivity {
     private RecyclerView rvTanaman;
-    boolean muncul =true;
+    boolean muncul = true;
     private ArrayList<Tanaman> list = new ArrayList<>();
     FirebaseFirestore db = FirebaseFirestore.getInstance();
 
@@ -61,15 +57,16 @@ public class ListTanaman extends AppCompatActivity {
                             for (QueryDocumentSnapshot document : task.getResult()) {
                                 Log.d("MyTag", document.getId() + " => " + document.getData());
                                 Tanaman tanaman = document.toObject(Tanaman.class);
+                                System.out.println(tanaman.getIdTutorial());
                                 list.add(tanaman);
                             }
-                            try{
+                            try {
                                 showRecyclerList(list);
-                            }catch (Exception e){
-                                Toast.makeText(getApplicationContext(),e.getMessage(),Toast.LENGTH_SHORT).show();
+                            } catch (Exception e) {
+                                Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
                             }
 
-                          } else {
+                        } else {
                             Log.d("Main", "Error getting documents: ", task.getException());
                         }
                     }
@@ -81,7 +78,7 @@ public class ListTanaman extends AppCompatActivity {
 
         bar.getSettings().setAnimateMenu(false);
         bar.displayHomeAsUpEnabled(true);
-        bar.addAction(R.drawable.ic_search_black_24dp,"Cari");
+        bar.addAction(R.drawable.ic_search_black_24dp, "Cari");
 
         bar.setOnMenuClickedListener(new View.OnClickListener() {
             @Override
@@ -93,10 +90,10 @@ public class ListTanaman extends AppCompatActivity {
         bar.setActionItemClickListener(new AwesomeBar.ActionItemClickListener() {
             @Override
             public void onActionItemClicked(int position, ActionItem actionItem) {
-                if(muncul){
+                if (muncul) {
                     search.setVisibility(View.VISIBLE);
                     muncul = false;
-                }else{
+                } else {
                     search.setVisibility(View.INVISIBLE);
                     muncul = true;
                 }
@@ -128,8 +125,8 @@ public class ListTanaman extends AppCompatActivity {
         tanamanAdapter.setOnItemClickCallback(new TanamanAdapter.OnItemClickCallback() {
             @Override
             public void onItemClicked(Tanaman tanaman) {
-                Intent intent = new Intent(getApplicationContext(),DetailTanaman.class);
-                intent.putExtra(DetailTanaman.EXTRA_TANAMAN,tanaman);
+                Intent intent = new Intent(getApplicationContext(), DetailTanaman.class);
+                intent.putExtra(DetailTanaman.EXTRA_TANAMAN, tanaman);
                 startActivity(intent);
             }
         });

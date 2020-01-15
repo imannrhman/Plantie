@@ -1,17 +1,13 @@
-package com.codates.plantie;
-
-import android.util.Log;
+package com.codates.plantie.model;
 
 import androidx.annotation.NonNull;
 
+import com.codates.plantie.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.Query;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 public class TanamanData {

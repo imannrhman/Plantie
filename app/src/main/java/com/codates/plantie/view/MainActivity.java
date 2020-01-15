@@ -8,9 +8,8 @@ import android.os.Bundle;
 
 import com.bumptech.glide.Glide;
 import com.codates.plantie.R;
-import com.codates.plantie.Tanaman;
+import com.codates.plantie.model.Tanaman;
 import com.codates.plantie.adapter.TanamanAdapter;
-import com.codates.plantie.TanamanData;
 import com.github.florent37.awesomebar.ActionItem;
 import com.github.florent37.awesomebar.AwesomeBar;
 import com.google.android.gms.auth.api.Auth;

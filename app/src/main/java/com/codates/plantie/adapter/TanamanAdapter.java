@@ -1,6 +1,5 @@
 package com.codates.plantie.adapter;
 
-import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,9 +10,8 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.RequestOptions;
 import com.codates.plantie.R;
-import com.codates.plantie.Tanaman;
+import com.codates.plantie.model.Tanaman;
 
 import java.util.ArrayList;
 

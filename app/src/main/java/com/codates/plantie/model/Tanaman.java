@@ -1,12 +1,36 @@
-package com.codates.plantie;
+package com.codates.plantie.model;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+
+import androidx.annotation.NonNull;
+
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 
 public class Tanaman implements Parcelable {
     String namaTanaman;
     String minggu;
     String gambar;
+    Tutorial idTutorial;
+
+    public Tutorial getIdTutorial() {
+        return idTutorial;
+    }
+
+    public void setIdTutorial(DocumentReference tutorial) {
+        tutorial.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+                    idTutorial = task.getResult().toObject(Tutorial.class);
+                }
+            }
+        });
+    }
+
 
     public String getNamaTanaman() {
         return namaTanaman;
@@ -28,9 +52,6 @@ public class Tanaman implements Parcelable {
         return gambar;
     }
 
-    public void setGambar(String gambar) {
-        this.gambar = gambar;
-    }
 
     @Override
     public int describeContents() {
@@ -42,16 +63,17 @@ public class Tanaman implements Parcelable {
         dest.writeString(this.namaTanaman);
         dest.writeString(this.minggu);
         dest.writeString(this.gambar);
+        dest.writeParcelable(this.idTutorial, flags);
     }
 
     public Tanaman() {
-
     }
 
     protected Tanaman(Parcel in) {
         this.namaTanaman = in.readString();
         this.minggu = in.readString();
         this.gambar = in.readString();
+        this.idTutorial = in.readParcelable(Tutorial.class.getClassLoader());
     }
 
     public static final Parcelable.Creator<Tanaman> CREATOR = new Parcelable.Creator<Tanaman>() {

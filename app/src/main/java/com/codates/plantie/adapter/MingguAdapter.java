@@ -9,7 +9,6 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.codates.plantie.R;
-import com.codates.plantie.Tanaman;
 
 public class MingguAdapter extends RecyclerView.Adapter<MingguAdapter.ViewHolder> {
     private OnItemClickCallback onItemClickCallback;
@@ -52,7 +51,6 @@ public class MingguAdapter extends RecyclerView.Adapter<MingguAdapter.ViewHolder
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             tvMinggu = itemView.findViewById(R.id.tv_minggu);
-
         }
     }
 }

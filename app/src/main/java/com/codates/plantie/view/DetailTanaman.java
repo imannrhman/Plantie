@@ -1,13 +1,12 @@
 package com.codates.plantie.view;
 
-import android.content.Context;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -19,8 +18,9 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.codates.plantie.R;
-import com.codates.plantie.Tanaman;
+import com.codates.plantie.model.Tanaman;
 import com.codates.plantie.adapter.MingguAdapter;
+import com.codates.plantie.view_menanam.MenanamActivity;
 import com.google.android.material.appbar.CollapsingToolbarLayout;
 
 
@@ -31,6 +31,7 @@ public class DetailTanaman extends AppCompatActivity {
     RelativeLayout rlCaraMenanam;
     Toolbar toolbar;
     CollapsingToolbarLayout collapsingToolbarLayout;
+    TextView tvMinggu;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,9 +39,9 @@ public class DetailTanaman extends AppCompatActivity {
         setContentView(R.layout.activity_detail_tanaman);
 
         toolbar = findViewById(R.id.toolbar);
+        tvMinggu = findViewById(R.id.tv_minggu);
+
         setSupportActionBar(toolbar);
-
-
         getSupportActionBar().setHomeButtonEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_keyboard_arrow_left_black_24dp);
@@ -60,6 +61,12 @@ public class DetailTanaman extends AppCompatActivity {
         Tanaman tanaman = getIntent().getParcelableExtra(EXTRA_TANAMAN);
 
         assert tanaman != null;
+        try{
+            Toast.makeText(this, tanaman.getIdTutorial().getId(), Toast.LENGTH_LONG).show();
+        }catch (Exception e){
+            Toast.makeText(this,e.getMessage(), Toast.LENGTH_LONG).show();
+        }
+        tvMinggu.setText(tanaman.getMinggu() + " minggu");
         collapsingToolbarLayout.setTitle(tanaman.getNamaTanaman());
         Glide.with(this).load(tanaman.getGambar())
                 .into(gambar);
@@ -68,7 +75,9 @@ public class DetailTanaman extends AppCompatActivity {
         rlCaraMenanam.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(getApplicationContext(), "Sudah di Click", Toast.LENGTH_SHORT).show();
+               Intent intent = new Intent(getApplicationContext(), MenanamActivity.class);
+                startActivity(intent);
+
             }
         });
     }

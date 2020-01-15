@@ -1,12 +1,24 @@
-package com.codates.plantie;
+package com.codates.plantie.model;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+
+import com.google.firebase.firestore.DocumentReference;
 
 public class Tanaman implements Parcelable {
     String namaTanaman;
     String minggu;
     String gambar;
+    DocumentReference idTutorial;
+
+    public DocumentReference getIdTutorial() {
+        return idTutorial;
+    }
+
+    public void setIdTutorial(DocumentReference idTutorial) {
+        this.idTutorial = idTutorial;
+    }
+
 
     public String getNamaTanaman() {
         return namaTanaman;
@@ -27,6 +39,8 @@ public class Tanaman implements Parcelable {
     public String getGambar() {
         return gambar;
     }
+
+
 
     public void setGambar(String gambar) {
         this.gambar = gambar;

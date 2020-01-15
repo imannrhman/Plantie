@@ -10,6 +10,8 @@ import androidx.fragment.app.FragmentPagerAdapter;
 
 import com.codates.plantie.R;
 
+import java.util.ArrayList;
+
 /**
  * A [FragmentPagerAdapter] that returns a fragment corresponding to
  * one of the sections/tabs/pages.
@@ -27,9 +29,20 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter {
 
     @Override
     public Fragment getItem(int position) {
-        // getItem is called to instantiate the fragment for the given page.
-        // Return a PlaceholderFragment (defined as a static inner class below).
-        return PlaceholderFragment.newInstance(position + 1);
+        if (position == 0) {
+            ArrayList<String> list = new ArrayList<String>();
+            list.add("sdsdsdsd");
+            list.add("sdsdsd");
+            list.add("sdsdsds");
+            return PlaceholderFragment.newInstance(position,list);
+        } else {
+            ArrayList<String> list = new ArrayList<String>();
+            list.add("wkwkwkwk");
+            list.add("wwwklwkl");
+            list.add("wkwkwkwk");
+            return PlaceholderFragment.newInstance(position, list);
+
+        }
     }
 
     @Nullable

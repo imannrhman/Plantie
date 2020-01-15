@@ -21,6 +21,7 @@ import com.bumptech.glide.Glide;
 import com.codates.plantie.R;
 import com.codates.plantie.Tanaman;
 import com.codates.plantie.adapter.MingguAdapter;
+import com.codates.plantie.view_menanam.MenanamActivity;
 import com.google.android.material.appbar.CollapsingToolbarLayout;
 
 
@@ -40,19 +41,18 @@ public class DetailTanaman extends AppCompatActivity {
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-
         getSupportActionBar().setHomeButtonEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_keyboard_arrow_left_black_24dp);
+        getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_arrow_left_black_24dp);
 
         collapsingToolbarLayout = findViewById(R.id.collapsing_toolbar);
         collapsingToolbarLayout.setCollapsedTitleTextColor(
                 ContextCompat.getColor(this, R.color.white)
         );
+
         collapsingToolbarLayout.setExpandedTitleColor(
                 ContextCompat.getColor(this, R.color.white)
         );
-
 
         gambar = findViewById(R.id.gambar_header);
         rvMinggu = findViewById(R.id.recycler_view_minggu);
@@ -68,7 +68,9 @@ public class DetailTanaman extends AppCompatActivity {
         rlCaraMenanam.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(getApplicationContext(), "Sudah di Click", Toast.LENGTH_SHORT).show();
+//                Toast.makeText(getApplicationContext(), "Sudah di Click", Toast.LENGTH_SHORT).show();
+                Intent mulaiMenanam = new Intent(DetailTanaman.this, MenanamActivity.class);
+                startActivity(mulaiMenanam);
             }
         });
     }

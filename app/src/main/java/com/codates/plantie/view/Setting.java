@@ -3,13 +3,11 @@ package com.codates.plantie.view;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -68,18 +66,6 @@ public class Setting extends AppCompatActivity implements AdapterView.OnItemSele
             }
         });
 
-        btnSave = findViewById(R.id.btnSetting);
-        btnSave.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                setPreference(PAGI, wpagi);
-                setPreference(SORE, wsore);
-                Snackbar.make(v, "Pengingat untuk menyiram di pagi hari : "+posisiPagi+
-                                      "Pengingat untuk menyiram di sore hari : "+posisiSore, Snackbar.LENGTH_LONG).show();
-            }
-        });
-
-
         Waktupagi.setText(getPreference(PAGI));
         Waktusore.setText(getPreference(SORE));
         spinnerPagi = findViewById(R.id.spinnerWaktuPagi);
@@ -125,6 +111,17 @@ public class Setting extends AppCompatActivity implements AdapterView.OnItemSele
         spinnerSore.setAdapter(adapterSore);
         spinnerSore.setSelection(adapterSore.getPosition(posisiSore));
         spinnerSore.setOnItemSelectedListener(this);
+
+        btnSave = findViewById(R.id.btnSetting);
+        btnSave.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                setPreference(PAGI, wpagi);
+                setPreference(SORE, wsore);
+                Snackbar.make(v, "pagi hari : "+getPreference(PAGI)+
+                        "\nsore hari : "+getPreference(SORE), Snackbar.LENGTH_LONG).show();
+            }
+        });
 
     }
 

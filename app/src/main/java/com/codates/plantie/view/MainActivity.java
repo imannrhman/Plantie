@@ -3,6 +3,13 @@ package com.codates.plantie.view;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.Paint;
+import android.graphics.PorterDuff;
+import android.graphics.PorterDuffXfermode;
+import android.graphics.Rect;
+import android.graphics.RectF;
 import android.net.Uri;
 import android.os.Bundle;
 
@@ -22,6 +29,7 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.OptionalPendingResult;
 import com.google.android.gms.common.api.ResultCallback;
 
+import android.provider.MediaStore;
 import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
@@ -221,8 +229,8 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
             tvName.setText(account.getDisplayName());
             tvEmail.setText(account.getEmail());
             if(account.getPhotoUrl() != null){
-               Glide.with(this).load(account.getPhotoUrl()).into(imgProfile);
-                 }else{
+                 Glide.with(this).load(account.getPhotoUrl()).into(imgProfile);
+            }else{
                 imgProfile.setImageResource(R.mipmap.ic_logo);
             }
 

@@ -2,14 +2,13 @@ package com.codates.plantie.view_menanam;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.content.res.ColorStateList;
 import android.graphics.Typeface;
 import android.os.Bundle;
 
-
 import com.bumptech.glide.Glide;
-import com.afollestad.materialdialogs.DialogAction;
-import com.afollestad.materialdialogs.MaterialDialog;
 import com.codates.plantie.R;
+import com.codates.plantie.adapter.TanamanAdapter;
 import com.codates.plantie.model.Tanaman;
 import com.codates.plantie.model.TanamanUser;
 import com.codates.plantie.model.TanamanUserData;
@@ -25,22 +24,25 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
-
-import com.codates.plantie.view.DetailTanaman;
-
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.tabs.TabLayout;
-
+import com.afollestad.materialdialogs.DialogAction;
+import com.afollestad.materialdialogs.MaterialDialog;
+import androidx.annotation.NonNull;
 import androidx.core.content.res.ResourcesCompat;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.ViewPager;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
-import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.codates.plantie.view_menanam.ui.main.SectionsPagerAdapter;
-
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -48,6 +50,7 @@ import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 
+import id.arieridwan.lib.PageLoader;
 
 public class MenanamActivity extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener {
     public static final String EXTRA_POSITION = "extra_position";
@@ -65,7 +68,7 @@ public class MenanamActivity extends AppCompatActivity implements GoogleApiClien
         assert tanaman != null;
         final ViewPager viewPager = findViewById(R.id.view_pager);
         Toast.makeText(getApplicationContext(),tanaman.getNamaTanaman(),Toast.LENGTH_LONG).show();
-        final TabLayout tabs = findViewById(R.id.tabs);
+        TabLayout tabs = findViewById(R.id.tabs);
         tabs.setupWithViewPager(viewPager);
 
         gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
@@ -78,16 +81,6 @@ public class MenanamActivity extends AppCompatActivity implements GoogleApiClien
 
 
         final SectionsPagerAdapter sectionsPagerAdapter = new SectionsPagerAdapter(this,getSupportFragmentManager(),tanaman);
-
-        ImageView Arrowback = findViewById(R.id.ArrowBack);
-        Arrowback.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onBackPressed();
-            }
-        });
-
-        SectionsPagerAdapter sectionsPagerAdapter = new SectionsPagerAdapter(this,getSupportFragmentManager(),tanaman);
         viewPager.setAdapter(sectionsPagerAdapter);
         final FloatingActionButton fab = findViewById(R.id.btnchecklistTutorial);
         final GoogleSignInAccount account = getAccount();
@@ -115,45 +108,9 @@ public class MenanamActivity extends AppCompatActivity implements GoogleApiClien
                         }
                     });
                 }
-
-            public void onClick(View view) {
-
-                Intent detail = new Intent(MenanamActivity.this, DetailTanaman.class);
-                startActivity(detail);
-//                Toast.makeText(getApplicationContext(), "ada", Toast.LENGTH_LONG).show();
-                // set DB buat visibility
-
             }
         });
     }
-
-
-    private GoogleSignInAccount getAccount(){
-        GoogleSignInResult result = User.setOptionalPendingResult(googleApiClient);
-        if (result != null) {
-            GoogleSignInAccount account = User.handleSignInResult(result);
-            if (account != null) {
-                return account;
-            } else {
-                return null;
-            }
-        } else {
-            return null;
-        }
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-    }
-
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-        infoDialog();
-    }
-
 
     public void infoDialog(){
         Typeface faceMed = ResourcesCompat.getFont(this, R.font.montserratsemibold);
@@ -178,5 +135,39 @@ public class MenanamActivity extends AppCompatActivity implements GoogleApiClien
             }
         });
     }
+    private void setPageLoader(PageLoader pageLoader) {
+        pageLoader.setImageLoading(R.drawable.logo);
+        pageLoader.setLoadingAnimationMode("flip");
+        pageLoader.setTextLoading("Tunggu");
+        pageLoader.setTextSize(0);
+        pageLoader.setLoadingImageWidth(250);
+        pageLoader.setLoadingImageHeight(250);
+        pageLoader.setTextColor(ColorStateList.valueOf(0));
+        pageLoader.startProgress();
+    }
 
+    private GoogleSignInAccount getAccount(){
+        GoogleSignInResult result = User.setOptionalPendingResult(googleApiClient);
+        if (result != null) {
+            GoogleSignInAccount account = User.handleSignInResult(result);
+            if (account != null) {
+                return account;
+            } else {
+                return null;
+            }
+        } else {
+            return null;
+        }
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        infoDialog();
+    }
+
+    @Override
+    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+
+    }
 }

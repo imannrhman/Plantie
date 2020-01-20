@@ -12,10 +12,10 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".view.PengembanganActivity">
-
-        </activity>
-      <activity android:name=".view.TanamanKuActivity"></activity>
+        <activity android:name=".view.DetailPenyakit"></activity>
+        <activity android:name=".view.ListPenyakit" />
+        <activity android:name=".view.PengembanganActivity" />
+        <activity android:name=".view.TanamanKuActivity" />
         <activity
             android:name=".view_menanam.MenanamActivity"
             android:label="@string/title_activity_menanam"
@@ -23,15 +23,14 @@
         <activity
             android:name=".view.Laporan"
             android:label="@string/title_activity_laporan"
-            android:theme="@style/AppTheme.NoActionBar"/>
-       <activity
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
             android:name=".view.tanamanKu"
             android:resizeableActivity="false" />
         <activity
             android:name=".view.DetailTanaman"
             android:resizeableActivity="false"
-            android:theme="@style/DetailTanaman"
-            />
+            android:theme="@style/DetailTanaman" />
         <activity
             android:name=".view.Setting"
             android:resizeableActivity="false" />

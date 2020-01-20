@@ -17,6 +17,7 @@ import com.bumptech.glide.Glide;
 import com.codates.plantie.R;
 import com.codates.plantie.model.Tanaman;
 import com.codates.plantie.adapter.TanamanAdapter;
+import com.codates.plantie.model.User;
 import com.github.florent37.awesomebar.ActionItem;
 import com.github.florent37.awesomebar.AwesomeBar;
 import com.google.android.gms.auth.api.Auth;
@@ -25,10 +26,9 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.common.api.OptionalPendingResult;
-import com.google.android.gms.common.api.ResultCallback;
 
 import android.provider.MediaStore;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
@@ -36,7 +36,12 @@ import android.view.View;
 import androidx.annotation.NonNull;
 import androidx.navigation.ui.AppBarConfiguration;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.navigation.NavigationView;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import androidx.drawerlayout.widget.DrawerLayout;
 
@@ -62,6 +67,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
    private GoogleApiClient googleApiClient;
    private GoogleSignInOptions gso;
    Context context;
+    FirebaseFirestore db = FirebaseFirestore.getInstance();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -102,7 +108,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
         bar.displayHomeAsUpEnabled(false);
         rvTanaman = findViewById(R.id.recycler_view);
         rvTanaman.setHasFixedSize(true);
-        showRecyclerList();
+        showRecyclerList(list);
         NavigationView navigationView = findViewById(R.id.nav_view);
         setupNavDrawer(navigationView);
         tvName = navigationView.getHeaderView(0).findViewById(R.id.tv_name);
@@ -115,6 +121,33 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
                 .enableAutoManage(this,this)
                 .addApi(Auth.GOOGLE_SIGN_IN_API,gso)
                 .build();
+
+
+        // list tanaman
+        db.collection("tanaman").get().addOnCompleteListener(
+                new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                Log.d("MyTag", document.getId() + " => " + document.getData());
+                                Tanaman tanaman = document.toObject(Tanaman.class);
+                                System.out.println(tanaman.getIdTutorial());
+                                list.add(tanaman);
+                            }
+                            try {
+                                showRecyclerList(list);
+                            } catch (Exception e) {
+                                Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
+                            }
+
+                        } else {
+                            Log.d("Main", "Error getting documents: ", task.getException());
+                        }
+                    }
+                }
+        );
+        System.out.println("list kosong" + list.isEmpty());
 
     }
 
@@ -131,7 +164,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
                         onBackPressed();
                         break;
                     case R.id.nav_my_plant:
-                        myPlant = new Intent(MainActivity.this, tanamanKu.class);
+                        myPlant = new Intent(MainActivity.this, TanamanKu.class);
                         startActivity(myPlant);
                         onBackPressed();
                         break;
@@ -172,7 +205,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
     @Override
     public void onBackPressed() {
         final DrawerLayout drawer = findViewById(R.id.drawer_layout);
-        drawer.setDescendantFocusability(ViewGroup.FOCUS_BLOCK_DESCENDANTS);
+//        drawer.setDescendantFocusability(ViewGroup.FOCUS_BLOCK_DESCENDANTS);
 
         if (drawer.isDrawerOpen(Gravity.START)){
             drawer.closeDrawers();
@@ -181,20 +214,59 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
         }
     }
 
-    private void showRecyclerList() {
-        TanamanAdapter tanamanAdapter = new TanamanAdapter(list);
+//    private void showRecyclerList() {
+//        TanamanAdapter tanamanAdapter = new TanamanAdapter(list);
+//        rvTanaman.setAdapter(tanamanAdapter);
+//        rvTanaman.setLayoutManager(new LinearLayoutManager(this,LinearLayoutManager.HORIZONTAL,false));
+//
+//
+//        tanamanAdapter.setOnItemClickCallback(new TanamanAdapter.OnItemClickCallback() {
+//            @Override
+//            public void onItemClicked(Tanaman tanaman) {
+//                Intent intent = new Intent(getApplicationContext(),DetailTanaman.class);
+//                intent.putExtra(DetailTanaman.EXTRA_TANAMAN,tanaman);
+//                startActivity(intent);
+//            }
+//        });
+//    }
+  
+  
+   @Override
+    protected void onStart() {
+        super.onStart();
+        GoogleSignInResult result = User.setOptionalPendingResult(googleApiClient);
+        if (result != null) {
+            GoogleSignInAccount account = User.handleSignInResult(result);
+            if (account != null) {
+                tvName.setText(account.getDisplayName());
+                tvEmail.setText(account.getEmail());
+                if(account.getPhotoUrl() != null){
+                    Glide.with(this).load(account.getPhotoUrl()).into(imgProfile);
+                }else{
+                    imgProfile.setImageResource(R.mipmap.ic_logo);
+                }
+            } else {
+                gotoLoginActivity();
+            }
+        } else {
+            gotoLoginActivity();
+        }
+
+    }
+
+    private void showRecyclerList(ArrayList<Tanaman> tanaman) {
+        TanamanAdapter tanamanAdapter = new TanamanAdapter(tanaman);
         rvTanaman.setAdapter(tanamanAdapter);
         rvTanaman.setLayoutManager(new LinearLayoutManager(this,LinearLayoutManager.HORIZONTAL,false));
-
-
         tanamanAdapter.setOnItemClickCallback(new TanamanAdapter.OnItemClickCallback() {
             @Override
             public void onItemClicked(Tanaman tanaman) {
-                Intent intent = new Intent(getApplicationContext(),DetailTanaman.class);
-                intent.putExtra(DetailTanaman.EXTRA_TANAMAN,tanaman);
+                Intent intent = new Intent(getApplicationContext(), DetailTanaman.class);
+                intent.putExtra(DetailTanaman.EXTRA_TANAMAN, tanaman);
                 startActivity(intent);
             }
         });
+
     }
 
     @Override
@@ -204,39 +276,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
         return true;
     }
 
-    @Override
-    protected void onStart() {
-        super.onStart();
 
-        OptionalPendingResult<GoogleSignInResult> opr = Auth.GoogleSignInApi.silentSignIn(googleApiClient);
-        if (opr.isDone()){
-            GoogleSignInResult result =opr.get();
-            handleSignInResult(result);
-        }else{
-            opr.setResultCallback(new ResultCallback<GoogleSignInResult>() {
-                @Override
-                public void onResult(@NonNull GoogleSignInResult googleSignInResult) {
-                    handleSignInResult(googleSignInResult);
-                }
-            });
-        }
-    }
-
-    private void handleSignInResult(GoogleSignInResult result) {
-        if (result.isSuccess()){
-            GoogleSignInAccount account = result.getSignInAccount();
-            tvName.setText(account.getDisplayName());
-            tvEmail.setText(account.getEmail());
-            if(account.getPhotoUrl() != null){
-                 Glide.with(this).load(account.getPhotoUrl()).into(imgProfile);
-            }else{
-                imgProfile.setImageResource(R.mipmap.ic_logo);
-            }
-
-        }else{
-            gotoLoginActivity();
-        }
-    }
 
     private void gotoLoginActivity() {
         Intent intent = new Intent(this,MainActivity.class);

@@ -61,6 +61,7 @@
         app:maxImageSize="30dp"
         android:padding="10dp"
         app:fabSize="normal"
+        android:visibility="gone"
         android:elevation="6dp"
         android:layout_gravity="bottom|end"
         android:layout_margin="@dimen/fab_margin"

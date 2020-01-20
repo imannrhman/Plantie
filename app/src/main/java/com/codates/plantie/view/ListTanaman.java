@@ -16,10 +16,12 @@ import android.widget.Toast;
 import com.codates.plantie.R;
 import com.codates.plantie.model.Tanaman;
 import com.codates.plantie.adapter.TanamanAdapter;
+import com.codates.plantie.model.Tutorial;
 import com.github.florent37.awesomebar.ActionItem;
 import com.github.florent37.awesomebar.AwesomeBar;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
@@ -45,8 +47,9 @@ public class ListTanaman extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list_tanaman);
-        AwesomeBar bar = findViewById(R.id.bar);
-        getSupportActionBar().hide();
+      
+        getSupportActionBar().hide();      
+        AwesomeBar bar = findViewById(R.id.bar);        
         final PageLoader pageLoader = findViewById(R.id.progress_bar);
         setPageLoader(pageLoader);
         db.collection("tanaman").get().addOnCompleteListener(
@@ -57,12 +60,18 @@ public class ListTanaman extends AppCompatActivity {
                             pageLoader.stopProgress();
                             for (QueryDocumentSnapshot document : task.getResult()) {
                                 Log.d("MyTag", document.getId() + " => " + document.getData());
-                                Tanaman tanaman = document.toObject(Tanaman.class);
+                                Tanaman tanaman = new Tanaman();
+                                tanaman.setIdTanaman(document.getId());
+                                tanaman.setGambar((String) document.getData().get("gambar"));
+                                tanaman.setIdTutorial((DocumentReference) document.getData().get("idTutorial"));
+                                tanaman.setMinggu((String) document.getData().get("minggu"));
+                                tanaman.setNamaTanaman((String) document.getData().get("namaTanaman"));
                                 System.out.println(tanaman.getIdTutorial());
                                 list.add(tanaman);
                             }
                             try {
                                 showRecyclerList(list);
+                                bar.addAction(R.drawable.ic_search_black_24dp, "Cari");
                             } catch (Exception e) {
                                 Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
                             }
@@ -79,7 +88,6 @@ public class ListTanaman extends AppCompatActivity {
 
         bar.getSettings().setAnimateMenu(false);
         bar.displayHomeAsUpEnabled(true);
-        bar.addAction(R.drawable.ic_search_black_24dp, "Cari");
 
         bar.setOnMenuClickedListener(new View.OnClickListener() {
             @Override

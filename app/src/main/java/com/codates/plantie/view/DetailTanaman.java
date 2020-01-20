@@ -1,6 +1,8 @@
 package com.codates.plantie.view;
 
+import android.content.Context;
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
@@ -14,6 +16,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.ContextCompat;
+import androidx.core.content.res.ResourcesCompat;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -24,18 +27,18 @@ import com.codates.plantie.adapter.MingguAdapter;
 import com.codates.plantie.model.Tutorial;
 import com.codates.plantie.view_menanam.MenanamActivity;
 import com.google.android.material.appbar.CollapsingToolbarLayout;
-import com.google.firebase.firestore.DocumentReference;
 
 
 public class DetailTanaman extends AppCompatActivity {
     public static final String EXTRA_TANAMAN = "extra_tanaman";
     ImageView gambar;
-    RecyclerView rvMinggu;
+    public RecyclerView rvMinggu;
     RelativeLayout rlCaraMenanam;
     Toolbar toolbar;
     CollapsingToolbarLayout collapsingToolbarLayout;
     TextView tvMinggu;
     Tanaman tanaman;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -86,6 +89,11 @@ public class DetailTanaman extends AppCompatActivity {
                 startActivity(mulaiMenanam);
             }
         });
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
     }
 
     private void showRecyclerList() {

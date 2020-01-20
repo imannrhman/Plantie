@@ -10,7 +10,7 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.codates.plantie.R;
-import com.codates.plantie.adapter.PenyakitAdapter;
+//import com.codates.plantie.adapter.PenyakitAdapter;
 import com.codates.plantie.model.Penyakit;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -66,7 +66,7 @@ public class ListPenyakit extends AppCompatActivity {
     }
 
     private void showRecyclerView(ArrayList<Penyakit> penyakit){
-        PenyakitAdapter penyakitAdapter = new PenyakitAdapter(penyakit);
+       // PenyakitAdapter penyakitAdapter = new PenyakitAdapter(penyakit);
 //        recyclerViewOne.setAdapter(penyakitAdapter);
         recyclerViewOne.setLayoutManager(new LinearLayoutManager(this));
         recyclerViewOne.setHasFixedSize(true);

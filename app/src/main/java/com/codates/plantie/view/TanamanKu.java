@@ -78,7 +78,7 @@ public class TanamanKu extends AppCompatActivity implements GoogleApiClient.OnCo
                 if(queryDocumentSnapshots.isEmpty()){
                     pageLoader.stopProgress();
                     imgEmpty.setVisibility(View.VISIBLE);
-                    imgEmpty.setVisibility(View.VISIBLE);
+                    txtEmpty.setVisibility(View.VISIBLE);
 
                 }else{
                     for(final DocumentSnapshot document : queryDocumentSnapshots){
@@ -89,10 +89,11 @@ public class TanamanKu extends AppCompatActivity implements GoogleApiClient.OnCo
                             public void onSuccess(DocumentSnapshot documentSnapshot) {
                                 try{
                                     Tanaman tanaman = documentSnapshot.toObject(Tanaman.class);
+                                    tanaman.setIdTanaman(documentSnapshot.getId());
                                     listTanaman.add(tanaman);
                                     pageLoader.stopProgress();
                                     showRecyclerList(listTanaman);
-                                    Toast.makeText(getApplicationContext(),tanaman + "",Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(getApplicationContext(),document.getId()+ "",Toast.LENGTH_SHORT).show();
                                 }catch (Exception e){
                                     Toast.makeText(getApplicationContext(),e.getMessage(),Toast.LENGTH_SHORT).show();
                                 }

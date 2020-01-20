@@ -19,15 +19,32 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.codates.plantie.R;
+import com.codates.plantie.model.Hari;
+import com.codates.plantie.model.Minggu;
 import com.codates.plantie.model.Tanaman;
 import com.codates.plantie.adapter.MingguAdapter;
 import com.codates.plantie.model.Tutorial;
+import com.codates.plantie.model.User;
 import com.codates.plantie.view_menanam.MenanamActivity;
+import com.google.android.gms.auth.api.Auth;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.auth.api.signin.GoogleSignInResult;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.appbar.CollapsingToolbarLayout;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
+
+import java.util.ArrayList;
+import java.util.Map;
 
 
-public class DetailTanaman extends AppCompatActivity {
+public class DetailTanaman extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener {
     public static final String EXTRA_TANAMAN = "extra_tanaman";
     ImageView gambar;
     RecyclerView rvMinggu;
@@ -36,6 +53,11 @@ public class DetailTanaman extends AppCompatActivity {
     CollapsingToolbarLayout collapsingToolbarLayout;
     TextView tvMinggu;
     Tanaman tanaman;
+    private GoogleApiClient googleApiClient;
+    private GoogleSignInOptions gso;
+
+    FirebaseFirestore db = FirebaseFirestore.getInstance();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -63,7 +85,7 @@ public class DetailTanaman extends AppCompatActivity {
         rlCaraMenanam = findViewById(R.id.btnCaraMenanam);
         this.tanaman = getIntent().getParcelableExtra(EXTRA_TANAMAN);
         assert tanaman != null;
-        Tutorial documentReference = tanaman.getIdTutorial();
+        final Tutorial documentReference = tanaman.getIdTutorial();
         try {
             Toast.makeText(this, documentReference + "", Toast.LENGTH_LONG).show();
         } catch (Exception e) {
@@ -73,7 +95,38 @@ public class DetailTanaman extends AppCompatActivity {
         collapsingToolbarLayout.setTitle(tanaman.getNamaTanaman());
         Glide.with(this).load(tanaman.getGambar())
                 .into(gambar);
-        showRecyclerList();
+        gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestEmail()
+                .build();
+        googleApiClient = new GoogleApiClient.Builder(this)
+                .enableAutoManage(this,this)
+                .addApi(Auth.GOOGLE_SIGN_IN_API,gso)
+                .build();
+        final GoogleSignInAccount account = getAccount();
+        assert  account != null;
+        DocumentReference reference = db.collection("tanaman").document(tanaman.getIdTanaman());
+        db.collection("tanaman_user").whereEqualTo("uid",account.getId()).whereEqualTo("idTanaman",reference).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+            @Override
+            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                if(queryDocumentSnapshots.isEmpty()){
+
+                }else{
+                    ArrayList<Hari> listHari = new ArrayList<>();
+                    for(DocumentSnapshot documentSnapshot : queryDocumentSnapshots.getDocuments()){
+                        try{
+
+                             listHari = (ArrayList<Hari>) documentSnapshot.get("minggu");
+
+                             }catch (Exception e){
+                            Toast.makeText(getApplicationContext(),e.getMessage(),Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                    showRecyclerList(listHari);
+                }
+            }
+        });
+
+
 
         rlCaraMenanam.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -88,8 +141,23 @@ public class DetailTanaman extends AppCompatActivity {
         });
     }
 
-    private void showRecyclerList() {
-        MingguAdapter mingguAdapter = new MingguAdapter();
+    private GoogleSignInAccount getAccount(){
+        GoogleSignInResult result = User.setOptionalPendingResult(googleApiClient);
+        if (result != null) {
+            GoogleSignInAccount account = User.handleSignInResult(result);
+            if (account != null) {
+                return account;
+            } else {
+                return null;
+            }
+        } else {
+            return null;
+        }
+    }
+
+    private void showRecyclerList(ArrayList<Hari> listMinggu) {
+        rvMinggu.setVisibility(View.VISIBLE  );
+        MingguAdapter mingguAdapter = new MingguAdapter(listMinggu);
         rvMinggu.setAdapter(mingguAdapter);
         rvMinggu.setLayoutManager(new GridLayoutManager(this, 3));
         mingguAdapter.setOnItemClickCallback(new MingguAdapter.OnItemClickCallback() {
@@ -112,5 +180,10 @@ public class DetailTanaman extends AppCompatActivity {
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    @Override
+    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+
     }
 }

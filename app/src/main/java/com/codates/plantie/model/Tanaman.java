@@ -11,6 +11,19 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 
 public class Tanaman implements Parcelable {
+    public String getIdTanaman() {
+        return idTanaman;
+    }
+
+    public void setIdTanaman(String idTanaman) {
+        this.idTanaman = idTanaman;
+    }
+
+    public void setGambar(String gambar) {
+        this.gambar = gambar;
+    }
+
+    String idTanaman;
     String namaTanaman;
     String minggu;
     String gambar;
@@ -60,6 +73,7 @@ public class Tanaman implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(this.idTanaman);
         dest.writeString(this.namaTanaman);
         dest.writeString(this.minggu);
         dest.writeString(this.gambar);
@@ -70,6 +84,7 @@ public class Tanaman implements Parcelable {
     }
 
     protected Tanaman(Parcel in) {
+        this.idTanaman = in.readString();
         this.namaTanaman = in.readString();
         this.minggu = in.readString();
         this.gambar = in.readString();

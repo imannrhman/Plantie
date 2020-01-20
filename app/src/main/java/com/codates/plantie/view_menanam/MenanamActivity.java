@@ -1,14 +1,26 @@
 package com.codates.plantie.view_menanam;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 
+import com.bumptech.glide.Glide;
 import com.codates.plantie.R;
 import com.codates.plantie.adapter.TanamanAdapter;
 import com.codates.plantie.model.Tanaman;
+import com.codates.plantie.model.TanamanUser;
+import com.codates.plantie.model.TanamanUserData;
 import com.codates.plantie.model.Tutorial;
+import com.codates.plantie.model.User;
 import com.codates.plantie.view.DetailTanaman;
+import com.google.android.gms.auth.api.Auth;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.auth.api.signin.GoogleSignInResult;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
@@ -29,34 +41,92 @@ import android.widget.Toast;
 import com.codates.plantie.view_menanam.ui.main.SectionsPagerAdapter;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 
-public class MenanamActivity extends AppCompatActivity {
+public class MenanamActivity extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener {
     public static final String EXTRA_POSITION = "extra_position";
     RecyclerView rvTanaman;
+    FirebaseFirestore db = FirebaseFirestore.getInstance();
+    private GoogleApiClient googleApiClient;
+    private GoogleSignInOptions gso;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_menanam);
-        Tanaman tanaman = getIntent().getParcelableExtra(EXTRA_POSITION);
+        final Tanaman tanaman = getIntent().getParcelableExtra(EXTRA_POSITION);
         assert tanaman != null;
         final ViewPager viewPager = findViewById(R.id.view_pager);
         Toast.makeText(getApplicationContext(),tanaman.getNamaTanaman(),Toast.LENGTH_LONG).show();
         TabLayout tabs = findViewById(R.id.tabs);
         tabs.setupWithViewPager(viewPager);
 
-        SectionsPagerAdapter sectionsPagerAdapter = new SectionsPagerAdapter(this,getSupportFragmentManager(),tanaman);
+        gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestEmail()
+                .build();
+        googleApiClient = new GoogleApiClient.Builder(this)
+                .enableAutoManage(this,this)
+                .addApi(Auth.GOOGLE_SIGN_IN_API,gso)
+                .build();
+
+
+        final SectionsPagerAdapter sectionsPagerAdapter = new SectionsPagerAdapter(this,getSupportFragmentManager(),tanaman);
         viewPager.setAdapter(sectionsPagerAdapter);
-        FloatingActionButton fab = findViewById(R.id.btnchecklistTutorial);
-        fab.setOnClickListener(new View.OnClickListener() {
+        final FloatingActionButton fab = findViewById(R.id.btnchecklistTutorial);
+        final GoogleSignInAccount account = getAccount();
+        assert  account != null;
+        DocumentReference documentReference = db.collection("tanaman").document(tanaman.getIdTanaman());
+
+        db.collection("tanaman_user").whereEqualTo("uid",account.getId()).whereEqualTo("idTanaman",documentReference ).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+            @SuppressLint("RestrictedApi")
             @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                if(queryDocumentSnapshots.isEmpty()){
+                    fab.setVisibility(View.VISIBLE);
+                    fab.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            DocumentReference documentReference = db.collection("tanaman").document(tanaman.getIdTanaman());
+                            TanamanUser userData = TanamanUserData.setTanamanUser(Integer.parseInt(tanaman.getMinggu()),
+                                    documentReference,
+                                    account.getId()
+                            );
+                            db.collection("tanaman_user").add(userData);
+                            Intent intent = new Intent(getApplicationContext(),DetailTanaman.class);
+                            intent.putExtra(DetailTanaman.EXTRA_TANAMAN, tanaman);
+                            startActivity(intent);
+                        }
+                    });
+                }
             }
         });
+    }
+
+
+    private GoogleSignInAccount getAccount(){
+        GoogleSignInResult result = User.setOptionalPendingResult(googleApiClient);
+        if (result != null) {
+            GoogleSignInAccount account = User.handleSignInResult(result);
+            if (account != null) {
+                return account;
+            } else {
+                return null;
+            }
+        } else {
+            return null;
+        }
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+    }
+
+    @Override
+    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
 
     }
 }

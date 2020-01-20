@@ -10,6 +10,7 @@ import com.bumptech.glide.Glide;
 import com.codates.plantie.R;
 import com.codates.plantie.model.Tanaman;
 import com.codates.plantie.adapter.TanamanAdapter;
+import com.codates.plantie.model.User;
 import com.github.florent37.awesomebar.ActionItem;
 import com.github.florent37.awesomebar.AwesomeBar;
 import com.google.android.gms.auth.api.Auth;
@@ -18,8 +19,6 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.common.api.OptionalPendingResult;
-import com.google.android.gms.common.api.ResultCallback;
 
 import android.view.Gravity;
 import android.view.MenuItem;
@@ -123,7 +122,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
                         onBackPressed();
                         break;
                     case R.id.nav_my_plant:
-                        myPlant = new Intent(MainActivity.this, tanamanKu.class);
+                        myPlant = new Intent(MainActivity.this, TanamanKu.class);
                         startActivity(myPlant);
                         onBackPressed();
                         break;
@@ -199,35 +198,24 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
     @Override
     protected void onStart() {
         super.onStart();
-
-        OptionalPendingResult<GoogleSignInResult> opr = Auth.GoogleSignInApi.silentSignIn(googleApiClient);
-        if (opr.isDone()){
-            GoogleSignInResult result =opr.get();
-            handleSignInResult(result);
-        }else{
-            opr.setResultCallback(new ResultCallback<GoogleSignInResult>() {
-                @Override
-                public void onResult(@NonNull GoogleSignInResult googleSignInResult) {
-                    handleSignInResult(googleSignInResult);
+        GoogleSignInResult result = User.setOptionalPendingResult(googleApiClient);
+        if (result != null) {
+            GoogleSignInAccount account = User.handleSignInResult(result);
+            if (account != null) {
+                tvName.setText(account.getDisplayName());
+                tvEmail.setText(account.getEmail());
+                if(account.getPhotoUrl() != null){
+                    Glide.with(this).load(account.getPhotoUrl()).into(imgProfile);
+                }else{
+                    imgProfile.setImageResource(R.mipmap.ic_logo);
                 }
-            });
-        }
-    }
-
-    private void handleSignInResult(GoogleSignInResult result) {
-        if (result.isSuccess()){
-            GoogleSignInAccount account = result.getSignInAccount();
-            tvName.setText(account.getDisplayName());
-            tvEmail.setText(account.getEmail());
-            if(account.getPhotoUrl() != null){
-               Glide.with(this).load(account.getPhotoUrl()).into(imgProfile);
-                 }else{
-                imgProfile.setImageResource(R.mipmap.ic_logo);
+            } else {
+                gotoLoginActivity();
             }
-
-        }else{
+        } else {
             gotoLoginActivity();
         }
+
     }
 
     private void gotoLoginActivity() {

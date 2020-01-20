@@ -25,7 +25,7 @@
             android:label="@string/title_activity_laporan"
             android:theme="@style/AppTheme.NoActionBar"/>
        <activity
-            android:name=".view.tanamanKu"
+            android:name=".view.TanamanKu"
             android:resizeableActivity="false" />
         <activity
             android:name=".view.DetailTanaman"

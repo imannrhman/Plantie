@@ -68,7 +68,6 @@ public class PlaceholderFragment extends Fragment {
             @NonNull LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_menanam, container, false);
-        final TextView textView = root.findViewById(R.id.section_label);
         rvTutorial = root.findViewById(R.id.rv_tutorial);
         ImageView imageView = root.findViewById(R.id.img_alat);
         TextView textViewAlat = root.findViewById(R.id.textview_alat);

@@ -170,7 +170,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
                         onBackPressed();
                         break;
                     case R.id.nav_hama:
-                        hama = new Intent(MainActivity.this, PengembanganActivity.class);
+                        hama = new Intent(MainActivity.this, ListPenyakit.class);
                         startActivity(hama);
                         onBackPressed();
                         break;

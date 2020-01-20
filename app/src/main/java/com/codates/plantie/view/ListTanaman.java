@@ -84,7 +84,6 @@ public class ListTanaman extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 onBackPressed();
-
             }
         });
         bar.setActionItemClickListener(new AwesomeBar.ActionItemClickListener() {

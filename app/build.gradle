@@ -46,6 +46,7 @@ dependencies {
     implementation 'com.google.android.gms:play-services-gcm:17.0.0'
     implementation 'com.google.android.gms:play-services-auth:17.0.0'
     implementation 'id.arieridwan:pageloader:0.0.2'
+    implementation 'com.makeramen:roundedimageview:2.3.0'
     androidTestImplementation 'androidx.test:runner:1.2.0'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
 }

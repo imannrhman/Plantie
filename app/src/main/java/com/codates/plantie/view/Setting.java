@@ -1,7 +1,9 @@
 package com.codates.plantie.view;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
@@ -9,9 +11,13 @@ import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.res.ResourcesCompat;
 
+import com.afollestad.materialdialogs.DialogAction;
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.codates.plantie.R;
 import com.github.florent37.awesomebar.AwesomeBar;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -112,17 +118,43 @@ public class Setting extends AppCompatActivity implements AdapterView.OnItemSele
         spinnerSore.setSelection(adapterSore.getPosition(posisiSore));
         spinnerSore.setOnItemSelectedListener(this);
 
+        final Typeface faceMed = ResourcesCompat.getFont(this, R.font.montserratsemibold);
+        final Typeface face = ResourcesCompat.getFont(this, R.font.montserrat);
+
         btnSave = findViewById(R.id.btnSetting);
         btnSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                setPreference(PAGI, wpagi);
-                setPreference(SORE, wsore);
-                Snackbar.make(v, "pagi hari : "+getPreference(PAGI)+
-                        "\nsore hari : "+getPreference(SORE), Snackbar.LENGTH_LONG).show();
+                click();
             }
         });
 
+    }
+
+    public void click(){
+        final Typeface faceMed = ResourcesCompat.getFont(this, R.font.montserratsemibold);
+        final Typeface face = ResourcesCompat.getFont(this, R.font.montserrat);
+
+        setPreference(PAGI, wpagi);
+        setPreference(SORE, wsore);
+
+        MaterialDialog dialog = new MaterialDialog.Builder(this)
+                .title("PENGATURAN")
+                .content("Pengingat Menyiram" + "\r\n- Pagi : " + getPreference(PAGI) + "\r\n- Sore : " + getPreference(SORE) )
+                .positiveText("OK")
+                .icon(getResources().getDrawable(R.mipmap.ic_logo))
+                .autoDismiss(true)
+                .typeface(faceMed,face)
+                .show();
+
+        View positiveBtn = dialog.getActionButton(DialogAction.POSITIVE);
+        positiveBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent home = new Intent(Setting.this, MainActivity.class);
+                startActivity(home);
+            }
+        });
     }
 
     public void setPreference(String key, String value) {

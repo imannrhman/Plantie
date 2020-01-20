@@ -3,6 +3,13 @@ package com.codates.plantie.view;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.Paint;
+import android.graphics.PorterDuff;
+import android.graphics.PorterDuffXfermode;
+import android.graphics.Rect;
+import android.graphics.RectF;
 import android.net.Uri;
 import android.os.Bundle;
 
@@ -20,6 +27,8 @@ import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 
+import android.provider.MediaStore;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
@@ -27,7 +36,12 @@ import android.view.View;
 import androidx.annotation.NonNull;
 import androidx.navigation.ui.AppBarConfiguration;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.navigation.NavigationView;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import androidx.drawerlayout.widget.DrawerLayout;
 
@@ -53,6 +67,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
    private GoogleApiClient googleApiClient;
    private GoogleSignInOptions gso;
    Context context;
+    FirebaseFirestore db = FirebaseFirestore.getInstance();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -93,7 +108,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
         bar.displayHomeAsUpEnabled(false);
         rvTanaman = findViewById(R.id.recycler_view);
         rvTanaman.setHasFixedSize(true);
-        showRecyclerList();
+        showRecyclerList(list);
         NavigationView navigationView = findViewById(R.id.nav_view);
         setupNavDrawer(navigationView);
         tvName = navigationView.getHeaderView(0).findViewById(R.id.tv_name);
@@ -106,6 +121,33 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
                 .enableAutoManage(this,this)
                 .addApi(Auth.GOOGLE_SIGN_IN_API,gso)
                 .build();
+
+
+        // list tanaman
+        db.collection("tanaman").get().addOnCompleteListener(
+                new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                Log.d("MyTag", document.getId() + " => " + document.getData());
+                                Tanaman tanaman = document.toObject(Tanaman.class);
+                                System.out.println(tanaman.getIdTutorial());
+                                list.add(tanaman);
+                            }
+                            try {
+                                showRecyclerList(list);
+                            } catch (Exception e) {
+                                Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
+                            }
+
+                        } else {
+                            Log.d("Main", "Error getting documents: ", task.getException());
+                        }
+                    }
+                }
+        );
+        System.out.println("list kosong" + list.isEmpty());
 
     }
 
@@ -127,7 +169,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
                         onBackPressed();
                         break;
                     case R.id.nav_hama:
-                        hama = new Intent(MainActivity.this, PengembanganActivity.class);
+                        hama = new Intent(MainActivity.this, ListPenyakit.class);
                         startActivity(hama);
                         onBackPressed();
                         break;
@@ -163,7 +205,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
     @Override
     public void onBackPressed() {
         final DrawerLayout drawer = findViewById(R.id.drawer_layout);
-        drawer.setDescendantFocusability(ViewGroup.FOCUS_BLOCK_DESCENDANTS);
+//        drawer.setDescendantFocusability(ViewGroup.FOCUS_BLOCK_DESCENDANTS);
 
         if (drawer.isDrawerOpen(Gravity.START)){
             drawer.closeDrawers();
@@ -172,30 +214,24 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
         }
     }
 
-    private void showRecyclerList() {
-        TanamanAdapter tanamanAdapter = new TanamanAdapter(list);
-        rvTanaman.setAdapter(tanamanAdapter);
-        rvTanaman.setLayoutManager(new LinearLayoutManager(this,LinearLayoutManager.HORIZONTAL,false));
-
-
-        tanamanAdapter.setOnItemClickCallback(new TanamanAdapter.OnItemClickCallback() {
-            @Override
-            public void onItemClicked(Tanaman tanaman) {
-                Intent intent = new Intent(getApplicationContext(),DetailTanaman.class);
-                intent.putExtra(DetailTanaman.EXTRA_TANAMAN,tanaman);
-                startActivity(intent);
-            }
-        });
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.main, menu);
-        return true;
-    }
-
-    @Override
+//    private void showRecyclerList() {
+//        TanamanAdapter tanamanAdapter = new TanamanAdapter(list);
+//        rvTanaman.setAdapter(tanamanAdapter);
+//        rvTanaman.setLayoutManager(new LinearLayoutManager(this,LinearLayoutManager.HORIZONTAL,false));
+//
+//
+//        tanamanAdapter.setOnItemClickCallback(new TanamanAdapter.OnItemClickCallback() {
+//            @Override
+//            public void onItemClicked(Tanaman tanaman) {
+//                Intent intent = new Intent(getApplicationContext(),DetailTanaman.class);
+//                intent.putExtra(DetailTanaman.EXTRA_TANAMAN,tanaman);
+//                startActivity(intent);
+//            }
+//        });
+//    }
+  
+  
+   @Override
     protected void onStart() {
         super.onStart();
         GoogleSignInResult result = User.setOptionalPendingResult(googleApiClient);
@@ -217,6 +253,30 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
         }
 
     }
+
+    private void showRecyclerList(ArrayList<Tanaman> tanaman) {
+        TanamanAdapter tanamanAdapter = new TanamanAdapter(tanaman);
+        rvTanaman.setAdapter(tanamanAdapter);
+        rvTanaman.setLayoutManager(new LinearLayoutManager(this,LinearLayoutManager.HORIZONTAL,false));
+        tanamanAdapter.setOnItemClickCallback(new TanamanAdapter.OnItemClickCallback() {
+            @Override
+            public void onItemClicked(Tanaman tanaman) {
+                Intent intent = new Intent(getApplicationContext(), DetailTanaman.class);
+                intent.putExtra(DetailTanaman.EXTRA_TANAMAN, tanaman);
+                startActivity(intent);
+            }
+        });
+
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.main, menu);
+        return true;
+    }
+
+
 
     private void gotoLoginActivity() {
         Intent intent = new Intent(this,MainActivity.class);

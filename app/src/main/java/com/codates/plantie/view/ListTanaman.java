@@ -47,7 +47,7 @@ public class ListTanaman extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list_tanaman);
-        AwesomeBar bar = findViewById(R.id.bar);
+        final AwesomeBar bar = findViewById(R.id.bar);
         final PageLoader pageLoader = findViewById(R.id.progress_bar);
         setPageLoader(pageLoader);
         db.collection("tanaman").get().addOnCompleteListener(
@@ -69,6 +69,7 @@ public class ListTanaman extends AppCompatActivity {
                             }
                             try {
                                 showRecyclerList(list);
+                                bar.addAction(R.drawable.ic_search_black_24dp, "Cari");
                             } catch (Exception e) {
                                 Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
                             }
@@ -85,12 +86,11 @@ public class ListTanaman extends AppCompatActivity {
 
         bar.getSettings().setAnimateMenu(false);
         bar.displayHomeAsUpEnabled(true);
-        bar.addAction(R.drawable.ic_search_black_24dp, "Cari");
+
         bar.setOnMenuClickedListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 onBackPressed();
-
             }
         });
         bar.setActionItemClickListener(new AwesomeBar.ActionItemClickListener() {

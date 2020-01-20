@@ -1,6 +1,8 @@
 package com.codates.plantie.view;
 
+import android.content.Context;
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
@@ -14,6 +16,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.ContextCompat;
+import androidx.core.content.res.ResourcesCompat;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -40,6 +43,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
+
 import java.util.ArrayList;
 import java.util.Map;
 
@@ -47,16 +51,16 @@ import java.util.Map;
 public class DetailTanaman extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener {
     public static final String EXTRA_TANAMAN = "extra_tanaman";
     ImageView gambar;
-    RecyclerView rvMinggu;
+    public RecyclerView rvMinggu;
     RelativeLayout rlCaraMenanam;
     Toolbar toolbar;
     CollapsingToolbarLayout collapsingToolbarLayout;
     TextView tvMinggu;
     Tanaman tanaman;
     private GoogleApiClient googleApiClient;
-    private GoogleSignInOptions gso;
-
+   private GoogleSignInOptions gso;
     FirebaseFirestore db = FirebaseFirestore.getInstance();
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -153,6 +157,12 @@ public class DetailTanaman extends AppCompatActivity implements GoogleApiClient.
         } else {
             return null;
         }
+    }
+
+
+    @Override
+    protected void onStart() {
+        super.onStart();
     }
 
     private void showRecyclerList(ArrayList<Hari> listMinggu) {

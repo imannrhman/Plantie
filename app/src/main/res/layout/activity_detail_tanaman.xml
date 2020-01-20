@@ -5,16 +5,14 @@
     xmlns:tools="http://schemas.android.com/tools "
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fitsSystemWindows="true"
-    >
-
+    android:fitsSystemWindows="true">
 
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="256dp"
         android:id="@+id/appbar"
-        android:fitsSystemWindows="true"
-        >
+        android:fitsSystemWindows="true">
+
         <com.google.android.material.appbar.CollapsingToolbarLayout
             android:id="@+id/collapsing_toolbar"
             android:layout_width="match_parent"
@@ -170,6 +168,7 @@
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recycler_view_minggu"
                 android:layout_width="match_parent"
+                android:visibility="visible"
                 android:layout_marginTop="16dp"
                 android:visibility="gone"
                 android:layout_height="match_parent"

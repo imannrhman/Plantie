@@ -46,6 +46,7 @@ public class ListTanaman extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list_tanaman);
         AwesomeBar bar = findViewById(R.id.bar);
+        getSupportActionBar().hide();
         final PageLoader pageLoader = findViewById(R.id.progress_bar);
         setPageLoader(pageLoader);
         db.collection("tanaman").get().addOnCompleteListener(

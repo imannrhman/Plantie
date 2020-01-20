@@ -10,7 +10,11 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.view.Gravity;
 import android.view.Window;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.view.animation.DecelerateInterpolator;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.codates.plantie.R;
 
@@ -21,17 +25,41 @@ private int time = 4000;
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash_screen);
+        ImageView ivSplash = findViewById(R.id.img_logo);
+        final TextView tvSplash = findViewById(R.id.tv_plantie);
 
-        new Handler().postDelayed(new Runnable() {
+        Animation anim = AnimationUtils.loadAnimation(getBaseContext(), R.anim.fade_in);
+
+        ivSplash.startAnimation(anim);
+        tvSplash.startAnimation(anim);
+
+        anim.setAnimationListener(new Animation.AnimationListener() {
             @Override
-            public void run() {
+            public void onAnimationStart(Animation animation) {
+
+            }
+
+            @Override
+            public void onAnimationEnd(Animation animation) {
                 Intent login = new Intent(SplashScreen.this,LoginActivity.class);
                 startActivity(login);
                 finish();
             }
-        }, time);
+
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+
+            }
+        });
+
+//        new Handler().postDelayed(new Runnable() {
+//            @Override
+//            public void run() {
+//                Intent login = new Intent(SplashScreen.this,LoginActivity.class);
+//                startActivity(login);
+//                finish();
+//            }
+//        }, time);
 
     }
-
-
 }

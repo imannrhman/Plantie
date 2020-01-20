@@ -37,16 +37,24 @@ public class ListPenyakit extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list_penyakit);
+        getSupportActionBar().hide();
         db.collection("penyakit").get().addOnCompleteListener(
                 new OnCompleteListener<QuerySnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         if (task.isSuccessful()){
                             for(QueryDocumentSnapshot documentSnapshot : task.getResult()){
-                                Log.d("MyTag", documentSnapshot.getId() + " => " + documentSnapshot.getData());
-                                Penyakit penyakit = documentSnapshot.toObject(Penyakit.class);
-                                System.out.println(penyakit.getTitle());
-                                listPenyakit.add(penyakit);
+                                try{
+                                    Log.d("", documentSnapshot.getId() + " => " + documentSnapshot.getData());
+                                    Penyakit penyakit = documentSnapshot.toObject(Penyakit.class);
+                                    System.out.println(penyakit.getTitle());
+                                    listPenyakit.add(penyakit);
+                                } catch(Exception ex){
+                                    Log.d("errorini", ex.getMessage());
+
+                                    Toast.makeText(getApplicationContext(), ex.getMessage(), Toast.LENGTH_SHORT).show();
+                                }
+
                             }
                             try{
                                 showRecyclerView(listPenyakit);
@@ -66,8 +74,9 @@ public class ListPenyakit extends AppCompatActivity {
     }
 
     private void showRecyclerView(ArrayList<Penyakit> penyakit){
-       // PenyakitAdapter penyakitAdapter = new PenyakitAdapter(penyakit);
-//        recyclerViewOne.setAdapter(penyakitAdapter);
+
+        PenyakitAdapter penyakitAdapter = new PenyakitAdapter(penyakit);
+        recyclerViewOne.setAdapter(penyakitAdapter);
         recyclerViewOne.setLayoutManager(new LinearLayoutManager(this));
         recyclerViewOne.setHasFixedSize(true);
     }

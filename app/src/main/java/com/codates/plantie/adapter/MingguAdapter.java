@@ -9,10 +9,19 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.codates.plantie.R;
+import com.codates.plantie.model.Hari;
+import com.codates.plantie.model.Minggu;
+
+import java.util.ArrayList;
 
 public class MingguAdapter extends RecyclerView.Adapter<MingguAdapter.ViewHolder> {
     private OnItemClickCallback onItemClickCallback;
 
+    public MingguAdapter(ArrayList<Hari> minggu) {
+        this.minggu = minggu;
+    }
+
+    private ArrayList<Hari> minggu;
     public void setOnItemClickCallback(OnItemClickCallback onItemClickCallback) {
         this.onItemClickCallback = onItemClickCallback;
     }
@@ -32,7 +41,7 @@ public class MingguAdapter extends RecyclerView.Adapter<MingguAdapter.ViewHolder
     @Override
     public void onBindViewHolder(@NonNull MingguAdapter.ViewHolder holder, final int position) {
         int nomor = position + 1 ;
-        holder.tvMinggu.setText("Minggu "+ nomor);
+        holder.tvMinggu.setText("Minggu "+ nomor );
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -43,7 +52,7 @@ public class MingguAdapter extends RecyclerView.Adapter<MingguAdapter.ViewHolder
 
     @Override
     public int getItemCount() {
-        return 30;
+        return minggu.size();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {

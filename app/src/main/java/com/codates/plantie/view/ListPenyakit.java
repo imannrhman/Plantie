@@ -11,6 +11,7 @@ import android.widget.Toast;
 
 import com.codates.plantie.R;
 //import com.codates.plantie.adapter.PenyakitAdapter;
+import com.codates.plantie.adapter.PenyakitAdapter;
 import com.codates.plantie.model.Penyakit;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;

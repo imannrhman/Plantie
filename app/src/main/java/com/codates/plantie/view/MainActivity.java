@@ -133,6 +133,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
                                 Log.d("MyTag", document.getId() + " => " + document.getData());
                                 Tanaman tanaman = document.toObject(Tanaman.class);
                                 System.out.println(tanaman.getIdTutorial());
+                                tanaman.setIdTanaman(document.getId());
                                 list.add(tanaman);
                             }
                             try {

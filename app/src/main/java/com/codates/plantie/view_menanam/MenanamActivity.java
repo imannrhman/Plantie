@@ -102,9 +102,7 @@ public class MenanamActivity extends AppCompatActivity implements GoogleApiClien
                                     account.getId()
                             );
                             db.collection("tanaman_user").add(userData);
-                            Intent intent = new Intent(getApplicationContext(),DetailTanaman.class);
-                            intent.putExtra(DetailTanaman.EXTRA_TANAMAN, tanaman);
-                            startActivity(intent);
+                            finish();
                         }
                     });
                 }

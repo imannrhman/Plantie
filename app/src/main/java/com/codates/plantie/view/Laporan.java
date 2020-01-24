@@ -3,6 +3,8 @@ package com.codates.plantie.view;
 import android.os.Bundle;
 
 import com.codates.plantie.R;
+import com.codates.plantie.model.Hari;
+import com.codates.plantie.model.Minggu;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.tabs.TabLayout;
@@ -25,7 +27,8 @@ public class Laporan extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_laporan);
-        SectionsPagerAdapter sectionsPagerAdapter = new SectionsPagerAdapter(this, getSupportFragmentManager());
+        Minggu minggu = getIntent().getParcelableExtra(EXTRA_POSITION);
+        SectionsPagerAdapter sectionsPagerAdapter = new SectionsPagerAdapter(this, getSupportFragmentManager(),minggu);
         ViewPager viewPager = findViewById(R.id.view_pager);
         viewPager.setAdapter(sectionsPagerAdapter);
         TabLayout tabs = findViewById(R.id.tabs);

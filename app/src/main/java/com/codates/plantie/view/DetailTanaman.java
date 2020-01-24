@@ -37,15 +37,19 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.appbar.CollapsingToolbarLayout;
+import com.google.firebase.database.util.JsonMapper;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.gson.Gson;
+import com.google.gson.JsonElement;
 
 
 import java.util.ArrayList;
 import java.util.Map;
+import java.util.Objects;
 
 
 public class DetailTanaman extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener {
@@ -58,7 +62,7 @@ public class DetailTanaman extends AppCompatActivity implements GoogleApiClient.
     TextView tvMinggu;
     Tanaman tanaman;
     private GoogleApiClient googleApiClient;
-   private GoogleSignInOptions gso;
+    private GoogleSignInOptions gso;
     FirebaseFirestore db = FirebaseFirestore.getInstance();
 
 
@@ -103,33 +107,37 @@ public class DetailTanaman extends AppCompatActivity implements GoogleApiClient.
                 .requestEmail()
                 .build();
         googleApiClient = new GoogleApiClient.Builder(this)
-                .enableAutoManage(this,this)
-                .addApi(Auth.GOOGLE_SIGN_IN_API,gso)
+                .enableAutoManage(this, this)
+                .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
                 .build();
         final GoogleSignInAccount account = getAccount();
-        assert  account != null;
+        assert account != null;
         DocumentReference reference = db.collection("tanaman").document(tanaman.getIdTanaman());
-        db.collection("tanaman_user").whereEqualTo("uid",account.getId()).whereEqualTo("idTanaman",reference).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+        db.collection("tanaman_user").whereEqualTo("uid", account.getId()).whereEqualTo("idTanaman", reference).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
             @Override
             public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                if(queryDocumentSnapshots.isEmpty()){
+                if (queryDocumentSnapshots.isEmpty()) {
 
-                }else{
-                    ArrayList<Hari> listHari = new ArrayList<>();
-                    for(DocumentSnapshot documentSnapshot : queryDocumentSnapshots.getDocuments()){
-                        try{
+                } else {
+                    ArrayList<Minggu> listMinggu = new ArrayList<>();
+                    for (DocumentSnapshot documentSnapshot : queryDocumentSnapshots.getDocuments()) {
+                        try {
+                            listMinggu = (ArrayList<Minggu>) documentSnapshot.get("minggu");
 
-                             listHari = (ArrayList<Hari>) documentSnapshot.get("minggu");
-
-                             }catch (Exception e){
-                            Toast.makeText(getApplicationContext(),e.getMessage(),Toast.LENGTH_SHORT).show();
+                        } catch (Exception e) {
+                            Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
                         }
                     }
-                    showRecyclerList(listHari);
+                    for (int i = 0; i < listMinggu.size(); i++) {
+                        Gson gson = new Gson();
+                        JsonElement jsonElement = gson.toJsonTree(listMinggu.get(i));
+                        Minggu pojo = gson.fromJson(jsonElement, Minggu.class);
+                        listMinggu.set(i, pojo);
+                     }
+                    showRecyclerList(listMinggu);
                 }
             }
         });
-
 
 
         rlCaraMenanam.setOnClickListener(new View.OnClickListener() {
@@ -138,14 +146,14 @@ public class DetailTanaman extends AppCompatActivity implements GoogleApiClient.
 //                Toast.makeText(getApplicationContext(), "Sudah di Click", Toast.LENGTH_SHORT).show();
                 System.out.println(tanaman.getIdTutorial());
                 Intent mulaiMenanam = new Intent(DetailTanaman.this, MenanamActivity.class);
-                Log.d("tanamam",tanaman.getIdTutorial() + "");
+                Log.d("tanamam", tanaman.getIdTutorial() + "");
                 mulaiMenanam.putExtra(MenanamActivity.EXTRA_POSITION, tanaman);
                 startActivity(mulaiMenanam);
             }
         });
     }
 
-    private GoogleSignInAccount getAccount(){
+    private GoogleSignInAccount getAccount() {
         GoogleSignInResult result = User.setOptionalPendingResult(googleApiClient);
         if (result != null) {
             GoogleSignInAccount account = User.handleSignInResult(result);
@@ -165,17 +173,17 @@ public class DetailTanaman extends AppCompatActivity implements GoogleApiClient.
         super.onStart();
     }
 
-    private void showRecyclerList(ArrayList<Hari> listMinggu) {
-        rvMinggu.setVisibility(View.VISIBLE  );
+    private void showRecyclerList(final ArrayList<Minggu> listMinggu) {
+        rvMinggu.setVisibility(View.VISIBLE);
         MingguAdapter mingguAdapter = new MingguAdapter(listMinggu);
         rvMinggu.setAdapter(mingguAdapter);
         rvMinggu.setLayoutManager(new GridLayoutManager(this, 3));
         mingguAdapter.setOnItemClickCallback(new MingguAdapter.OnItemClickCallback() {
             @Override
             public void onItemClicked(int posisition) {
-                Intent intent = new Intent(getApplicationContext(), Laporan.class);
-                intent.putExtra(Laporan.EXTRA_POSITION, posisition);
-                startActivity(intent);
+               Intent intent = new Intent(getApplicationContext(),Laporan.class);
+               intent.putExtra(Laporan.EXTRA_POSITION,listMinggu.get(posisition));
+               startActivity(intent);
             }
         });
 

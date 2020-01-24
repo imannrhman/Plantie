@@ -1,5 +1,6 @@
 package com.codates.plantie.view.ui.main;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,8 +12,19 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.codates.plantie.R;
+import com.codates.plantie.adapter.HariAdapter;
+import com.codates.plantie.adapter.MingguAdapter;
+import com.codates.plantie.model.DeskripsiHari;
+import com.codates.plantie.model.Hari;
+import com.codates.plantie.model.Minggu;
+import com.codates.plantie.view.Laporan;
+
+import java.util.ArrayList;
 
 
 /**
@@ -21,11 +33,17 @@ import com.codates.plantie.R;
 public class PlaceholderFragment extends Fragment {
 
     private static final String ARG_SECTION_NUMBER = "section_number";
+    RecyclerView rvHari;
 
     private PageViewModel pageViewModel;
+    private Minggu minggu;
 
-    public static PlaceholderFragment newInstance(int index) {
-        PlaceholderFragment fragment = new PlaceholderFragment();
+    public PlaceholderFragment(Minggu minggu) {
+        this.minggu = minggu;
+    }
+
+    public static PlaceholderFragment newInstance(int index, Minggu minggu) {
+        PlaceholderFragment fragment = new PlaceholderFragment(minggu);
         Bundle bundle = new Bundle();
         bundle.putInt(ARG_SECTION_NUMBER, index);
         fragment.setArguments(bundle);
@@ -40,6 +58,7 @@ public class PlaceholderFragment extends Fragment {
         if (getArguments() != null) {
             index = getArguments().getInt(ARG_SECTION_NUMBER);
         }
+
         pageViewModel.setIndex(index);
     }
 
@@ -48,13 +67,22 @@ public class PlaceholderFragment extends Fragment {
             @NonNull LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_laporan, container, false);
-        final TextView textView = root.findViewById(R.id.section_label);
-        pageViewModel.getText().observe(this, new Observer<String>() {
+        rvHari = root.findViewById(R.id.rv_laporan);
+        pageViewModel.getPosition().observe(this, new Observer<Integer>() {
             @Override
-            public void onChanged(@Nullable String s) {
-                textView.setText(s);
+            public void onChanged(Integer position) {
+
+                showRecyclerList(minggu.getHari().get(position).getDeskripsi());
+
             }
         });
         return root;
+    }
+    private void showRecyclerList(final ArrayList<DeskripsiHari> deskripsiHari) {
+        HariAdapter hariAdapter = new HariAdapter(deskripsiHari);
+        rvHari.setLayoutManager(new LinearLayoutManager(getContext()));
+        rvHari.setAdapter(hariAdapter);
+        rvHari.setHasFixedSize(true);
+
     }
 }

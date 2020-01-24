@@ -17,11 +17,11 @@ import java.util.ArrayList;
 public class MingguAdapter extends RecyclerView.Adapter<MingguAdapter.ViewHolder> {
     private OnItemClickCallback onItemClickCallback;
 
-    public MingguAdapter(ArrayList<Hari> minggu) {
+    public MingguAdapter(ArrayList<Minggu> minggu) {
         this.minggu = minggu;
     }
 
-    private ArrayList<Hari> minggu;
+    private ArrayList<Minggu> minggu;
     public void setOnItemClickCallback(OnItemClickCallback onItemClickCallback) {
         this.onItemClickCallback = onItemClickCallback;
     }

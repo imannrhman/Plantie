@@ -12,9 +12,12 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".view.OnBoardingActivity"></activity>
+        <activity android:name=".view.OnBoardingActivity"
+                  android:theme="@style/AppTheme.NoActionBar"></activity>
         <activity android:name=".view.DetailPenyakit" />
-        <activity android:name=".view.ListPenyakit" />
+        <activity android:name=".view.ListPenyakit"
+                  android:resizeableActivity="false"
+                  android:theme="@style/ListPenyakit"/>
         <activity android:name=".view.PengembanganActivity" />
         <activity android:name=".view.TanamanKuActivity" />
         <activity

@@ -58,7 +58,7 @@ public class DetailTanaman extends AppCompatActivity implements GoogleApiClient.
     TextView tvMinggu;
     Tanaman tanaman;
     private GoogleApiClient googleApiClient;
-   private GoogleSignInOptions gso;
+    private GoogleSignInOptions gso;
     FirebaseFirestore db = FirebaseFirestore.getInstance();
 
 

@@ -52,6 +52,7 @@
                         android:id="@+id/img_jenis_penyakit"
                         android:layout_width="12dp"
                         android:layout_height="12dp"
+                        android:scaleType="centerCrop"
                         android:layout_gravity="center_vertical"
                         android:src="@drawable/ic_virus_penyakit"/>
 

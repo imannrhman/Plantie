@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.annotation.NonNull;
@@ -22,7 +23,9 @@ import com.codates.plantie.adapter.MingguAdapter;
 import com.codates.plantie.model.DeskripsiHari;
 import com.codates.plantie.model.Hari;
 import com.codates.plantie.model.Minggu;
+import com.codates.plantie.model.MingguTemp;
 import com.codates.plantie.view.Laporan;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
 
@@ -34,16 +37,19 @@ public class PlaceholderFragment extends Fragment {
 
     private static final String ARG_SECTION_NUMBER = "section_number";
     RecyclerView rvHari;
-
+    FirebaseFirestore db = FirebaseFirestore.getInstance();
     private PageViewModel pageViewModel;
     private Minggu minggu;
-
-    public PlaceholderFragment(Minggu minggu) {
+    private String tanamanUserId;
+    private  MingguTemp mingguTemp;
+    public PlaceholderFragment(Minggu minggu,String tanamanUserId,MingguTemp mingguTemp) {
         this.minggu = minggu;
+        this.tanamanUserId = tanamanUserId;
+        this.mingguTemp = mingguTemp;
     }
 
-    public static PlaceholderFragment newInstance(int index, Minggu minggu) {
-        PlaceholderFragment fragment = new PlaceholderFragment(minggu);
+    public static PlaceholderFragment newInstance(int index, Minggu minggu, String tanamanUserId, MingguTemp mingguTemp) {
+        PlaceholderFragment fragment = new PlaceholderFragment(minggu,tanamanUserId,mingguTemp);
         Bundle bundle = new Bundle();
         bundle.putInt(ARG_SECTION_NUMBER, index);
         fragment.setArguments(bundle);
@@ -63,6 +69,17 @@ public class PlaceholderFragment extends Fragment {
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+        pageViewModel.getPosition().observe(this, new Observer<Integer>() {
+            @Override
+            public void onChanged(Integer position) {
+                showRecyclerList(minggu.getHari().get(position).getDeskripsi(),minggu.getHari(),position);
+            }
+        });
+    }
+
+    @Override
     public View onCreateView(
             @NonNull LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState) {
@@ -71,18 +88,31 @@ public class PlaceholderFragment extends Fragment {
         pageViewModel.getPosition().observe(this, new Observer<Integer>() {
             @Override
             public void onChanged(Integer position) {
-
-                showRecyclerList(minggu.getHari().get(position).getDeskripsi());
-
+                    showRecyclerList(minggu.getHari().get(position).getDeskripsi(),minggu.getHari(),position);
             }
         });
         return root;
     }
-    private void showRecyclerList(final ArrayList<DeskripsiHari> deskripsiHari) {
-        HariAdapter hariAdapter = new HariAdapter(deskripsiHari);
+    private void showRecyclerList(final ArrayList<DeskripsiHari> deskripsiHari, final ArrayList<Hari> hari, final int dayPosition) {
+        System.out.println(hari.get(dayPosition));
+        HariAdapter hariAdapter = new HariAdapter(deskripsiHari,hari.get(dayPosition));
         rvHari.setLayoutManager(new LinearLayoutManager(getContext()));
         rvHari.setAdapter(hariAdapter);
         rvHari.setHasFixedSize(true);
+        hariAdapter.setOnItemClickCallback(new HariAdapter.OnItemClickCallback() {
+            @Override
+            public void onItemClicked(int position) {
+                deskripsiHari.get(position).setSelesai(!deskripsiHari.get(position).isSelesai());
+                hari.get(dayPosition).setDeskripsi(deskripsiHari);
+                 int mingguPosition = mingguTemp.getPosition();
+                 ArrayList<Minggu> mingguList = mingguTemp.getTempListMinggu();
+
+                 mingguList.get(mingguPosition).setHari(hari);
+
+                db.collection("tanaman_user").document(tanamanUserId).update("minggu",mingguList);
+
+            }
+        });
 
     }
 }

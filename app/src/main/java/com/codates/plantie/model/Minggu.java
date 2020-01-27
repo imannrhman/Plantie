@@ -4,9 +4,9 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 import java.util.ArrayList;
+import java.util.Date;
 
 public class Minggu implements Parcelable {
-
     public ArrayList<Hari> hari;
     public boolean selesai;
 

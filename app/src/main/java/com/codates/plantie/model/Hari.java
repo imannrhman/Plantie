@@ -4,10 +4,12 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Map;
 
 public class Hari implements Parcelable {
     public ArrayList<DeskripsiHari> deskripsi;
+    public String date;
 
     public ArrayList<DeskripsiHari> getDeskripsi() {
         return deskripsi;
@@ -15,6 +17,14 @@ public class Hari implements Parcelable {
 
     public void setDeskripsi(ArrayList<DeskripsiHari> deskripsi) {
         this.deskripsi = deskripsi;
+    }
+
+    public String getDate() {
+        return date;
+    }
+
+    public void setDate(String date) {
+        this.date = date;
     }
 
 
@@ -25,15 +35,16 @@ public class Hari implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeList(this.deskripsi);
+        dest.writeTypedList(this.deskripsi);
+        dest.writeString(this.date);
     }
 
     public Hari() {
     }
 
     protected Hari(Parcel in) {
-        this.deskripsi = new ArrayList<DeskripsiHari>();
-        in.readList(this.deskripsi, DeskripsiHari.class.getClassLoader());
+        this.deskripsi = in.createTypedArrayList(DeskripsiHari.CREATOR);
+        this.date = in.readString();
     }
 
     public static final Parcelable.Creator<Hari> CREATOR = new Parcelable.Creator<Hari>() {

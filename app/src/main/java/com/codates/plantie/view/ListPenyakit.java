@@ -39,6 +39,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
@@ -47,8 +48,11 @@ import java.util.ArrayList;
 public class ListPenyakit extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener {
 
     private RecyclerView recyclerViewOne;
+    private RecyclerView recyclerViewTwo;
     private ArrayList<Penyakit> listPenyakit = new ArrayList<>();
+    private ArrayList<Penyakit> listPenyakit2 = new ArrayList<>();
     FirebaseFirestore db = FirebaseFirestore.getInstance();
+    FirebaseFirestore db2 = FirebaseFirestore.getInstance();
     TextView tvName, tvEmail;
     ImageView imgProfile;
     Intent home, myPlant, setting, hama;
@@ -97,7 +101,7 @@ public class ListPenyakit extends AppCompatActivity implements GoogleApiClient.O
                 .build();
 
 
-        db.collection("penyakit").get().addOnCompleteListener(
+        db.collection("penyakit").orderBy("jumlah_view", Query.Direction.DESCENDING).limit(10).get().addOnCompleteListener(
                 new OnCompleteListener<QuerySnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
@@ -113,7 +117,6 @@ public class ListPenyakit extends AppCompatActivity implements GoogleApiClient.O
 
                                     Toast.makeText(getApplicationContext(), ex.getMessage(), Toast.LENGTH_SHORT).show();
                                 }
-
                             }
                             try{
                                 showRecyclerView(listPenyakit);
@@ -128,8 +131,39 @@ public class ListPenyakit extends AppCompatActivity implements GoogleApiClient.O
                 }
         );
 
+        db2.collection("penyakit").get().addOnCompleteListener(
+                new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            for (QueryDocumentSnapshot documentSnapshot : task.getResult()) {
+                                try {
+                                    Log.d("success", documentSnapshot.getId() + " => " + documentSnapshot.getData());
+                                    Penyakit penyakit2 = documentSnapshot.toObject(Penyakit.class);
+                                    System.out.println(penyakit2.getTitle());
+                                    listPenyakit2.add(penyakit2);
+                                } catch (Exception ex) {
+                                    Log.d("error", ex.getMessage());
+
+                                    Toast.makeText(getApplicationContext(), ex.getMessage(), Toast.LENGTH_SHORT).show();
+                                }
+                            }
+                            try {
+                                showRecyclerViewTwo(listPenyakit2);
+                            } catch (Exception ex) {
+                                Toast.makeText(getApplicationContext(), ex.getMessage(), Toast.LENGTH_SHORT).show();
+                            }
+                        } else {
+                            Log.d("Main", "Error Getting Documents: ", task.getException());
+                        }
+                    }
+                }
+        );
+
         recyclerViewOne = findViewById(R.id.recycler_view_penyakit);
-        System.out.println("list kosong" + listPenyakit.isEmpty());
+        System.out.println("list kosong " + listPenyakit.isEmpty());
+        recyclerViewTwo = findViewById(R.id.recycler_view_penyakit_dua);
+        System.out.println("list kosong " + listPenyakit2.isEmpty());
     }
 
     private void setupNavDrawer(NavigationView navigationView){
@@ -240,6 +274,24 @@ public class ListPenyakit extends AppCompatActivity implements GoogleApiClient.O
         recyclerViewOne.setAdapter(penyakitAdapter);
         recyclerViewOne.setLayoutManager(llm);
         recyclerViewOne.setHasFixedSize(true);
+        penyakitAdapter.setOnItemClickCallback(new PenyakitAdapter.OnItemClickCallback() {
+            @Override
+            public void onItemClicked(Penyakit penyakit) {
+                Intent intent = new Intent(getApplicationContext(), DetailPenyakit.class);
+                intent.putExtra(DetailPenyakit.EXTRA_PENYAKIT, penyakit);
+                startActivity(intent);
+            }
+        });
+    }
+
+    private void showRecyclerViewTwo(ArrayList<Penyakit> penyakit){
+
+        LinearLayoutManager llm2 = new LinearLayoutManager(this);
+        llm2.setOrientation(LinearLayoutManager.VERTICAL);
+        PenyakitAdapter penyakitAdapter = new PenyakitAdapter(penyakit);
+        recyclerViewTwo.setAdapter(penyakitAdapter);
+        recyclerViewTwo.setLayoutManager(llm2);
+        recyclerViewTwo.setHasFixedSize(true);
         penyakitAdapter.setOnItemClickCallback(new PenyakitAdapter.OnItemClickCallback() {
             @Override
             public void onItemClicked(Penyakit penyakit) {

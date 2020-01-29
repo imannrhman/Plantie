@@ -14,7 +14,9 @@
         tools:ignore="GoogleAppIndexingWarning">
         <activity android:name=".view.OnBoardingActivity"
                   android:theme="@style/AppTheme.NoActionBar"></activity>
-        <activity android:name=".view.DetailPenyakit" />
+        <activity android:name=".view.DetailPenyakit"
+                  android:resizeableActivity="false"
+                  android:theme="@style/DetailPenyakit"/>
         <activity android:name=".view.ListPenyakit"
                   android:resizeableActivity="false"
                   android:theme="@style/ListPenyakit"/>

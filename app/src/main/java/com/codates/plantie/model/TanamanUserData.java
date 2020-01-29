@@ -11,6 +11,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Random;
 
 public class TanamanUserData {
 
@@ -25,6 +26,20 @@ public class TanamanUserData {
         return hari;
     }
 
+    public static Hari getTugasHarianPupuk(){
+        Hari hari = new Hari();
+        ArrayList<DeskripsiHari> deskripsi = new ArrayList<DeskripsiHari>();
+        deskripsi.add(new DeskripsiHari(
+                "Menyiram Tanaman Pagi",false));
+        deskripsi.add(new DeskripsiHari(
+                "Memberi Pupuk pada Tanaman",false));
+        deskripsi.add(new DeskripsiHari(
+                "Menyiram Tanaman Sore",false));
+        hari.setDeskripsi(deskripsi);
+        return hari;
+    }
+
+
     public static  Minggu getMinggu(ArrayList<Date> date){
         Minggu minggu = new Minggu();
         ArrayList<Hari> harian = new ArrayList<>();
@@ -33,7 +48,24 @@ public class TanamanUserData {
             SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
             harian.get(i).setDate(simpleDateFormat.format(date.get(i)));
             System.out.println(harian.get(i).getDate());
+        }
+        minggu.setSelesai(false);
+        minggu.setHari(harian);
+        return minggu;
+    }
 
+    public static  Minggu getMingguMemupuk(ArrayList<Date> date){
+        Minggu minggu = new Minggu();
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        ArrayList<Hari> harian = new ArrayList<>();
+        for(int i= 0 ; i < 7 ; i++ ){
+            if(i==3){
+                harian.add(getTugasHarianPupuk());
+            }else{
+                harian.add(getTugasHarian());
+            }
+            harian.get(i).setDate(simpleDateFormat.format(date.get(i)));
+            System.out.println(harian.get(i).getDate());
         }
         minggu.setSelesai(false);
         minggu.setHari(harian);
@@ -60,10 +92,12 @@ public class TanamanUserData {
                 }else{
                     date.set(j,calendar.getTime());
                 }
-                tempDate = tempDate + 1;
-                System.out.println(tempDate);
             }
-            mingguan.add(getMinggu(date));
+           if(i == 0){
+               mingguan.add(getMinggu(date));
+           }else{
+               mingguan.add(getMingguMemupuk(date));
+           }
         }
         tanamanUser.setIdTanaman(documentReference);
         tanamanUser.setUid(uid);

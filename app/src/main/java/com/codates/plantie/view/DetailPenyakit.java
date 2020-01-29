@@ -62,7 +62,12 @@ public class DetailPenyakit extends AppCompatActivity implements GoogleApiClient
                 ContextCompat.getColor(this, R.color.white)
         );
 
-        imageView = findViewById(R.id.img_header);
+        imageView = findViewById(R.id.gambar_header
+
+
+
+
+        );
         this.penyakit = getIntent().getParcelableExtra(EXTRA_PENYAKIT);
         assert penyakit != null;
         txt_judul.setText(penyakit.getTitle());

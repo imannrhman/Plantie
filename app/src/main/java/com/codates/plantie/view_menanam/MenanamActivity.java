@@ -93,6 +93,7 @@ public class MenanamActivity extends AppCompatActivity implements GoogleApiClien
             @Override
             public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
                 if(queryDocumentSnapshots.isEmpty()){
+                    infoDialog();
                     fab.setVisibility(View.VISIBLE);
                     fab.setOnClickListener(new View.OnClickListener() {
                         @Override
@@ -162,7 +163,7 @@ public class MenanamActivity extends AppCompatActivity implements GoogleApiClien
     @Override
     protected void onStart() {
         super.onStart();
-        infoDialog();
+
     }
 
     @Override

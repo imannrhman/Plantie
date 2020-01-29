@@ -22,6 +22,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.codates.plantie.R;
+import com.codates.plantie.model.DeskripsiHari;
 import com.codates.plantie.model.Hari;
 import com.codates.plantie.model.Minggu;
 import com.codates.plantie.model.MingguTemp;
@@ -48,6 +49,7 @@ import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Map;
 import java.util.Objects;
@@ -60,7 +62,7 @@ public class DetailTanaman extends AppCompatActivity implements GoogleApiClient.
     RelativeLayout rlCaraMenanam;
     Toolbar toolbar;
     CollapsingToolbarLayout collapsingToolbarLayout;
-    TextView tvMinggu;
+    TextView tvPengerjaan,tvTugasHarian;
     Tanaman tanaman;
     private GoogleApiClient googleApiClient;
     private GoogleSignInOptions gso;
@@ -71,9 +73,8 @@ public class DetailTanaman extends AppCompatActivity implements GoogleApiClient.
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail_tanaman);
-
+        tvPengerjaan = findViewById(R.id.tv_pengerjaan);
         toolbar = findViewById(R.id.toolbar);
-        tvMinggu = findViewById(R.id.tv_minggu);
 
         setSupportActionBar(toolbar);
         getSupportActionBar().setHomeButtonEnabled(true);
@@ -88,7 +89,7 @@ public class DetailTanaman extends AppCompatActivity implements GoogleApiClient.
         collapsingToolbarLayout.setExpandedTitleColor(
                 ContextCompat.getColor(this, R.color.white)
         );
-
+        tvTugasHarian = findViewById(R.id.tv_tugas_harian);
         gambar = findViewById(R.id.gambar_header);
         rvMinggu = findViewById(R.id.recycler_view_minggu);
         rlCaraMenanam = findViewById(R.id.btnCaraMenanam);
@@ -100,7 +101,7 @@ public class DetailTanaman extends AppCompatActivity implements GoogleApiClient.
         } catch (Exception e) {
             Toast.makeText(this, e.getMessage(), Toast.LENGTH_LONG).show();
         }
-        tvMinggu.setText(tanaman.getMinggu() + " minggu");
+
         collapsingToolbarLayout.setTitle(tanaman.getNamaTanaman());
         Glide.with(this).load(tanaman.getGambar())
                 .into(gambar);
@@ -146,9 +147,9 @@ public class DetailTanaman extends AppCompatActivity implements GoogleApiClient.
                     String tanamanUserId = "";
                     for (DocumentSnapshot documentSnapshot : queryDocumentSnapshots.getDocuments()) {
                         try {
-
                             listMinggu = (ArrayList<Minggu>) documentSnapshot.get("minggu");
                             tanamanUserId = documentSnapshot.getId();
+
                         } catch (Exception e) {
                             Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
                         }
@@ -159,6 +160,27 @@ public class DetailTanaman extends AppCompatActivity implements GoogleApiClient.
                         Minggu pojo = gson.fromJson(jsonElement, Minggu.class);
                         listMinggu.set(i, pojo);
                     }
+                    int jumlahSemuaCeklis = 0;
+                    int jumlahCeklis = 0;
+                    for (int i = 0; i < listMinggu.size(); i++) {
+                        for(int j = 0; j < listMinggu.get(i).getHari().size(); j++){
+                            for (int k = 0 ; k < listMinggu.get(i).getHari().get(j).getDeskripsi().size();k++){
+                                DeskripsiHari deskripsiHari = listMinggu.get(i).getHari().get(j).getDeskripsi().get(k);
+                                jumlahSemuaCeklis += 1;
+                                if(deskripsiHari.isSelesai()){
+                                    jumlahCeklis += 1;
+                                }
+                            }
+                        }
+                    }
+                    double task = Double.valueOf(jumlahCeklis);
+                    double alltask = Double.valueOf(jumlahSemuaCeklis);
+                    double presentase = task/alltask * 100  ;
+                    DecimalFormat decimalFormat = new DecimalFormat("#.##");
+                    String progress = decimalFormat.format(presentase) + " %";
+                    String ceklis = jumlahCeklis + "/" + jumlahSemuaCeklis;
+                    tvPengerjaan.setText(progress);
+                    tvTugasHarian.setText(ceklis);
                     showRecyclerList(listMinggu,tanamanUserId);
                 }
             }

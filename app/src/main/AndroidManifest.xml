@@ -4,6 +4,7 @@
     package="com.codates.plantie">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.WAKE_LOCK"/>
 
     <application
         android:allowBackup="true"
@@ -11,7 +12,12 @@
         android:roundIcon="@mipmap/ic_logo_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
-        tools:ignore="GoogleAppIndexingWarning">
+        tools:ignore="GoogleAppIndexingWarning"
+        android:hardwareAccelerated="true">
+      
+        <activity android:name=".view.DetailPenyakit"></activity>
+        <activity android:name=".view.ListPenyakit" />
+      
         <activity android:name=".view.OnBoardingActivity"
                   android:theme="@style/AppTheme.NoActionBar"></activity>
         <activity android:name=".view.DetailPenyakit"
@@ -20,6 +26,7 @@
         <activity android:name=".view.ListPenyakit"
                   android:resizeableActivity="false"
                   android:theme="@style/ListPenyakit"/>
+
         <activity android:name=".view.PengembanganActivity" />
         <activity android:name=".view.TanamanKuActivity" />
         <activity
@@ -66,6 +73,12 @@
         <meta-data
             android:name="preloaded_fonts"
             android:resource="@array/preloaded_fonts" />
+
+        <receiver
+            android:name=".adapter.AlarmAdapter"
+            android:enabled="true"
+            android:exported="true"/>
+
     </application>
 
 </manifest>

@@ -15,6 +15,15 @@ import java.util.ArrayList;
 
 public class Penyakit implements Parcelable {
 
+    public String getIdPenyakit() {
+        return idPenyakit;
+    }
+
+    public void setIdPenyakit(String idPenyakit) {
+        this.idPenyakit = idPenyakit;
+    }
+
+    String idPenyakit;
     String title;
     String gambar_tanaman;
     String jenis_penyakit;

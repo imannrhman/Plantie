@@ -14,8 +14,19 @@
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning"
         android:hardwareAccelerated="true">
+      
         <activity android:name=".view.DetailPenyakit"></activity>
         <activity android:name=".view.ListPenyakit" />
+      
+        <activity android:name=".view.OnBoardingActivity"
+                  android:theme="@style/AppTheme.NoActionBar"></activity>
+        <activity android:name=".view.DetailPenyakit"
+                  android:resizeableActivity="false"
+                  android:theme="@style/DetailPenyakit"/>
+        <activity android:name=".view.ListPenyakit"
+                  android:resizeableActivity="false"
+                  android:theme="@style/ListPenyakit"/>
+
         <activity android:name=".view.PengembanganActivity" />
         <activity android:name=".view.TanamanKuActivity" />
         <activity
@@ -25,8 +36,8 @@
         <activity
             android:name=".view.Laporan"
             android:label="@string/title_activity_laporan"
-            android:theme="@style/AppTheme.NoActionBar"/>
-       <activity
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
             android:name=".view.TanamanKu"
             android:resizeableActivity="false" />
         <activity

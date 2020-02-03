@@ -3,8 +3,13 @@ package com.codates.plantie.model;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import androidx.annotation.NonNull;
+
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 
 import java.util.ArrayList;
 
@@ -16,7 +21,7 @@ public class Penyakit implements Parcelable {
     String level;
     int jumlah_view;
     Content content;
-    ArrayList<DocumentReference> jenis_tanaman;
+    ArrayList<Tanaman> jenis_tanaman=new ArrayList<>();
 
     public String getTitle() {
         return title;
@@ -66,12 +71,25 @@ public class Penyakit implements Parcelable {
         this.content = content;
     }
 
-    public ArrayList<DocumentReference> getJenis_tanaman() {
+    public ArrayList<Tanaman> getJenis_tanaman() {
         return jenis_tanaman;
     }
 
-    public void setJenis_tanaman(ArrayList<DocumentReference> jenis_tanaman) {
-        this.jenis_tanaman = jenis_tanaman;
+    public void setJenis_tanaman(ArrayList<DocumentReference> documentReferences) {
+
+        for(int i=0;i<documentReferences.size();i++){
+            documentReferences.get(i).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                @Override
+                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                    if (task.isSuccessful()) {
+                        Tanaman tanaman = task.getResult().toObject(Tanaman.class);
+                        jenis_tanaman.add(tanaman);
+
+                    }
+                }
+            });
+        }
+
     }
 
     protected Penyakit(Parcel in){
@@ -81,7 +99,7 @@ public class Penyakit implements Parcelable {
         this.level = in.readString();
         this.jumlah_view = in.readInt();
         this.content = in.readParcelable(Content.class.getClassLoader());
-        this.jenis_tanaman = new ArrayList<DocumentReference>();
+        this.jenis_tanaman = new ArrayList<Tanaman>();
         in.readList(this.jenis_tanaman, DocumentReference.class.getClassLoader());
 
     }

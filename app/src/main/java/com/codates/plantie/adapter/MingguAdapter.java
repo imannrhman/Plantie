@@ -1,10 +1,12 @@
 package com.codates.plantie.adapter;
 
+import android.graphics.drawable.ColorDrawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import androidx.annotation.ColorRes;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -17,11 +19,11 @@ import java.util.ArrayList;
 public class MingguAdapter extends RecyclerView.Adapter<MingguAdapter.ViewHolder> {
     private OnItemClickCallback onItemClickCallback;
 
-    public MingguAdapter(ArrayList<Hari> minggu) {
+    public MingguAdapter(ArrayList<Minggu> minggu) {
         this.minggu = minggu;
     }
 
-    private ArrayList<Hari> minggu;
+    private ArrayList<Minggu> minggu;
     public void setOnItemClickCallback(OnItemClickCallback onItemClickCallback) {
         this.onItemClickCallback = onItemClickCallback;
     }
@@ -41,6 +43,9 @@ public class MingguAdapter extends RecyclerView.Adapter<MingguAdapter.ViewHolder
     @Override
     public void onBindViewHolder(@NonNull MingguAdapter.ViewHolder holder, final int position) {
         int nomor = position + 1 ;
+       if(minggu.get(position).isSelesai()){
+           holder.itemView.setBackgroundColor(0x5fc388);
+       }
         holder.tvMinggu.setText("Minggu "+ nomor );
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override

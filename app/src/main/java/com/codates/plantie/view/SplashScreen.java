@@ -41,7 +41,7 @@ private int time = 4000;
 
             @Override
             public void onAnimationEnd(Animation animation) {
-                Intent login = new Intent(SplashScreen.this,LoginActivity.class);
+                Intent login = new Intent(SplashScreen.this,OnBoardingActivity.class);
                 startActivity(login);
                 finish();
             }

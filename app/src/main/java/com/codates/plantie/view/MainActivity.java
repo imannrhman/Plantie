@@ -6,20 +6,27 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.Canvas;
-import android.graphics.Paint;
-import android.graphics.PorterDuff;
-import android.graphics.PorterDuffXfermode;
-import android.graphics.Rect;
-import android.graphics.RectF;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.Gravity;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.View;
+import android.widget.ImageView;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.codates.plantie.R;
-import com.codates.plantie.model.Tanaman;
 import com.codates.plantie.adapter.TanamanAdapter;
+import com.codates.plantie.model.Tanaman;
 import com.codates.plantie.model.User;
 import com.github.florent37.awesomebar.ActionItem;
 import com.github.florent37.awesomebar.AwesomeBar;
@@ -29,16 +36,6 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
-
-import android.provider.MediaStore;
-import android.util.Log;
-import android.view.Gravity;
-import android.view.MenuItem;
-import android.view.View;
-
-import androidx.annotation.NonNull;
-import androidx.navigation.ui.AppBarConfiguration;
-
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.navigation.NavigationView;
@@ -46,26 +43,16 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
-import androidx.drawerlayout.widget.DrawerLayout;
-
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
-import android.view.Menu;
-import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.TextView;
-import android.widget.Toast;
-
 import java.util.ArrayList;
 import java.util.Calendar;
 
 public class MainActivity extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener {
     private RecyclerView rvTanaman;
     private ArrayList<Tanaman> list = new ArrayList<>();
+
     private AppBarConfiguration mAppBarConfiguration;
-    TextView tvName,tvEmail;
+    TextView tvName, tvEmail,tvJumlahTanaman;
+
     Intent home, myPlant, setting, hama;
     ImageView imgProfile;
     private GoogleApiClient googleApiClient;
@@ -80,10 +67,10 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
         context = this;
 
         AwesomeBar bar = findViewById(R.id.bar);
-
+        tvJumlahTanaman = findViewById(R.id.tv_jumlah_tanamanku);
         bar.getSettings().setAnimateMenu(false);
 
-        bar.addAction(R.drawable.ic_add_black_24dp,"Tambah");
+        bar.addAction(R.drawable.ic_add_black_24dp, "Tambah");
 
         bar.setActionItemClickListener(new AwesomeBar.ActionItemClickListener() {
             @Override
@@ -95,7 +82,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
         bar.setOverflowActionItemClickListener(new AwesomeBar.OverflowActionItemClickListener() {
             @Override
             public void onOverflowActionItemClicked(int position, String item) {
-                Toast.makeText(getBaseContext(), item+" clicked", Toast.LENGTH_LONG).show();
+                Toast.makeText(getBaseContext(), item + " clicked", Toast.LENGTH_LONG).show();
             }
         });
 
@@ -122,10 +109,22 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
                 .requestEmail()
                 .build();
         googleApiClient = new GoogleApiClient.Builder(this)
-                .enableAutoManage(this,this)
-                .addApi(Auth.GOOGLE_SIGN_IN_API,gso)
+                .enableAutoManage(this, this)
+                .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
                 .build();
 
+        GoogleSignInAccount account = getAccount();
+        db.collection("tanaman_user").whereEqualTo("uid", account.getId()).get().addOnCompleteListener(
+                new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            int jumlah = task.getResult().getDocuments().size();
+                            setJumlahTanaman(String.valueOf(jumlah));
+                        }
+                    }
+                }
+        );
 
         // list tanaman
         db.collection("tanaman").get().addOnCompleteListener(
@@ -156,13 +155,16 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
 
     }
 
-    private void setupNavDrawer(NavigationView navigationView){
+    private void setJumlahTanaman(String jumlah){
+        tvJumlahTanaman.setText(jumlah);
+    }
+    private void setupNavDrawer(NavigationView navigationView) {
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @SuppressLint("WrongConstant")
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
 
-                switch (menuItem.getItemId()){
+                switch (menuItem.getItemId()) {
                     case R.id.nav_home:
                         home = new Intent(context, MainActivity.class);
                         startActivity(home);
@@ -189,8 +191,8 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
                         ));
 //                        intent.setType("text/plain");
 //                        startActivity(Intent.createChooser(intent, "Kritik & Saran"));
-                        intent.putExtra(Intent.EXTRA_EMAIL, new String[] {"codatescompany@gmail.com"});
-                        intent.putExtra(Intent.EXTRA_CC, new String[] {tvEmail.getText().toString()});
+                        intent.putExtra(Intent.EXTRA_EMAIL, new String[]{"codatescompany@gmail.com"});
+                        intent.putExtra(Intent.EXTRA_CC, new String[]{tvEmail.getText().toString()});
                         intent.putExtra(Intent.EXTRA_SUBJECT, "Kritik & Saran");
                         intent.putExtra(Intent.EXTRA_TEXT, "");
 
@@ -212,9 +214,9 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
         final DrawerLayout drawer = findViewById(R.id.drawer_layout);
 //        drawer.setDescendantFocusability(ViewGroup.FOCUS_BLOCK_DESCENDANTS);
 
-        if (drawer.isDrawerOpen(Gravity.START)){
+        if (drawer.isDrawerOpen(Gravity.START)) {
             drawer.closeDrawers();
-        }else {
+        } else {
             super.onBackPressed();
         }
     }
@@ -234,9 +236,23 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
 //            }
 //        });
 //    }
-  
-  
-   @Override
+
+    private GoogleSignInAccount getAccount() {
+        GoogleSignInResult result = User.setOptionalPendingResult(googleApiClient);
+        if (result != null) {
+            GoogleSignInAccount account = User.handleSignInResult(result);
+            if (account != null) {
+                return account;
+            } else {
+                return null;
+            }
+        } else {
+            return null;
+        }
+    }
+
+
+    @Override
     protected void onStart() {
         super.onStart();
         GoogleSignInResult result = User.setOptionalPendingResult(googleApiClient);
@@ -245,9 +261,9 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
             if (account != null) {
                 tvName.setText(account.getDisplayName());
                 tvEmail.setText(account.getEmail());
-                if(account.getPhotoUrl() != null){
+                if (account.getPhotoUrl() != null) {
                     Glide.with(this).load(account.getPhotoUrl()).into(imgProfile);
-                }else{
+                } else {
                     imgProfile.setImageResource(R.mipmap.ic_logo);
                 }
             } else {
@@ -256,13 +272,12 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
         } else {
             gotoLoginActivity();
         }
-
     }
 
     private void showRecyclerList(ArrayList<Tanaman> tanaman) {
         TanamanAdapter tanamanAdapter = new TanamanAdapter(tanaman);
         rvTanaman.setAdapter(tanamanAdapter);
-        rvTanaman.setLayoutManager(new LinearLayoutManager(this,LinearLayoutManager.HORIZONTAL,false));
+        rvTanaman.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
         tanamanAdapter.setOnItemClickCallback(new TanamanAdapter.OnItemClickCallback() {
             @Override
             public void onItemClicked(Tanaman tanaman) {
@@ -282,9 +297,8 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
     }
 
 
-
     private void gotoLoginActivity() {
-        Intent intent = new Intent(this,MainActivity.class);
+        Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
     }
 

@@ -74,6 +74,7 @@ public class MenanamActivity extends AppCompatActivity implements GoogleApiClien
         gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestEmail()
                 .build();
+
         googleApiClient = new GoogleApiClient.Builder(this)
                 .enableAutoManage(this,this)
                 .addApi(Auth.GOOGLE_SIGN_IN_API,gso)
@@ -92,6 +93,7 @@ public class MenanamActivity extends AppCompatActivity implements GoogleApiClien
             @Override
             public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
                 if(queryDocumentSnapshots.isEmpty()){
+                    infoDialog();
                     fab.setVisibility(View.VISIBLE);
                     fab.setOnClickListener(new View.OnClickListener() {
                         @Override
@@ -102,9 +104,7 @@ public class MenanamActivity extends AppCompatActivity implements GoogleApiClien
                                     account.getId()
                             );
                             db.collection("tanaman_user").add(userData);
-                            Intent intent = new Intent(getApplicationContext(),DetailTanaman.class);
-                            intent.putExtra(DetailTanaman.EXTRA_TANAMAN, tanaman);
-                            startActivity(intent);
+                            finish();
                         }
                     });
                 }
@@ -163,7 +163,7 @@ public class MenanamActivity extends AppCompatActivity implements GoogleApiClien
     @Override
     protected void onStart() {
         super.onStart();
-        infoDialog();
+
     }
 
     @Override

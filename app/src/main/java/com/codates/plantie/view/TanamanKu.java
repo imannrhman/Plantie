@@ -25,6 +25,8 @@ import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -42,6 +44,7 @@ public class TanamanKu extends AppCompatActivity implements GoogleApiClient.OnCo
     private ImageView imgEmpty;
     private TextView txtEmpty;
     private PageLoader pageLoader;
+    private FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,14 +67,14 @@ public class TanamanKu extends AppCompatActivity implements GoogleApiClient.OnCo
                 .enableAutoManage(this,this)
                 .addApi(Auth.GOOGLE_SIGN_IN_API,gso)
                 .build();
-        final GoogleSignInAccount account = getAccount();
+        final FirebaseUser account = firebaseAuth.getCurrentUser();
         assert  account != null;
         rvTanaman = findViewById(R.id.recycler_view);
         imgEmpty = findViewById(R.id.img_empty);
         txtEmpty = findViewById(R.id.tv_empty);
         pageLoader = findViewById(R.id.progress_bar);
         setPageLoader(pageLoader);
-          db.collection("tanaman_user").whereEqualTo("uid",account.getId()).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+          db.collection("tanaman_user").whereEqualTo("uid",account.getUid()).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
             @Override
             public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
                 final ArrayList<Tanaman> listTanaman = new ArrayList<>();

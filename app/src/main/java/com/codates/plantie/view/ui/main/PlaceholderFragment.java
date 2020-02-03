@@ -106,10 +106,8 @@ public class PlaceholderFragment extends Fragment {
                 hari.get(dayPosition).setDeskripsi(deskripsiHari);
                  int mingguPosition = mingguTemp.getPosition();
                  ArrayList<Minggu> mingguList = mingguTemp.getTempListMinggu();
-
                  mingguList.get(mingguPosition).setHari(hari);
-
-                db.collection("tanaman_user").document(tanamanUserId).update("minggu",mingguList);
+                 db.collection("tanaman_user").document(tanamanUserId).update("minggu",mingguList);
 
             }
         });

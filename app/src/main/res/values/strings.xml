@@ -3,6 +3,8 @@
     <style name="web_client_id">
         120039102516-evo8r5e0htlib4di6n7lfm251i4k33fp.apps.googleusercontent.com</style>
 
+    <string name="facebook_app_id">474514103227434</string>
+    <string name="fb_login_protocol_scheme">fb474514103227434</string>
     <string name="app_name">Plantie</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>

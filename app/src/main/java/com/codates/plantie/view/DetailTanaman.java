@@ -1,8 +1,6 @@
 package com.codates.plantie.view;
 
-import android.content.Context;
 import android.content.Intent;
-import android.graphics.Typeface;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
@@ -16,18 +14,16 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.ContextCompat;
-import androidx.core.content.res.ResourcesCompat;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.codates.plantie.R;
+import com.codates.plantie.adapter.MingguAdapter;
 import com.codates.plantie.model.DeskripsiHari;
-import com.codates.plantie.model.Hari;
 import com.codates.plantie.model.Minggu;
 import com.codates.plantie.model.MingguTemp;
 import com.codates.plantie.model.Tanaman;
-import com.codates.plantie.adapter.MingguAdapter;
 import com.codates.plantie.model.Tutorial;
 import com.codates.plantie.model.User;
 import com.codates.plantie.view_menanam.MenanamActivity;
@@ -39,20 +35,17 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.appbar.CollapsingToolbarLayout;
-import com.google.firebase.database.util.JsonMapper;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 
-
 import java.text.DecimalFormat;
 import java.util.ArrayList;
-import java.util.Map;
-import java.util.Objects;
 
 
 public class DetailTanaman extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener {
@@ -62,11 +55,10 @@ public class DetailTanaman extends AppCompatActivity implements GoogleApiClient.
     RelativeLayout rlCaraMenanam;
     Toolbar toolbar;
     CollapsingToolbarLayout collapsingToolbarLayout;
-    TextView tvPengerjaan,tvTugasHarian;
+    TextView tvPengerjaan, tvTugasHarian;
     Tanaman tanaman;
-    private GoogleApiClient googleApiClient;
-    private GoogleSignInOptions gso;
     FirebaseFirestore db = FirebaseFirestore.getInstance();
+    private FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
 
 
     @Override
@@ -105,13 +97,6 @@ public class DetailTanaman extends AppCompatActivity implements GoogleApiClient.
         collapsingToolbarLayout.setTitle(tanaman.getNamaTanaman());
         Glide.with(this).load(tanaman.getGambar())
                 .into(gambar);
-        gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestEmail()
-                .build();
-        googleApiClient = new GoogleApiClient.Builder(this)
-                .enableAutoManage(this, this)
-                .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
-                .build();
         showTanamanUser();
         rlCaraMenanam.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -133,11 +118,11 @@ public class DetailTanaman extends AppCompatActivity implements GoogleApiClient.
         showTanamanUser();
     }
 
-    private void showTanamanUser(){
-        final GoogleSignInAccount account = getAccount();
-        assert account != null;
+    private void showTanamanUser() {
         DocumentReference reference = db.collection("tanaman").document(tanaman.getIdTanaman());
-        db.collection("tanaman_user").whereEqualTo("uid", account.getId()).whereEqualTo("idTanaman", reference).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+        FirebaseUser account = firebaseAuth.getCurrentUser();
+        assert account != null;
+        db.collection("tanaman_user").whereEqualTo("uid", account.getUid()).whereEqualTo("idTanaman", reference).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
             @Override
             public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
                 if (queryDocumentSnapshots.isEmpty()) {
@@ -163,11 +148,11 @@ public class DetailTanaman extends AppCompatActivity implements GoogleApiClient.
                     int jumlahSemuaCeklis = 0;
                     int jumlahCeklis = 0;
                     for (int i = 0; i < listMinggu.size(); i++) {
-                        for(int j = 0; j < listMinggu.get(i).getHari().size(); j++){
-                            for (int k = 0 ; k < listMinggu.get(i).getHari().get(j).getDeskripsi().size();k++){
+                        for (int j = 0; j < listMinggu.get(i).getHari().size(); j++) {
+                            for (int k = 0; k < listMinggu.get(i).getHari().get(j).getDeskripsi().size(); k++) {
                                 DeskripsiHari deskripsiHari = listMinggu.get(i).getHari().get(j).getDeskripsi().get(k);
                                 jumlahSemuaCeklis += 1;
-                                if(deskripsiHari.isSelesai()){
+                                if (deskripsiHari.isSelesai()) {
                                     jumlahCeklis += 1;
                                 }
                             }
@@ -175,29 +160,16 @@ public class DetailTanaman extends AppCompatActivity implements GoogleApiClient.
                     }
                     double task = Double.valueOf(jumlahCeklis);
                     double alltask = Double.valueOf(jumlahSemuaCeklis);
-                    double presentase = task/alltask * 100  ;
+                    double presentase = task / alltask * 100;
                     DecimalFormat decimalFormat = new DecimalFormat("#.##");
                     String progress = decimalFormat.format(presentase) + " %";
                     String ceklis = jumlahCeklis + "/" + jumlahSemuaCeklis;
                     tvPengerjaan.setText(progress);
                     tvTugasHarian.setText(ceklis);
-                    showRecyclerList(listMinggu,tanamanUserId);
+                    showRecyclerList(listMinggu, tanamanUserId);
                 }
             }
         });
-    }
-    private GoogleSignInAccount getAccount() {
-        GoogleSignInResult result = User.setOptionalPendingResult(googleApiClient);
-        if (result != null) {
-            GoogleSignInAccount account = User.handleSignInResult(result);
-            if (account != null) {
-                return account;
-            } else {
-                return null;
-            }
-        } else {
-            return null;
-        }
     }
 
 
@@ -227,14 +199,14 @@ public class DetailTanaman extends AppCompatActivity implements GoogleApiClient.
         mingguAdapter.setOnItemClickCallback(new MingguAdapter.OnItemClickCallback() {
             @Override
             public void onItemClicked(int position) {
-               Intent intent = new Intent(getApplicationContext(),Laporan.class);
+                Intent intent = new Intent(getApplicationContext(), Laporan.class);
                 MingguTemp mingguTemp = new MingguTemp();
                 mingguTemp.setTempListMinggu(listMinggu);
                 mingguTemp.setPosition(position);
-               intent.putExtra(Laporan.EXTRA_POSITION,listMinggu.get(position));
-               intent.putExtra(Laporan.EXTRA_DATA,tanamanUserId);
-               intent.putExtra(Laporan.EXTRA_TEMP,mingguTemp);
-               startActivity(intent);
+                intent.putExtra(Laporan.EXTRA_POSITION, listMinggu.get(position));
+                intent.putExtra(Laporan.EXTRA_DATA, tanamanUserId);
+                intent.putExtra(Laporan.EXTRA_TEMP, mingguTemp);
+                startActivity(intent);
             }
         });
 

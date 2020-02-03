@@ -27,18 +27,19 @@ import com.bumptech.glide.Glide;
 import com.codates.plantie.R;
 import com.codates.plantie.adapter.TanamanAdapter;
 import com.codates.plantie.model.Tanaman;
-import com.codates.plantie.model.User;
+import com.facebook.login.LoginManager;
 import com.github.florent37.awesomebar.ActionItem;
 import com.github.florent37.awesomebar.AwesomeBar;
-import com.google.android.gms.auth.api.Auth;
-import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
-import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.navigation.NavigationView;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
@@ -49,20 +50,21 @@ import java.util.Calendar;
 public class MainActivity extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener {
     private RecyclerView rvTanaman;
     private ArrayList<Tanaman> list = new ArrayList<>();
-
-    private AppBarConfiguration mAppBarConfiguration;
-    TextView tvName, tvEmail,tvJumlahTanaman;
-
-    Intent home, myPlant, setting, hama;
-    ImageView imgProfile;
-    private GoogleApiClient googleApiClient;
-    private GoogleSignInOptions gso;
-    Context context;
-    FirebaseFirestore db = FirebaseFirestore.getInstance();
+    private FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
+    private TextView tvName, tvEmail, tvJumlahTanaman;
+    private Intent home, myPlant, setting, hama;
+    private ImageView imgProfile;
+    private Context context;
+    private FirebaseFirestore db = FirebaseFirestore.getInstance();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        FirebaseUser account = firebaseAuth.getCurrentUser();
+        if (account == null) {
+            gotoLoginActivity();
+            finish();
+        }
         setContentView(R.layout.activity_main);
         context = this;
 
@@ -105,28 +107,16 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
         tvName = navigationView.getHeaderView(0).findViewById(R.id.tv_name);
         tvEmail = navigationView.getHeaderView(0).findViewById(R.id.tv_email);
         imgProfile = navigationView.getHeaderView(0).findViewById(R.id.img_profile);
-        gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestEmail()
-                .build();
-        googleApiClient = new GoogleApiClient.Builder(this)
-                .enableAutoManage(this, this)
-                .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
-                .build();
 
-        GoogleSignInAccount account = getAccount();
-        db.collection("tanaman_user").whereEqualTo("uid", account.getId()).get().addOnCompleteListener(
-                new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if (task.isSuccessful()) {
-                            int jumlah = task.getResult().getDocuments().size();
-                            setJumlahTanaman(String.valueOf(jumlah));
-                        }
-                    }
-                }
-        );
 
+        showJumlahTanaman(account);
         // list tanaman
+        showListTanaman();
+        System.out.println("list kosong" + list.isEmpty());
+
+    }
+
+    private void showListTanaman() {
         db.collection("tanaman").get().addOnCompleteListener(
                 new OnCompleteListener<QuerySnapshot>() {
                     @Override
@@ -151,13 +141,26 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
                     }
                 }
         );
-        System.out.println("list kosong" + list.isEmpty());
-
     }
 
-    private void setJumlahTanaman(String jumlah){
+    private void showJumlahTanaman(FirebaseUser account) {
+        db.collection("tanaman_user").whereEqualTo("uid", account.getUid()).get().addOnCompleteListener(
+                new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            int jumlah = task.getResult().getDocuments().size();
+                            setJumlahTanaman(String.valueOf(jumlah));
+                        }
+                    }
+                }
+        );
+    }
+
+    private void setJumlahTanaman(String jumlah) {
         tvJumlahTanaman.setText(jumlah);
     }
+
     private void setupNavDrawer(NavigationView navigationView) {
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @SuppressLint("WrongConstant")
@@ -202,11 +205,42 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
                             ex.printStackTrace();
                         }
                         break;
+                    case R.id.nav_logout:
+                        firebaseAuth.signOut();
+                        GoogleSignInOptions gso = new GoogleSignInOptions.
+                                Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).
+                                build();
+                        GoogleSignInClient googleSignInClient = GoogleSignIn.getClient(context, gso);
+                        googleSignInClient.signOut();
+                        LoginManager.getInstance().logOut();
+                        intent = new Intent(getApplicationContext(), LoginActivity.class);
+                        startActivity(intent);
+                        finish();
+                        break;
                 }
                 return true;
             }
         });
     }
+
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        FirebaseUser account = firebaseAuth.getCurrentUser();
+        showJumlahTanaman(account);
+        showListTanaman();
+    }
+
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        FirebaseUser account = firebaseAuth.getCurrentUser();
+        showJumlahTanaman(account);
+        showListTanaman();
+    }
+
 
     @SuppressLint("WrongConstant")
     @Override
@@ -237,41 +271,29 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
 //        });
 //    }
 
-    private GoogleSignInAccount getAccount() {
-        GoogleSignInResult result = User.setOptionalPendingResult(googleApiClient);
-        if (result != null) {
-            GoogleSignInAccount account = User.handleSignInResult(result);
-            if (account != null) {
-                return account;
-            } else {
-                return null;
-            }
-        } else {
-            return null;
-        }
-    }
-
 
     @Override
     protected void onStart() {
         super.onStart();
-        GoogleSignInResult result = User.setOptionalPendingResult(googleApiClient);
-        if (result != null) {
-            GoogleSignInAccount account = User.handleSignInResult(result);
-            if (account != null) {
-                tvName.setText(account.getDisplayName());
-                tvEmail.setText(account.getEmail());
-                if (account.getPhotoUrl() != null) {
-                    Glide.with(this).load(account.getPhotoUrl()).into(imgProfile);
-                } else {
-                    imgProfile.setImageResource(R.mipmap.ic_logo);
-                }
+        FirebaseUser account = firebaseAuth.getCurrentUser();
+        if (account != null) {
+            tvName.setText(account.getDisplayName());
+            tvEmail.setText(account.getEmail());
+            if (account.getPhotoUrl() != null) {
+                Glide.with(this).load(account.getPhotoUrl()).into(imgProfile);
             } else {
-                gotoLoginActivity();
+                imgProfile.setImageResource(R.mipmap.ic_logo);
             }
         } else {
             gotoLoginActivity();
         }
+
+    }
+
+    private void gotoLoginActivity() {
+        Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+        startActivity(intent);
+        finish();
     }
 
     private void showRecyclerList(ArrayList<Tanaman> tanaman) {
@@ -296,11 +318,6 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
         return true;
     }
 
-
-    private void gotoLoginActivity() {
-        Intent intent = new Intent(this, MainActivity.class);
-        startActivity(intent);
-    }
 
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {

@@ -166,7 +166,6 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
             @SuppressLint("WrongConstant")
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
-
                 switch (menuItem.getItemId()) {
                     case R.id.nav_home:
                         home = new Intent(context, MainActivity.class);

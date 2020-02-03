@@ -1,6 +1,9 @@
 package com.codates.plantie.view;
 
 import android.annotation.SuppressLint;
+import android.app.AlarmManager;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -56,17 +59,18 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 
 public class MainActivity extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener {
     private RecyclerView rvTanaman;
     private ArrayList<Tanaman> list = new ArrayList<>();
     private AppBarConfiguration mAppBarConfiguration;
-   TextView tvName,tvEmail;
-   Intent home, myPlant, setting, hama;
-   ImageView imgProfile;
-   private GoogleApiClient googleApiClient;
-   private GoogleSignInOptions gso;
-   Context context;
+    TextView tvName,tvEmail;
+    Intent home, myPlant, setting, hama;
+    ImageView imgProfile;
+    private GoogleApiClient googleApiClient;
+    private GoogleSignInOptions gso;
+    Context context;
     FirebaseFirestore db = FirebaseFirestore.getInstance();
 
     @Override

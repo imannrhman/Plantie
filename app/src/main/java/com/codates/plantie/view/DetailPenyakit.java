@@ -4,8 +4,13 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.ContextCompat;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -13,7 +18,10 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.codates.plantie.R;
+import com.codates.plantie.adapter.JenisTanamanAdapter;
+import com.codates.plantie.adapter.PenyakitAdapter;
 import com.codates.plantie.model.Penyakit;
+import com.codates.plantie.model.Tanaman;
 import com.codates.plantie.model.Tutorial;
 import com.codates.plantie.model.User;
 import com.google.android.gms.auth.api.Auth;
@@ -23,14 +31,22 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptionsExtension;
 import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.appbar.CollapsingToolbarLayout;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QuerySnapshot;
+
+import java.util.ArrayList;
 
 public class DetailPenyakit extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener {
 
     public static final String EXTRA_PENYAKIT = "extra_penyakit";
-    ImageView imageView;
-    TextView txt_judul, txt_deskripsi, txt_solusi;
+    private RecyclerView recyclerViewJenisTanaman;
+    ImageView imageView, imgJenis;
+    TextView txt_judul, txt_deskripsi, txt_solusi, txt_jenis_penyakit;
     Toolbar toolbar;
     CollapsingToolbarLayout collapsingToolbarLayout;
     Penyakit penyakit;
@@ -47,6 +63,8 @@ public class DetailPenyakit extends AppCompatActivity implements GoogleApiClient
         txt_judul = findViewById(R.id.txt_judul);
         txt_solusi = findViewById(R.id.txt_solusi);
         txt_deskripsi = findViewById(R.id.txt_deskripsi);
+        txt_jenis_penyakit = findViewById(R.id.txt_jenis_penyakit);
+        imgJenis = findViewById(R.id.img_jenis_penyakit);
 
         setSupportActionBar(toolbar);
         getSupportActionBar().setHomeButtonEnabled(true);
@@ -57,7 +75,6 @@ public class DetailPenyakit extends AppCompatActivity implements GoogleApiClient
         collapsingToolbarLayout.setCollapsedTitleTextColor(
                 ContextCompat.getColor(this, R.color.white)
         );
-
         collapsingToolbarLayout.setExpandedTitleColor(
                 ContextCompat.getColor(this, R.color.white)
         );
@@ -65,10 +82,35 @@ public class DetailPenyakit extends AppCompatActivity implements GoogleApiClient
         imageView = findViewById(R.id.gambar_header);
         this.penyakit = getIntent().getParcelableExtra(EXTRA_PENYAKIT);
         assert penyakit != null;
+
         txt_judul.setText(penyakit.getTitle());
         txt_deskripsi.setText(penyakit.getContent().getDeskripsi());
         txt_solusi.setText(penyakit.getContent().getSolusi());
+
+        String jenis = penyakit.getJenis_penyakit();
+        txt_jenis_penyakit.setText(jenis);
+        if (jenis.equals("bakteri")){
+
+            txt_jenis_penyakit.setTextColor(Color.parseColor("#F4A560"));
+            imgJenis.setImageResource(R.drawable.ic_bakteri_penyakit);
+
+        } else if (jenis.equals("hewan/serangga")){
+
+            txt_jenis_penyakit.setTextColor(Color.parseColor("#E14666"));
+            imgJenis.setImageResource(R.drawable.ic_hewan_penyakit);
+
+        } else if (jenis.equals("virus")){
+
+            txt_jenis_penyakit.setTextColor(Color.parseColor("#00B3C9"));
+            imgJenis.setImageResource(R.drawable.ic_virus_penyakit);
+
+        } else{
+            txt_jenis_penyakit.setText("Tidak Terdefinisi");
+            txt_jenis_penyakit.setTextColor(Color.parseColor("#4A4A4A"));
+        }
+
         Glide.with(this).load(penyakit.getGambar_tanaman()).into(imageView);
+
         gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestEmail()
                 .build();
@@ -78,6 +120,12 @@ public class DetailPenyakit extends AppCompatActivity implements GoogleApiClient
                 .build();
         final GoogleSignInAccount account = getAccount();
         assert  account != null;
+
+
+
+        recyclerViewJenisTanaman = findViewById(R.id.recycler_view_jenis_tanaman);
+        showRecyclerView(penyakit.getJenis_tanaman());
+
     }
 
     private GoogleSignInAccount getAccount(){
@@ -103,6 +151,15 @@ public class DetailPenyakit extends AppCompatActivity implements GoogleApiClient
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    private void showRecyclerView(final ArrayList<Tanaman> tanaman){
+        LinearLayoutManager llm = new LinearLayoutManager(this);
+        llm.setOrientation(LinearLayoutManager.HORIZONTAL);
+        JenisTanamanAdapter jenisTanamanAdapter = new JenisTanamanAdapter(tanaman);
+        recyclerViewJenisTanaman.setAdapter(jenisTanamanAdapter);
+        recyclerViewJenisTanaman.setLayoutManager(llm);
+        recyclerViewJenisTanaman.setHasFixedSize(true);
     }
 
     @Override

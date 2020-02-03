@@ -10,6 +10,7 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
+import android.nfc.Tag;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Gravity;
@@ -35,9 +36,13 @@ import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FieldPath;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
@@ -110,19 +115,17 @@ public class ListPenyakit extends AppCompatActivity implements GoogleApiClient.O
                                 try{
                                     Log.d("success", documentSnapshot.getId() + " => " + documentSnapshot.getData());
                                     Penyakit penyakit = documentSnapshot.toObject(Penyakit.class);
+                                    penyakit.setIdPenyakit(documentSnapshot.getId());
                                     System.out.println(penyakit.getTitle());
                                     listPenyakit.add(penyakit);
+                                    showRecyclerView(listPenyakit);
                                 } catch(Exception ex){
                                     Log.d("error", ex.getMessage());
 
                                     Toast.makeText(getApplicationContext(), ex.getMessage(), Toast.LENGTH_SHORT).show();
                                 }
                             }
-                            try{
-                                showRecyclerView(listPenyakit);
-                            } catch (Exception ex){
-                                Toast.makeText(getApplicationContext(), ex.getMessage(), Toast.LENGTH_SHORT).show();
-                            }
+
                         }
                         else {
                             Log.d("Main", "Error Getting Documents: ", task.getException());
@@ -140,18 +143,15 @@ public class ListPenyakit extends AppCompatActivity implements GoogleApiClient.O
                                 try {
                                     Log.d("success", documentSnapshot.getId() + " => " + documentSnapshot.getData());
                                     Penyakit penyakit2 = documentSnapshot.toObject(Penyakit.class);
+                                    penyakit2.setIdPenyakit(documentSnapshot.getId());
                                     System.out.println(penyakit2.getTitle());
                                     listPenyakit2.add(penyakit2);
+                                    showRecyclerViewTwo(listPenyakit2);
                                 } catch (Exception ex) {
                                     Log.d("error", ex.getMessage());
 
                                     Toast.makeText(getApplicationContext(), ex.getMessage(), Toast.LENGTH_SHORT).show();
                                 }
-                            }
-                            try {
-                                showRecyclerViewTwo(listPenyakit2);
-                            } catch (Exception ex) {
-                                Toast.makeText(getApplicationContext(), ex.getMessage(), Toast.LENGTH_SHORT).show();
                             }
                         } else {
                             Log.d("Main", "Error Getting Documents: ", task.getException());
@@ -266,8 +266,7 @@ public class ListPenyakit extends AppCompatActivity implements GoogleApiClient.O
         startActivity(intent);
     }
 
-    private void showRecyclerView(ArrayList<Penyakit> penyakit){
-
+    private void showRecyclerView(final ArrayList<Penyakit> penyakit){
         LinearLayoutManager llm = new LinearLayoutManager(this);
         llm.setOrientation(LinearLayoutManager.HORIZONTAL);
         PenyakitAdapter penyakitAdapter = new PenyakitAdapter(penyakit);
@@ -276,10 +275,28 @@ public class ListPenyakit extends AppCompatActivity implements GoogleApiClient.O
         recyclerViewOne.setHasFixedSize(true);
         penyakitAdapter.setOnItemClickCallback(new PenyakitAdapter.OnItemClickCallback() {
             @Override
-            public void onItemClicked(Penyakit penyakit) {
-                Intent intent = new Intent(getApplicationContext(), DetailPenyakit.class);
-                intent.putExtra(DetailPenyakit.EXTRA_PENYAKIT, penyakit);
-                startActivity(intent);
+            public void onItemClicked(final Penyakit penyakit) {
+                int jumlah_view = penyakit.getJumlah_view() + 1;
+                DocumentReference documentReference = db.collection("penyakit").document(penyakit.getIdPenyakit());
+                documentReference.update("jumlah_view", jumlah_view).addOnCompleteListener(
+                        new OnCompleteListener<Void>() {
+                            @Override
+                            public void onComplete(@NonNull Task<Void> task) {
+                                Log.d("myTag", "Jumlah Views Bertambah");
+                                Intent intent = new Intent(getApplicationContext(), DetailPenyakit.class);
+                                intent.putExtra(DetailPenyakit.EXTRA_PENYAKIT, penyakit);
+                                startActivity(intent);
+                            }
+                        }
+                ).addOnFailureListener(
+                        new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                Log.d("myTag", "ERROR UPDATING DATA");
+                                e.printStackTrace();
+                            }
+                        }
+                );
             }
         });
     }
@@ -291,13 +308,31 @@ public class ListPenyakit extends AppCompatActivity implements GoogleApiClient.O
         PenyakitAdapter penyakitAdapter = new PenyakitAdapter(penyakit);
         recyclerViewTwo.setAdapter(penyakitAdapter);
         recyclerViewTwo.setLayoutManager(llm2);
-        recyclerViewTwo.setHasFixedSize(true);
+
         penyakitAdapter.setOnItemClickCallback(new PenyakitAdapter.OnItemClickCallback() {
             @Override
-            public void onItemClicked(Penyakit penyakit) {
-                Intent intent = new Intent(getApplicationContext(), DetailPenyakit.class);
-                intent.putExtra(DetailPenyakit.EXTRA_PENYAKIT, penyakit);
-                startActivity(intent);
+            public void onItemClicked(final Penyakit penyakit) {
+                int jumlah_view = penyakit.getJumlah_view() + 1;
+                DocumentReference documentReference = db.collection("penyakit").document(penyakit.getIdPenyakit());
+                documentReference.update("jumlah_view", jumlah_view).addOnCompleteListener(
+                        new OnCompleteListener<Void>() {
+                            @Override
+                            public void onComplete(@NonNull Task<Void> task) {
+                                Log.d("myTag", "Jumlah Views Bertambah");
+                                Intent intent = new Intent(getApplicationContext(), DetailPenyakit.class);
+                                intent.putExtra(DetailPenyakit.EXTRA_PENYAKIT, penyakit);
+                                startActivity(intent);
+                            }
+                        }
+                ).addOnFailureListener(
+                        new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                Log.d("myTag", "ERROR UPDATING DATA");
+                                e.printStackTrace();
+                            }
+                        }
+                );
             }
         });
     }

@@ -31,63 +31,30 @@
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"/>
 
-        <LinearLayout
-            android:id="@+id/filter_search"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            app:layout_constraintTop_toBottomOf="@id/bar"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintLeft_toLeftOf="parent"
-            android:layout_margin="20dp">
-
-            <ImageView
-                android:id="@+id/search_bar"
-                android:layout_width="300dp"
-                android:layout_height="wrap_content"
-                android:src="@drawable/searchbar"/>
-
-            <androidx.cardview.widget.CardView
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                app:cardCornerRadius="2dp"
-                app:cardBackgroundColor="#D3ECDD"
-                android:layout_marginLeft="30dp">
-
-                <ImageView
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
-                    android:src="@drawable/ic_filter_list_black_24dp"
-                    android:layout_gravity="center"/>
-
-            </androidx.cardview.widget.CardView>
-
-        </LinearLayout>
 
         <androidx.core.widget.NestedScrollView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:layout_constraintTop_toBottomOf="@id/filter_search"
+            android:layout_height="match_parent"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior"
+            app:layout_constraintTop_toBottomOf="@id/bar"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintLeft_toLeftOf="parent">
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
+                android:paddingTop="90dp"
                 android:orientation="vertical">
 
                 <TextView
                     android:id="@+id/txt_sering_dilihat"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_margin="20dp"
+                    android:layout_marginLeft="20dp"
                     android:text="Sering Dilihat"
                     android:textColor="#000"
                     android:textSize="20sp"
-                    android:textStyle="bold"
-                    app:layout_constraintTop_toBottomOf="@id/filter_search"
-                    app:layout_constraintRight_toRightOf="parent"
-                    app:layout_constraintLeft_toLeftOf="parent"/>
+                    android:textStyle="bold"/>
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/recycler_view_penyakit"

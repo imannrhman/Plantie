@@ -4,6 +4,7 @@
     package="com.codates.plantie">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.WAKE_LOCK"/>
 
     <application
         android:allowBackup="true"
@@ -11,6 +12,7 @@
         android:roundIcon="@mipmap/ic_logo_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
+        android:hardwareAccelerated="true"
         tools:ignore="GoogleAppIndexingWarning">
         <activity
             android:name=".view.OnBoardingActivity"
@@ -23,6 +25,7 @@
             android:name=".view.ListPenyakit"
             android:resizeableActivity="false"
             android:theme="@style/ListPenyakit" />
+      
         <activity android:name=".view.PengembanganActivity" />
         <activity android:name=".view.TanamanKuActivity" />
         <activity
@@ -69,7 +72,6 @@
         <meta-data
             android:name="preloaded_fonts"
             android:resource="@array/preloaded_fonts" />
-
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"
             android:value="@string/facebook_app_id" />
@@ -87,7 +89,10 @@
                 <data android:scheme="@string/fb_login_protocol_scheme" />
             </intent-filter>
         </activity>
-
+      <receiver
+            android:name=".adapter.AlarmAdapter"
+            android:enabled="true"
+            android:exported="true"/>
     </application>
 
 </manifest>

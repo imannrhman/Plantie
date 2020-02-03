@@ -40,6 +40,8 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.navigation.NavigationView;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FieldPath;
@@ -50,7 +52,7 @@ import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 
-public class ListPenyakit extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener {
+public class ListPenyakit extends AppCompatActivity {
 
     private RecyclerView recyclerViewOne;
     private RecyclerView recyclerViewTwo;
@@ -61,9 +63,8 @@ public class ListPenyakit extends AppCompatActivity implements GoogleApiClient.O
     TextView tvName, tvEmail;
     ImageView imgProfile;
     Intent home, myPlant, setting, hama;
-    private GoogleApiClient googleApiClient;
-    private GoogleSignInOptions gso;
     Context context;
+    private FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
 
     @Override
     public boolean onSupportNavigateUp() {
@@ -97,13 +98,7 @@ public class ListPenyakit extends AppCompatActivity implements GoogleApiClient.O
         tvName = navigationView.getHeaderView(0).findViewById(R.id.tv_name);
         tvEmail = navigationView.getHeaderView(0).findViewById(R.id.tv_email);
         imgProfile = navigationView.getHeaderView(0).findViewById(R.id.img_profile);
-        gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestEmail()
-                .build();
-        googleApiClient = new GoogleApiClient.Builder(this)
-                .enableAutoManage(this,this)
-                .addApi(Auth.GOOGLE_SIGN_IN_API,gso)
-                .build();
+
 
 
         db.collection("penyakit").orderBy("jumlah_view", Query.Direction.DESCENDING).limit(10).get().addOnCompleteListener(
@@ -232,9 +227,7 @@ public class ListPenyakit extends AppCompatActivity implements GoogleApiClient.O
     @Override
     protected void onStart() {
         super.onStart();
-        GoogleSignInResult result = User.setOptionalPendingResult(googleApiClient);
-        if (result != null) {
-            GoogleSignInAccount account = User.handleSignInResult(result);
+        FirebaseUser account = firebaseAuth.getCurrentUser();
             if (account != null) {
                 tvName.setText(account.getDisplayName());
                 tvEmail.setText(account.getEmail());
@@ -243,12 +236,7 @@ public class ListPenyakit extends AppCompatActivity implements GoogleApiClient.O
                 }else{
                     imgProfile.setImageResource(R.mipmap.ic_logo);
                 }
-            } else {
-                gotoLoginActivity();
             }
-        } else {
-            gotoLoginActivity();
-        }
 
     }
 
@@ -337,8 +325,5 @@ public class ListPenyakit extends AppCompatActivity implements GoogleApiClient.O
         });
     }
 
-    @Override
-    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
 
-    }
 }

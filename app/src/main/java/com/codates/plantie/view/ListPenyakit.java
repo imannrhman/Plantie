@@ -10,6 +10,7 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
+import android.nfc.Tag;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Gravity;
@@ -35,9 +36,15 @@ import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.navigation.NavigationView;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FieldPath;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
@@ -45,7 +52,7 @@ import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 
-public class ListPenyakit extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener {
+public class ListPenyakit extends AppCompatActivity {
 
     private RecyclerView recyclerViewOne;
     private RecyclerView recyclerViewTwo;
@@ -56,9 +63,8 @@ public class ListPenyakit extends AppCompatActivity implements GoogleApiClient.O
     TextView tvName, tvEmail;
     ImageView imgProfile;
     Intent home, myPlant, setting, hama;
-    private GoogleApiClient googleApiClient;
-    private GoogleSignInOptions gso;
     Context context;
+    private FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
 
     @Override
     public boolean onSupportNavigateUp() {
@@ -92,13 +98,7 @@ public class ListPenyakit extends AppCompatActivity implements GoogleApiClient.O
         tvName = navigationView.getHeaderView(0).findViewById(R.id.tv_name);
         tvEmail = navigationView.getHeaderView(0).findViewById(R.id.tv_email);
         imgProfile = navigationView.getHeaderView(0).findViewById(R.id.img_profile);
-        gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestEmail()
-                .build();
-        googleApiClient = new GoogleApiClient.Builder(this)
-                .enableAutoManage(this,this)
-                .addApi(Auth.GOOGLE_SIGN_IN_API,gso)
-                .build();
+
 
 
         db.collection("penyakit").orderBy("jumlah_view", Query.Direction.DESCENDING).limit(10).get().addOnCompleteListener(
@@ -110,19 +110,17 @@ public class ListPenyakit extends AppCompatActivity implements GoogleApiClient.O
                                 try{
                                     Log.d("success", documentSnapshot.getId() + " => " + documentSnapshot.getData());
                                     Penyakit penyakit = documentSnapshot.toObject(Penyakit.class);
+                                    penyakit.setIdPenyakit(documentSnapshot.getId());
                                     System.out.println(penyakit.getTitle());
                                     listPenyakit.add(penyakit);
+                                    showRecyclerView(listPenyakit);
                                 } catch(Exception ex){
                                     Log.d("error", ex.getMessage());
 
                                     Toast.makeText(getApplicationContext(), ex.getMessage(), Toast.LENGTH_SHORT).show();
                                 }
                             }
-                            try{
-                                showRecyclerView(listPenyakit);
-                            } catch (Exception ex){
-                                Toast.makeText(getApplicationContext(), ex.getMessage(), Toast.LENGTH_SHORT).show();
-                            }
+
                         }
                         else {
                             Log.d("Main", "Error Getting Documents: ", task.getException());
@@ -140,18 +138,15 @@ public class ListPenyakit extends AppCompatActivity implements GoogleApiClient.O
                                 try {
                                     Log.d("success", documentSnapshot.getId() + " => " + documentSnapshot.getData());
                                     Penyakit penyakit2 = documentSnapshot.toObject(Penyakit.class);
+                                    penyakit2.setIdPenyakit(documentSnapshot.getId());
                                     System.out.println(penyakit2.getTitle());
                                     listPenyakit2.add(penyakit2);
+                                    showRecyclerViewTwo(listPenyakit2);
                                 } catch (Exception ex) {
                                     Log.d("error", ex.getMessage());
 
                                     Toast.makeText(getApplicationContext(), ex.getMessage(), Toast.LENGTH_SHORT).show();
                                 }
-                            }
-                            try {
-                                showRecyclerViewTwo(listPenyakit2);
-                            } catch (Exception ex) {
-                                Toast.makeText(getApplicationContext(), ex.getMessage(), Toast.LENGTH_SHORT).show();
                             }
                         } else {
                             Log.d("Main", "Error Getting Documents: ", task.getException());
@@ -232,9 +227,7 @@ public class ListPenyakit extends AppCompatActivity implements GoogleApiClient.O
     @Override
     protected void onStart() {
         super.onStart();
-        GoogleSignInResult result = User.setOptionalPendingResult(googleApiClient);
-        if (result != null) {
-            GoogleSignInAccount account = User.handleSignInResult(result);
+        FirebaseUser account = firebaseAuth.getCurrentUser();
             if (account != null) {
                 tvName.setText(account.getDisplayName());
                 tvEmail.setText(account.getEmail());
@@ -243,12 +236,7 @@ public class ListPenyakit extends AppCompatActivity implements GoogleApiClient.O
                 }else{
                     imgProfile.setImageResource(R.mipmap.ic_logo);
                 }
-            } else {
-                gotoLoginActivity();
             }
-        } else {
-            gotoLoginActivity();
-        }
 
     }
 
@@ -266,8 +254,7 @@ public class ListPenyakit extends AppCompatActivity implements GoogleApiClient.O
         startActivity(intent);
     }
 
-    private void showRecyclerView(ArrayList<Penyakit> penyakit){
-
+    private void showRecyclerView(final ArrayList<Penyakit> penyakit){
         LinearLayoutManager llm = new LinearLayoutManager(this);
         llm.setOrientation(LinearLayoutManager.HORIZONTAL);
         PenyakitAdapter penyakitAdapter = new PenyakitAdapter(penyakit);
@@ -276,10 +263,28 @@ public class ListPenyakit extends AppCompatActivity implements GoogleApiClient.O
         recyclerViewOne.setHasFixedSize(true);
         penyakitAdapter.setOnItemClickCallback(new PenyakitAdapter.OnItemClickCallback() {
             @Override
-            public void onItemClicked(Penyakit penyakit) {
-                Intent intent = new Intent(getApplicationContext(), DetailPenyakit.class);
-                intent.putExtra(DetailPenyakit.EXTRA_PENYAKIT, penyakit);
-                startActivity(intent);
+            public void onItemClicked(final Penyakit penyakit) {
+                int jumlah_view = penyakit.getJumlah_view() + 1;
+                DocumentReference documentReference = db.collection("penyakit").document(penyakit.getIdPenyakit());
+                documentReference.update("jumlah_view", jumlah_view).addOnCompleteListener(
+                        new OnCompleteListener<Void>() {
+                            @Override
+                            public void onComplete(@NonNull Task<Void> task) {
+                                Log.d("myTag", "Jumlah Views Bertambah");
+                                Intent intent = new Intent(getApplicationContext(), DetailPenyakit.class);
+                                intent.putExtra(DetailPenyakit.EXTRA_PENYAKIT, penyakit);
+                                startActivity(intent);
+                            }
+                        }
+                ).addOnFailureListener(
+                        new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                Log.d("myTag", "ERROR UPDATING DATA");
+                                e.printStackTrace();
+                            }
+                        }
+                );
             }
         });
     }
@@ -291,19 +296,34 @@ public class ListPenyakit extends AppCompatActivity implements GoogleApiClient.O
         PenyakitAdapter penyakitAdapter = new PenyakitAdapter(penyakit);
         recyclerViewTwo.setAdapter(penyakitAdapter);
         recyclerViewTwo.setLayoutManager(llm2);
-        recyclerViewTwo.setHasFixedSize(true);
+
         penyakitAdapter.setOnItemClickCallback(new PenyakitAdapter.OnItemClickCallback() {
             @Override
-            public void onItemClicked(Penyakit penyakit) {
-                Intent intent = new Intent(getApplicationContext(), DetailPenyakit.class);
-                intent.putExtra(DetailPenyakit.EXTRA_PENYAKIT, penyakit);
-                startActivity(intent);
+            public void onItemClicked(final Penyakit penyakit) {
+                int jumlah_view = penyakit.getJumlah_view() + 1;
+                DocumentReference documentReference = db.collection("penyakit").document(penyakit.getIdPenyakit());
+                documentReference.update("jumlah_view", jumlah_view).addOnCompleteListener(
+                        new OnCompleteListener<Void>() {
+                            @Override
+                            public void onComplete(@NonNull Task<Void> task) {
+                                Log.d("myTag", "Jumlah Views Bertambah");
+                                Intent intent = new Intent(getApplicationContext(), DetailPenyakit.class);
+                                intent.putExtra(DetailPenyakit.EXTRA_PENYAKIT, penyakit);
+                                startActivity(intent);
+                            }
+                        }
+                ).addOnFailureListener(
+                        new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                Log.d("myTag", "ERROR UPDATING DATA");
+                                e.printStackTrace();
+                            }
+                        }
+                );
             }
         });
     }
 
-    @Override
-    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
 
-    }
 }

@@ -43,6 +43,8 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.codates.plantie.view_menanam.ui.main.SectionsPagerAdapter;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -58,7 +60,7 @@ public class MenanamActivity extends AppCompatActivity implements GoogleApiClien
     FirebaseFirestore db = FirebaseFirestore.getInstance();
     private GoogleApiClient googleApiClient;
     private GoogleSignInOptions gso;
-
+    private FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -84,11 +86,9 @@ public class MenanamActivity extends AppCompatActivity implements GoogleApiClien
         final SectionsPagerAdapter sectionsPagerAdapter = new SectionsPagerAdapter(this,getSupportFragmentManager(),tanaman);
         viewPager.setAdapter(sectionsPagerAdapter);
         final FloatingActionButton fab = findViewById(R.id.btnchecklistTutorial);
-        final GoogleSignInAccount account = getAccount();
-        assert  account != null;
         DocumentReference documentReference = db.collection("tanaman").document(tanaman.getIdTanaman());
-
-        db.collection("tanaman_user").whereEqualTo("uid",account.getId()).whereEqualTo("idTanaman",documentReference ).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+        final FirebaseUser account = firebaseAuth.getCurrentUser();
+        db.collection("tanaman_user").whereEqualTo("uid",account.getUid()).whereEqualTo("idTanaman",documentReference ).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
             @SuppressLint("RestrictedApi")
             @Override
             public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
@@ -101,7 +101,7 @@ public class MenanamActivity extends AppCompatActivity implements GoogleApiClien
                             DocumentReference documentReference = db.collection("tanaman").document(tanaman.getIdTanaman());
                             TanamanUser userData = TanamanUserData.setTanamanUser(Integer.parseInt(tanaman.getMinggu()),
                                     documentReference,
-                                    account.getId()
+                                    account.getUid()
                             );
                             db.collection("tanaman_user").add(userData);
                             finish();

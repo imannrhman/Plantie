@@ -137,7 +137,7 @@ public class OnBoardingActivity extends AppCompatActivity {
 
     private void launchHomeScreen(){
         prefManager.setIsFirstTimeLaunc(false);
-        startActivity(new Intent(OnBoardingActivity.this, LoginActivity.class));
+        startActivity(new Intent(OnBoardingActivity.this, MainActivity.class));
         finish();
     }
 

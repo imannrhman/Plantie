@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.coordinatorlayout.widget.CoordinatorLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools "
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:tools1="http://schemas.android.com/tools"
     android:fitsSystemWindows="true">
 
     <com.google.android.material.appbar.AppBarLayout
@@ -60,10 +60,12 @@
                     android:id="@+id/txt_judul"
                     android:layout_width="256dp"
                     android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginBottom="16dp"
                     android:text="Judul Artikel Penyakit"
-                    android:textSize="14sp"
-                    android:textStyle="bold"
-                    android:layout_margin="16dp"/>
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
 
             </RelativeLayout>
 
@@ -83,7 +85,7 @@
                     android:src="@drawable/ic_virus_penyakit"/>
 
                 <TextView
-                    android:id="@+id/txt_jenis_tanaman"
+                    android:id="@+id/txt_jenis_penyakit"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="6dp"
@@ -92,17 +94,55 @@
                     android:textColor="#2F80ED"
                     android:textSize="12sp" />
 
+                <RelativeLayout
+                    android:id="@+id/relative_layout_level"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="#FCE5D2"
+                    android:layout_marginLeft="16dp"
+                    android:layout_gravity="bottom"
+                    android:gravity="end">
+
+                    <TextView
+                        android:id="@+id/txt_level"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Bahaya"
+                        android:textSize="12sp"
+                        android:textColor="#F4A560"
+                        android:layout_marginHorizontal="12dp"
+                        android:layout_marginVertical="3dp"/>
+
+                </RelativeLayout>
+
             </LinearLayout>
 
-            <TextView
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Jenis Tanaman yang Sering Terjangkit"
-                android:textColor="#000"
-                android:textSize="14sp"
-                android:textStyle="bold"
-                android:layout_margin="16dp"
-                android:layout_marginRight="16dp"/>
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Jenis Tanaman yang Sering Terjangkit"
+                    android:textColor="#000"
+                    android:textSize="14sp"
+                    android:textStyle="bold"
+                    android:layout_margin="16dp"
+                    android:layout_marginRight="16dp"/>
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/recycler_view_jenis_tanaman"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="16dp"
+                    tools1:listitem="@layout/item_jenis_tanaman"
+                    android:scrollbars="horizontal">
+
+                </androidx.recyclerview.widget.RecyclerView>
+
+            </LinearLayout>
 
             <TextView
             android:layout_width="match_parent"

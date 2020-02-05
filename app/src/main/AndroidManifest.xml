@@ -15,9 +15,6 @@
         tools:ignore="GoogleAppIndexingWarning"
         android:hardwareAccelerated="true">
       
-        <activity android:name=".view.DetailPenyakit"></activity>
-        <activity android:name=".view.ListPenyakit" />
-      
         <activity android:name=".view.OnBoardingActivity"
                   android:theme="@style/AppTheme.NoActionBar"></activity>
         <activity android:name=".view.DetailPenyakit"
@@ -28,7 +25,6 @@
                   android:theme="@style/ListPenyakit"/>
 
         <activity android:name=".view.PengembanganActivity" />
-        <activity android:name=".view.TanamanKuActivity" />
         <activity
             android:name=".view_menanam.MenanamActivity"
             android:label="@string/title_activity_menanam"

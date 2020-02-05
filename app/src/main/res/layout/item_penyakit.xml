@@ -19,7 +19,6 @@
             android:layout_marginStart="0dp"
             android:layout_marginLeft="0dp"
             android:scaleType="centerCrop"
-            android:src="@drawable/penyakit"
             app:riv_corner_radius="8dp" />
 
         <LinearLayout

@@ -209,40 +209,40 @@ public class Setting extends AppCompatActivity implements AdapterView.OnItemSele
 //        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, timeInMillis, AlarmManager.INTERVAL_DAY, pendingIntent);
 
 //       ini percobaan
-        int hour = c.get(Calendar.HOUR);
-        int date = c.get(Calendar.DATE);
-        int mth = c.get(Calendar.MONTH);
-        int yer = c.get(Calendar.YEAR);
-        int min = c.get(Calendar.MINUTE);
-
-        Calendar cal = Calendar.getInstance();
-        int jam = cal.get(Calendar.HOUR);
-        int tgl = cal.get(Calendar.DATE);
-        int bln = cal.get(Calendar.MONTH);
-        int thn = cal.get(Calendar.YEAR);
-        int mnt = cal.get(Calendar.MINUTE);
-
-
-        final Typeface faceMed = ResourcesCompat.getFont(this, R.font.montserratsemibold);
-        final Typeface face = ResourcesCompat.getFont(this, R.font.montserrat);
-        MaterialDialog dialog = new MaterialDialog.Builder(this)
-                .title("PENGATURAN Sore")
-                .content("c : " +hour+"."+min+" "+date+" "+mth+" "+yer+
-                        "\ncal : "+jam+"."+mnt+" "+tgl+" "+bln+" "+thn)
-                .positiveText("OK")
-                .icon(getResources().getDrawable(R.mipmap.ic_logo))
-                .autoDismiss(true)
-                .typeface(faceMed,face)
-                .show();
-
-        View positiveBtn = dialog.getActionButton(DialogAction.POSITIVE);
-        positiveBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent home = new Intent(Setting.this, MainActivity.class);
-                startActivity(home);
-            }
-        });
+//        int hour = c.get(Calendar.HOUR);
+//        int date = c.get(Calendar.DATE);
+//        int mth = c.get(Calendar.MONTH);
+//        int yer = c.get(Calendar.YEAR);
+//        int min = c.get(Calendar.MINUTE);
+//
+//        Calendar cal = Calendar.getInstance();
+//        int jam = cal.get(Calendar.HOUR);
+//        int tgl = cal.get(Calendar.DATE);
+//        int bln = cal.get(Calendar.MONTH);
+//        int thn = cal.get(Calendar.YEAR);
+//        int mnt = cal.get(Calendar.MINUTE);
+//
+//
+//        final Typeface faceMed = ResourcesCompat.getFont(this, R.font.montserratsemibold);
+//        final Typeface face = ResourcesCompat.getFont(this, R.font.montserrat);
+//        MaterialDialog dialog = new MaterialDialog.Builder(this)
+//                .title("PENGATURAN Sore")
+//                .content("c : " +hour+"."+min+" "+date+" "+mth+" "+yer+
+//                        "\ncal : "+jam+"."+mnt+" "+tgl+" "+bln+" "+thn)
+//                .positiveText("OK")
+//                .icon(getResources().getDrawable(R.mipmap.ic_logo))
+//                .autoDismiss(true)
+//                .typeface(faceMed,face)
+//                .show();
+//
+//        View positiveBtn = dialog.getActionButton(DialogAction.POSITIVE);
+//        positiveBtn.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Intent home = new Intent(Setting.this, MainActivity.class);
+//                startActivity(home);
+//            }
+//        });
 //        sini-sini
 //        Toast.makeText(this, String.valueOf(timeInMillis), Toast.LENGTH_LONG).show();
     }
@@ -282,7 +282,7 @@ public class Setting extends AppCompatActivity implements AdapterView.OnItemSele
 
         int tgl1 = tgl + 1;
 
-        if (hour < jam || hour == jam && date == tgl && mth == bln && yer == thn && min < mnt){
+        if (hour < jam || hour == jam && date == tgl && mth == bln && yer == thn && min < mnt || min == mnt){
             calendar.set(Calendar.DATE, tgl1);
         }
 
@@ -310,7 +310,7 @@ public class Setting extends AppCompatActivity implements AdapterView.OnItemSele
 
         int tgl1 = tgl + 1;
 
-        if (hour < jam || hour == jam && date == tgl && mth == bln && yer == thn && min < mnt){
+        if (hour < jam || hour == jam && date == tgl && mth == bln && yer == thn && min < mnt || min == mnt){
             calendar.set(Calendar.DATE, tgl1);
         }
 

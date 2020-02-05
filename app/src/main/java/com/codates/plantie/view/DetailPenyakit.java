@@ -13,6 +13,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -46,8 +47,9 @@ public class DetailPenyakit extends AppCompatActivity implements GoogleApiClient
     public static final String EXTRA_PENYAKIT = "extra_penyakit";
     private RecyclerView recyclerViewJenisTanaman;
     ImageView imageView, imgJenis;
-    TextView txt_judul, txt_deskripsi, txt_solusi, txt_jenis_penyakit;
+    TextView txt_judul, txt_deskripsi, txt_solusi, txt_jenis_penyakit, txt_level;
     Toolbar toolbar;
+    RelativeLayout rl_level;
     CollapsingToolbarLayout collapsingToolbarLayout;
     Penyakit penyakit;
     private GoogleApiClient googleApiClient;
@@ -64,6 +66,8 @@ public class DetailPenyakit extends AppCompatActivity implements GoogleApiClient
         txt_solusi = findViewById(R.id.txt_solusi);
         txt_deskripsi = findViewById(R.id.txt_deskripsi);
         txt_jenis_penyakit = findViewById(R.id.txt_jenis_penyakit);
+        txt_level = findViewById(R.id.txt_level);
+        rl_level = findViewById(R.id.relative_layout_level);
         imgJenis = findViewById(R.id.img_jenis_penyakit);
 
         setSupportActionBar(toolbar);
@@ -107,6 +111,28 @@ public class DetailPenyakit extends AppCompatActivity implements GoogleApiClient
         } else{
             txt_jenis_penyakit.setText("Tidak Terdefinisi");
             txt_jenis_penyakit.setTextColor(Color.parseColor("#4A4A4A"));
+        }
+
+        String level = penyakit.getLevel();
+
+        if (level.equals("1")){
+            txt_level.setText("Rendah");
+            txt_level.setTextColor(Color.parseColor("#6FCF97"));
+            rl_level.setBackgroundColor(Color.parseColor("#D4EDDA"));
+        } else if (level.equals("2")){
+            txt_level.setText("Sedang");
+            txt_level.setTextColor(Color.parseColor("#00B3C9"));
+            rl_level.setBackgroundColor(Color.parseColor("#CCE5FF"));
+        } else if (level.equals("3")){
+            txt_level.setText("Serius");
+            txt_level.setTextColor(Color.parseColor("#F2994A"));
+            rl_level.setBackgroundColor(Color.parseColor("#FCE5D2"));
+        } else if(level.equals("4")){
+            txt_level.setText("Bahaya");
+            txt_level.setTextColor(Color.parseColor("#EB5757"));
+            rl_level.setBackgroundColor(Color.parseColor("#F8D7DA"));
+        } else{
+            txt_level.setText(level);
         }
 
         Glide.with(this).load(penyakit.getGambar_tanaman()).into(imageView);

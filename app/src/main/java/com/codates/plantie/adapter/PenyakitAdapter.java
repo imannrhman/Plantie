@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -48,8 +49,10 @@ public class PenyakitAdapter extends RecyclerView.Adapter<PenyakitAdapter.ViewHo
     public void onBindViewHolder(@NonNull final PenyakitAdapter.ViewHolder holder, int position){
         Penyakit penyakit = listPenyakit.get(position);
         String jenis = penyakit.getJenis_penyakit();
-        holder.txt_title.setText(penyakit.getTitle());
+        String level = penyakit.getLevel();
+
         try{
+            holder.txt_title.setText(penyakit.getTitle());
             holder.txt_jenis_penyakit.setText(jenis);
             if (jenis.equals("bakteri")){
 
@@ -70,7 +73,28 @@ public class PenyakitAdapter extends RecyclerView.Adapter<PenyakitAdapter.ViewHo
                 holder.txt_jenis_penyakit.setText("Tidak Terdefinisi");
                 holder.txt_jenis_penyakit.setTextColor(Color.parseColor("#4A4A4A"));
             }
-            holder.txt_level.setText(penyakit.getLevel());
+
+
+            if (level.equals("1")){
+                holder.txt_level.setText("Rendah");
+                holder.txt_level.setTextColor(Color.parseColor("#6FCF97"));
+                holder.rl_level.setBackgroundColor(Color.parseColor("#D4EDDA"));
+            } else if (level.equals("2")){
+                holder.txt_level.setText("Sedang");
+                holder.txt_level.setTextColor(Color.parseColor("#00B3C9"));
+                holder.rl_level.setBackgroundColor(Color.parseColor("#CCE5FF"));
+            } else if (level.equals("3")){
+                holder.txt_level.setText("Serius");
+                holder.txt_level.setTextColor(Color.parseColor("#F2994A"));
+                holder.rl_level.setBackgroundColor(Color.parseColor("#FCE5D2"));
+            } else if(level.equals("4")){
+                holder.txt_level.setText("Bahaya");
+                holder.txt_level.setTextColor(Color.parseColor("#EB5757"));
+                holder.rl_level.setBackgroundColor(Color.parseColor("#F8D7DA"));
+            } else{
+                holder.txt_level.setText(level);
+            }
+
             Glide.with(holder.itemView.getContext()).load(penyakit.getGambar_tanaman()).into(holder.imgPenyakit);
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -92,6 +116,7 @@ public class PenyakitAdapter extends RecyclerView.Adapter<PenyakitAdapter.ViewHo
     public class ViewHolder extends RecyclerView.ViewHolder{
         TextView txt_title, txt_jenis_penyakit, txt_level;
         ImageView imgPenyakit, imgJenis;
+        RelativeLayout rl_level;
         public ViewHolder(@NonNull View itemView){
             super(itemView);
             txt_title = itemView.findViewById(R.id.txt_penyakit);
@@ -99,6 +124,7 @@ public class PenyakitAdapter extends RecyclerView.Adapter<PenyakitAdapter.ViewHo
             txt_level = itemView.findViewById(R.id.txt_level);
             imgPenyakit = itemView.findViewById(R.id.img_penyakit);
             imgJenis = itemView.findViewById(R.id.img_jenis_penyakit);
+            rl_level = itemView.findViewById(R.id.relative_layout_level);
         }
     }
 

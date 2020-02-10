@@ -56,22 +56,29 @@ public class PenyakitAdapter extends RecyclerView.Adapter<PenyakitAdapter.ViewHo
             holder.txt_jenis_penyakit.setText(jenis);
             if (jenis.equals("bakteri")){
 
-                holder.txt_jenis_penyakit.setTextColor(Color.parseColor("#F4A560"));
+                holder.txt_jenis_penyakit.setTextColor(Color.parseColor("#6FCF97"));
                 holder.imgJenis.setImageResource(R.drawable.ic_bakteri_penyakit);
 
             } else if (jenis.equals("hewan/serangga")){
 
-                holder.txt_jenis_penyakit.setTextColor(Color.parseColor("#E14666"));
+                holder.txt_jenis_penyakit.setTextColor(Color.parseColor("#EB5757"));
                 holder.imgJenis.setImageResource(R.drawable.ic_hewan_penyakit);
 
             } else if (jenis.equals("virus")){
 
-                holder.txt_jenis_penyakit.setTextColor(Color.parseColor("#00B3C9"));
+                holder.txt_jenis_penyakit.setTextColor(Color.parseColor("#2F80ED"));
                 holder.imgJenis.setImageResource(R.drawable.ic_virus_penyakit);
 
-            } else{
+            } else if (jenis.equals("jamur")){
+
+                holder.txt_jenis_penyakit.setTextColor(Color.parseColor("#F2994A"));
+                holder.imgJenis.setImageResource(R.drawable.ic_jamur_penyakit);
+
+            }else{
+
                 holder.txt_jenis_penyakit.setText("Tidak Terdefinisi");
                 holder.txt_jenis_penyakit.setTextColor(Color.parseColor("#4A4A4A"));
+
             }
 
 
@@ -81,7 +88,7 @@ public class PenyakitAdapter extends RecyclerView.Adapter<PenyakitAdapter.ViewHo
                 holder.rl_level.setBackgroundColor(Color.parseColor("#D4EDDA"));
             } else if (level.equals("2")){
                 holder.txt_level.setText("Sedang");
-                holder.txt_level.setTextColor(Color.parseColor("#00B3C9"));
+                holder.txt_level.setTextColor(Color.parseColor("#2F80ED"));
                 holder.rl_level.setBackgroundColor(Color.parseColor("#CCE5FF"));
             } else if (level.equals("3")){
                 holder.txt_level.setText("Serius");

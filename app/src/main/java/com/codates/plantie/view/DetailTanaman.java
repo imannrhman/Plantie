@@ -90,7 +90,7 @@ public class DetailTanaman extends AppCompatActivity implements GoogleApiClient.
         assert tanaman != null;
         final Tutorial documentReference = tanaman.getIdTutorial();
         try {
-            Toast.makeText(this, documentReference + "", Toast.LENGTH_LONG).show();
+//            Toast.makeText(this, documentReference + "", Toast.LENGTH_LONG).show();
         } catch (Exception e) {
             Toast.makeText(this, e.getMessage(), Toast.LENGTH_LONG).show();
         }

@@ -12,13 +12,16 @@ import com.codates.plantie.R;
 import com.codates.plantie.model.Deskripsi;
 import com.codates.plantie.model.Hari;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 public class HariAdapter extends RecyclerView.Adapter<HariAdapter.ViewHolder> {
     Hari hari;
     ArrayList<Deskripsi> listDeskripsi;
     private OnItemClickCallback onItemClickCallback;
+
     public HariAdapter(ArrayList<Deskripsi> listHari, Hari hari) {
         this.listDeskripsi = listHari;
         this.hari = hari;
@@ -38,21 +41,20 @@ public class HariAdapter extends RecyclerView.Adapter<HariAdapter.ViewHolder> {
     @Override
     public void onBindViewHolder(@NonNull HariAdapter.ViewHolder holder, final int position) {
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
-
-//        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMdd");
-//        System.out.println(hari.getDate());
-//        try {
-//            Date parseDate = simpleDateFormat.parse(hari.getDate());
-//            int dateDate = Integer.parseInt(dateFormat.format(parseDate));
-//            int dateToday = Integer.parseInt(dateFormat.format(new Date()));
-//            System.out.println(dateDate);
-//            System.out.println(dateToday);
-//            System.out.println(dateDate <= dateToday);
-//            System.out.println(hari.getDate().equals(simpleDateFormat.format(new Date())) || dateDate <= dateToday);
-//            holder.checkBox.setEnabled(hari.getDate().equals(simpleDateFormat.format(new Date())) || dateDate <= dateToday);
-//        } catch (ParseException e) {
-//            e.printStackTrace();
-//        }
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMdd");
+        System.out.println(hari.getDate());
+        try {
+            Date parseDate = simpleDateFormat.parse(hari.getDate());
+            int dateDate = Integer.parseInt(dateFormat.format(parseDate));
+            int dateToday = Integer.parseInt(dateFormat.format(new Date()));
+            System.out.println(dateDate);
+            System.out.println(dateToday);
+            System.out.println(dateDate <= dateToday);
+            System.out.println(hari.getDate().equals(simpleDateFormat.format(new Date())) || dateDate <= dateToday);
+            holder.checkBox.setEnabled(hari.getDate().equals(simpleDateFormat.format(new Date())) || dateDate <= dateToday);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
 
 
         holder.checkBox.setText(listDeskripsi.get(position).deskripsi);

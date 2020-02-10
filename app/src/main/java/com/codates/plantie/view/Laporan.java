@@ -3,8 +3,10 @@ package com.codates.plantie.view;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.viewpager.widget.ViewPager;
 
 import com.codates.plantie.R;
@@ -13,6 +15,7 @@ import com.codates.plantie.model.Minggu;
 import com.codates.plantie.model.MingguTemp;
 import com.codates.plantie.model.TanamanUser;
 import com.codates.plantie.view.ui.main.SectionsPagerAdapter;
+
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.tabs.TabLayout;
@@ -28,11 +31,15 @@ public class Laporan extends AppCompatActivity {
     public static final String EXTRA_DATA = "extra_data";
     public static final String EXTRA_TEMP = "extra_temp";
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
+    private CoordinatorLayout layout;
+    private ProgressBar progressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_laporan);
+        progressBar = findViewById(R.id.progress_bar);
+        layout = findViewById(R.id.layout);
         Minggu minggu = getIntent().getParcelableExtra(EXTRA_POSITION);
         final String tanamanUserId = getIntent().getStringExtra(EXTRA_DATA);
         final MingguTemp mingguTemp = getIntent().getParcelableExtra(EXTRA_TEMP);
@@ -42,18 +49,16 @@ public class Laporan extends AppCompatActivity {
         TabLayout tabs = findViewById(R.id.tabs);
         tabs.setupWithViewPager(viewPager);
         tabs.setTabMode(TabLayout.MODE_SCROLLABLE);
-
         ImageView Arrowback = findViewById(R.id.ArrowBack);
         Arrowback.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 finish();
                 onBackPressed();
-
             }
         });
 
-        FloatingActionButton fab = findViewById(R.id.btnchecklistLaporan);
+        final FloatingActionButton fab = findViewById(R.id.btnchecklistLaporan);
 
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -61,6 +66,8 @@ public class Laporan extends AppCompatActivity {
                 db.collection("tanaman_user").document(tanamanUserId).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                     @Override
                     public void onSuccess(DocumentSnapshot documentSnapshot) {
+                        layout.setEnabled(false);
+                        progressBar.setVisibility(View.VISIBLE);
                         ArrayList<Minggu> listMinggu = (ArrayList<Minggu>) documentSnapshot.get("minggu");
                         Gson gson = new Gson();
                         JsonElement jsonElement = gson.toJsonTree(listMinggu.get(mingguTemp.getPosition()));
@@ -88,7 +95,6 @@ public class Laporan extends AppCompatActivity {
                             addMinggu.get(mingguTemp.getPosition()).setSelesai(false);
                             db.collection("tanaman_user").document(tanamanUserId).update("minggu",addMinggu);
                             finish();
-
                         }
                     }
                 });

@@ -205,7 +205,7 @@ public class Setting extends AppCompatActivity implements AdapterView.OnItemSele
         assert alarmManager != null;
         alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, timeInMillis, pendingIntent);
 //        alarmManager.setExact(AlarmManager.RTC_WAKEUP, timeInMillis, pendingIntent);
-        alarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP, timeInMillis, AlarmManager.INTERVAL_DAY, pendingIntent);
+//        alarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP, timeInMillis, AlarmManager.INTERVAL_DAY, pendingIntent);
 //        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, timeInMillis, AlarmManager.INTERVAL_DAY, pendingIntent);
 
 //       ini percobaan
@@ -239,8 +239,8 @@ public class Setting extends AppCompatActivity implements AdapterView.OnItemSele
 //        positiveBtn.setOnClickListener(new View.OnClickListener() {
 //            @Override
 //            public void onClick(View v) {
-//                Intent home = new Intent(Setting.this, MainActivity.class);
-//                startActivity(home);
+////                Intent home = new Intent(Setting.this, MainActivity.class);
+////                startActivity(home);
 //            }
 //        });
 //        sini-sini
@@ -255,8 +255,43 @@ public class Setting extends AppCompatActivity implements AdapterView.OnItemSele
         assert alarmManager != null;
         alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, timeInMillis, pendingIntent);
 //        alarmManager.setExact(AlarmManager.RTC_WAKEUP, timeInMillis, pendingIntent);
-        alarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP, timeInMillis, AlarmManager.INTERVAL_DAY, pendingIntent);
+//        alarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP, timeInMillis, AlarmManager.INTERVAL_DAY, pendingIntent);
 //        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, timeInMillis, AlarmManager.INTERVAL_DAY, pendingIntent);
+
+//        int hour = c.get(Calendar.HOUR);
+//        int date = c.get(Calendar.DATE);
+//        int mth = c.get(Calendar.MONTH);
+//        int yer = c.get(Calendar.YEAR);
+//        int min = c.get(Calendar.MINUTE);
+//
+//        Calendar cal = Calendar.getInstance();
+//        int jam = cal.get(Calendar.HOUR);
+//        int tgl = cal.get(Calendar.DATE);
+//        int bln = cal.get(Calendar.MONTH);
+//        int thn = cal.get(Calendar.YEAR);
+//        int mnt = cal.get(Calendar.MINUTE);
+//
+//
+//        final Typeface faceMed = ResourcesCompat.getFont(this, R.font.montserratsemibold);
+//        final Typeface face = ResourcesCompat.getFont(this, R.font.montserrat);
+//        MaterialDialog dialog = new MaterialDialog.Builder(this)
+//                .title("PENGATURAN Pagi")
+//                .content("c : " +hour+"."+min+" "+date+" "+mth+" "+yer+
+//                        "\ncal : "+jam+"."+mnt+" "+tgl+" "+bln+" "+thn)
+//                .positiveText("OK")
+//                .icon(getResources().getDrawable(R.mipmap.ic_logo))
+//                .autoDismiss(true)
+//                .typeface(faceMed,face)
+//                .show();
+//
+//        View positiveBtn = dialog.getActionButton(DialogAction.POSITIVE);
+//        positiveBtn.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Intent home = new Intent(Setting.this, MainActivity.class);
+//                startActivity(home);
+//            }
+//        });
 
 //        Toast.makeText(this, "JAM "+hour+" ."+mnt+" "+tgl+" "+bln+" "+thn, Toast.LENGTH_LONG).show();
     }

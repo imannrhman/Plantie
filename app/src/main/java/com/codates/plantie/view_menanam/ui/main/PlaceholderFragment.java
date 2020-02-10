@@ -1,8 +1,11 @@
 package com.codates.plantie.view_menanam.ui.main;
 
 import android.content.Intent;
+import android.graphics.Color;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -73,6 +76,17 @@ public class PlaceholderFragment extends Fragment {
         TextView textViewAlat = root.findViewById(R.id.textview_alat);
         textViewAlat.setText(text);
         imageView.setImageResource(gambar);
+
+        final TextView tokped = root.findViewById(R.id.link_tokped);
+        tokped.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String url = "https://www.tokopedia.com/p/pertukangan/alat-perkebunan";
+                Intent i = new Intent(Intent.ACTION_VIEW);
+                i.setData(Uri.parse(url));
+                startActivity(i);
+            }
+        });
 
         if(list != null){
             showRecyclerList(list);

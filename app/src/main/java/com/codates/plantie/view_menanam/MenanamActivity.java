@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.graphics.Typeface;
+import android.net.Uri;
 import android.os.Bundle;
 
 import com.bumptech.glide.Glide;
@@ -40,6 +41,8 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.codates.plantie.view_menanam.ui.main.SectionsPagerAdapter;
@@ -61,6 +64,7 @@ public class MenanamActivity extends AppCompatActivity implements GoogleApiClien
     private GoogleApiClient googleApiClient;
     private GoogleSignInOptions gso;
     private FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
+    ImageView back;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,6 +76,14 @@ public class MenanamActivity extends AppCompatActivity implements GoogleApiClien
         Toast.makeText(getApplicationContext(),tanaman.getNamaTanaman(),Toast.LENGTH_LONG).show();
         TabLayout tabs = findViewById(R.id.tabs);
         tabs.setupWithViewPager(viewPager);
+
+        back = findViewById(R.id.ArrowBack);
+        back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressed();
+            }
+        });
 
         gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestEmail()

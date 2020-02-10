@@ -30,7 +30,7 @@ public class Penyakit implements Parcelable {
     String level;
     int jumlah_view;
     Content content;
-    ArrayList<Tanaman> jenis_tanaman=new ArrayList<>();
+    ArrayList<Tanaman> jenis_tanaman = new ArrayList<>();
 
     public String getTitle() {
         return title;

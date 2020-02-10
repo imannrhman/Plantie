@@ -5,7 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:tools1="http://schemas.android.com/tools"
-    android:fitsSystemWindows="true">
+    android:fitsSystemWindows="true"
+    android:id="@+id/b">
 
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
@@ -197,32 +198,35 @@
                 android:textSize="14sp"
                 android:textAlignment="textEnd"
                 android:layout_marginHorizontal="16dp"
-                android:layout_marginVertical="32dp"/>
+                android:layout_marginTop="26dp"
+                android:layout_marginBottom="10dp"/>
 
             <LinearLayout
                 android:id="@+id/ll_contact"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:visibility="gone"
+                android:visibility="invisible"
                 android:orientation="vertical"
                 android:paddingHorizontal="32dp"
-                android:paddingVertical="32dp"
+                android:paddingVertical="7dp"
                 android:layout_gravity="center_horizontal"
                 android:background="@color/colorPrimary">
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Pilih Social Media"
-                    android:textSize="12sp"
+                    android:text="Pilih Sosial Media"
+                    android:textSize="13sp"
                     android:textStyle="bold"
                     android:textColor="#fff"
-                    android:layout_marginBottom="16dp"/>
+                    android:layout_marginBottom="10dp"/>
 
                 <LinearLayout
+                    android:layout_gravity="center"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal">
+                    android:orientation="horizontal"
+                    android:layout_marginBottom="5dp">
 
                     <ImageView
                         android:id="@+id/btn_contact_instagram"

@@ -6,6 +6,9 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.transition.Fade;
+import androidx.transition.Slide;
+import androidx.transition.Transition;
 
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
@@ -13,8 +16,11 @@ import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.animation.TranslateAnimation;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -47,6 +53,8 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
+import androidx.transition.Fade;
+import androidx.transition.TransitionManager;
 
 public class DetailPenyakit extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener {
 
@@ -63,6 +71,7 @@ public class DetailPenyakit extends AppCompatActivity implements GoogleApiClient
     private GoogleSignInOptions gso;
     private FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
     FirebaseFirestore db = FirebaseFirestore.getInstance();
+    boolean opened;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -162,7 +171,22 @@ public class DetailPenyakit extends AppCompatActivity implements GoogleApiClient
         txt_contact.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ll_contact.setVisibility(View.VISIBLE);
+//                ll_contact.setVisibility(View.VISIBLE);
+                if (!opened){
+                    ll_contact.setVisibility(View.VISIBLE);
+                    TranslateAnimation animation = new TranslateAnimation(0, 0, ll_contact.getHeight(),0);
+                    animation.setDuration(500);
+                    animation.setFillAfter(true);
+                    ll_contact.startAnimation(animation);
+                }else {
+                    ll_contact.setVisibility(View.INVISIBLE);
+                    TranslateAnimation animation = new TranslateAnimation(0,0,0,ll_contact.getHeight());
+                    animation.setDuration(500);
+                    animation.setFillAfter(true);
+                    ll_contact.startAnimation(animation);
+                }
+                opened = !opened;
+
             }
         });
 

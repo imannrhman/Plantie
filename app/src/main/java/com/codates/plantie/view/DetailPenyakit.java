@@ -122,7 +122,7 @@ public class DetailPenyakit extends AppCompatActivity implements GoogleApiClient
         img_btn_fb.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Uri uri = Uri.parse("fb-messenger://user/iman.nurrohman.7");
+                Uri uri = Uri.parse("https://www.facebook.com/iman.nurrohman.7");
 
                 Intent chatme = new Intent(Intent.ACTION_VIEW, uri);
 
@@ -131,7 +131,7 @@ public class DetailPenyakit extends AppCompatActivity implements GoogleApiClient
                 try{
                     startActivity(chatme);
                 } catch (ActivityNotFoundException ex){
-                    startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("fb-messenger://user/iman.nurrohman.7")));
+                    startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.facebook.com/iman.nurrohman.7")));
                     ex.printStackTrace();
                 }
             }

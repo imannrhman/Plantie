@@ -1,30 +1,23 @@
 package com.codates.plantie.view.ui.main;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
-import android.widget.Toast;
 
-import androidx.annotation.Nullable;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
-import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.codates.plantie.R;
 import com.codates.plantie.adapter.HariAdapter;
-import com.codates.plantie.adapter.MingguAdapter;
-import com.codates.plantie.model.DeskripsiHari;
+import com.codates.plantie.model.Deskripsi;
 import com.codates.plantie.model.Hari;
 import com.codates.plantie.model.Minggu;
 import com.codates.plantie.model.MingguTemp;
-import com.codates.plantie.view.Laporan;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
@@ -41,15 +34,16 @@ public class PlaceholderFragment extends Fragment {
     private PageViewModel pageViewModel;
     private Minggu minggu;
     private String tanamanUserId;
-    private  MingguTemp mingguTemp;
-    public PlaceholderFragment(Minggu minggu,String tanamanUserId,MingguTemp mingguTemp) {
+    private MingguTemp mingguTemp;
+
+    public PlaceholderFragment(Minggu minggu, String tanamanUserId, MingguTemp mingguTemp) {
         this.minggu = minggu;
         this.tanamanUserId = tanamanUserId;
         this.mingguTemp = mingguTemp;
     }
 
     public static PlaceholderFragment newInstance(int index, Minggu minggu, String tanamanUserId, MingguTemp mingguTemp) {
-        PlaceholderFragment fragment = new PlaceholderFragment(minggu,tanamanUserId,mingguTemp);
+        PlaceholderFragment fragment = new PlaceholderFragment(minggu, tanamanUserId, mingguTemp);
         Bundle bundle = new Bundle();
         bundle.putInt(ARG_SECTION_NUMBER, index);
         fragment.setArguments(bundle);
@@ -74,7 +68,7 @@ public class PlaceholderFragment extends Fragment {
         pageViewModel.getPosition().observe(this, new Observer<Integer>() {
             @Override
             public void onChanged(Integer position) {
-                showRecyclerList(minggu.getHari().get(position).getDeskripsi(),minggu.getHari(),position);
+                showRecyclerList(minggu.getHari().get(position).getDeskripsi(), minggu.getHari(), position);
             }
         });
     }
@@ -88,26 +82,27 @@ public class PlaceholderFragment extends Fragment {
         pageViewModel.getPosition().observe(this, new Observer<Integer>() {
             @Override
             public void onChanged(Integer position) {
-                    showRecyclerList(minggu.getHari().get(position).getDeskripsi(),minggu.getHari(),position);
+                showRecyclerList(minggu.getHari().get(position).getDeskripsi(), minggu.getHari(), position);
             }
         });
         return root;
     }
-    private void showRecyclerList(final ArrayList<DeskripsiHari> deskripsiHari, final ArrayList<Hari> hari, final int dayPosition) {
+
+    private void showRecyclerList(final ArrayList<Deskripsi> deskripsi, final ArrayList<Hari> hari, final int dayPosition) {
         System.out.println(hari.get(dayPosition));
-        HariAdapter hariAdapter = new HariAdapter(deskripsiHari,hari.get(dayPosition));
+        HariAdapter hariAdapter = new HariAdapter(deskripsi, hari.get(dayPosition));
         rvHari.setLayoutManager(new LinearLayoutManager(getContext()));
         rvHari.setAdapter(hariAdapter);
         rvHari.setHasFixedSize(true);
         hariAdapter.setOnItemClickCallback(new HariAdapter.OnItemClickCallback() {
             @Override
             public void onItemClicked(int position) {
-                deskripsiHari.get(position).setSelesai(!deskripsiHari.get(position).isSelesai());
-                hari.get(dayPosition).setDeskripsi(deskripsiHari);
-                 int mingguPosition = mingguTemp.getPosition();
-                 ArrayList<Minggu> mingguList = mingguTemp.getTempListMinggu();
-                 mingguList.get(mingguPosition).setHari(hari);
-                 db.collection("tanaman_user").document(tanamanUserId).update("minggu",mingguList);
+                deskripsi.get(position).setSelesai(!deskripsi.get(position).isSelesai());
+                hari.get(dayPosition).setDeskripsi(deskripsi);
+                int mingguPosition = mingguTemp.getPosition();
+                ArrayList<Minggu> mingguList = mingguTemp.getTempListMinggu();
+                mingguList.get(mingguPosition).setHari(hari);
+                db.collection("tanaman_user").document(tanamanUserId).update("minggu", mingguList);
 
             }
         });

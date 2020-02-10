@@ -13,11 +13,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@android:color/white"
-        app:bar_primaryColor="@android:color/white"
+        android:elevation="4dp"
         app:bar_actionsColor="@color/colorPrimary"
-        app:bar_primaryDarkColor="@color/colorPrimary"
-        android:elevation="4dp" />
-
+        app:bar_primaryColor="@android:color/white"
+        app:bar_primaryDarkColor="@color/colorPrimary" />
 
 
     <include layout="@layout/content_main" />

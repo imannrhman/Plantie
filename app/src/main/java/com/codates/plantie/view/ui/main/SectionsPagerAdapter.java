@@ -7,7 +7,6 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
 
-import com.codates.plantie.model.Hari;
 import com.codates.plantie.model.Minggu;
 import com.codates.plantie.model.MingguTemp;
 
@@ -18,8 +17,8 @@ import com.codates.plantie.model.MingguTemp;
  */
 public class SectionsPagerAdapter extends FragmentPagerAdapter {
 
-    private final Context mContext;
     private static final String[] TITLE = new String[]{};
+    private final Context mContext;
     Minggu minggu;
     String tanamanUserId;
     MingguTemp mingguTemp;
@@ -28,7 +27,7 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter {
         super(fm);
         mContext = context;
         this.minggu = minggu;
-        this.tanamanUserId =tanamanUserId;
+        this.tanamanUserId = tanamanUserId;
         this.mingguTemp = mingguTemp;
     }
 
@@ -36,13 +35,13 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter {
     public Fragment getItem(int position) {
         // getItem is called to instantiate the fragment for the given page.
         // Return a PlaceholderFragment (defined as a static inner class below).
-        return PlaceholderFragment.newInstance(position, minggu,tanamanUserId,mingguTemp);
+        return PlaceholderFragment.newInstance(position, minggu, tanamanUserId, mingguTemp);
     }
 
     @Nullable
     @Override
     public CharSequence getPageTitle(int position) {
-        return "Hari " + (position+1);
+        return "Hari " + (position + 1);
     }
 
     @Override

@@ -1,36 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".view.SplashScreen">
+
     <FrameLayout
-        android:layout_centerInParent="true"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true">
+
         <ImageView
             android:id="@+id/img_logo"
             android:layout_width="184dp"
             android:layout_height="184dp"
-            android:src="@drawable/logo"
             android:layout_gravity="center"
-            />
+            android:src="@drawable/logo" />
 
         <TextView
-            android:layout_gravity="bottom|center"
-            android:layout_below="@id/img_logo"
             android:id="@+id/tv_plantie"
-            android:layout_centerInParent="true"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_below="@id/img_logo"
+            android:layout_centerInParent="true"
+            android:layout_gravity="bottom|center"
+            android:fontFamily="@font/segoepr"
             android:text="Plantie"
             android:textColor="@color/colorAccent"
-            android:fontFamily="@font/segoepr"
             android:textSize="20pt" />
     </FrameLayout>
-
 
 
 </RelativeLayout>

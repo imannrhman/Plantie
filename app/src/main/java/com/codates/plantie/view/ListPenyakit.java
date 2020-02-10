@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.ColorStateList;
 import android.net.Uri;
 import android.nfc.Tag;
 import android.os.Bundle;
@@ -52,6 +53,8 @@ import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 
+import id.arieridwan.lib.PageLoader;
+
 public class ListPenyakit extends AppCompatActivity {
 
     private RecyclerView recyclerViewOne;
@@ -83,6 +86,7 @@ public class ListPenyakit extends AppCompatActivity {
         bar.getSettings().setAnimateMenu(false);
 
         final DrawerLayout drawerLayout = findViewById(R.id.drawer_layout);
+        final PageLoader pageLoader = findViewById(R.id.progress_bar);
 
         bar.setOnMenuClickedListener(new View.OnClickListener() {
             @SuppressLint("WrongConstant")
@@ -99,7 +103,7 @@ public class ListPenyakit extends AppCompatActivity {
         tvEmail = navigationView.getHeaderView(0).findViewById(R.id.tv_email);
         imgProfile = navigationView.getHeaderView(0).findViewById(R.id.img_profile);
 
-
+        setPageLoader(pageLoader);
 
         db.collection("penyakit").orderBy("jumlah_view", Query.Direction.DESCENDING).limit(10).get().addOnCompleteListener(
                 new OnCompleteListener<QuerySnapshot>() {
@@ -134,6 +138,7 @@ public class ListPenyakit extends AppCompatActivity {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         if (task.isSuccessful()) {
+                            pageLoader.stopProgress();
                             for (QueryDocumentSnapshot documentSnapshot : task.getResult()) {
                                 try {
                                     Log.d("success", documentSnapshot.getId() + " => " + documentSnapshot.getData());
@@ -159,6 +164,17 @@ public class ListPenyakit extends AppCompatActivity {
         System.out.println("list kosong " + listPenyakit.isEmpty());
         recyclerViewTwo = findViewById(R.id.recycler_view_penyakit_dua);
         System.out.println("list kosong " + listPenyakit2.isEmpty());
+    }
+
+    private void setPageLoader(PageLoader pageLoader) {
+        pageLoader.setImageLoading(R.drawable.logo);
+        pageLoader.setLoadingAnimationMode("flip");
+        pageLoader.setTextLoading("Tunggu");
+        pageLoader.setTextSize(0);
+        pageLoader.setLoadingImageWidth(250);
+        pageLoader.setLoadingImageHeight(250);
+        pageLoader.setTextColor(ColorStateList.valueOf(0));
+        pageLoader.startProgress();
     }
 
     private void setupNavDrawer(NavigationView navigationView){

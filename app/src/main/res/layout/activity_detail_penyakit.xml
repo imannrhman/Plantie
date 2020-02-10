@@ -129,7 +129,9 @@
                     android:textColor="#000"
                     android:textSize="14sp"
                     android:textStyle="bold"
-                    android:layout_margin="16dp"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginBottom="8dp"
                     android:layout_marginRight="16dp"/>
 
                 <androidx.recyclerview.widget.RecyclerView
@@ -151,8 +153,10 @@
             android:textColor="#000"
             android:textSize="14sp"
             android:textStyle="bold"
-            android:layout_margin="16dp"
-            android:layout_marginRight="16dp"/>
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="16dp"/>
 
             <TextView
                 android:id="@+id/txt_deskripsi"
@@ -188,7 +192,7 @@
                 android:id="@+id/txt_contact_button"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Belum punya alat / bahan ?"
+                android:text="Tanyakan lebih lanjut ?"
                 android:textColor="#50B278"
                 android:textSize="14sp"
                 android:textAlignment="textEnd"

@@ -6,7 +6,27 @@ import android.os.Parcelable;
 import java.util.ArrayList;
 
 public class MingguTemp implements Parcelable {
+    public static final Parcelable.Creator<MingguTemp> CREATOR = new Parcelable.Creator<MingguTemp>() {
+        @Override
+        public MingguTemp createFromParcel(Parcel source) {
+            return new MingguTemp(source);
+        }
+
+        @Override
+        public MingguTemp[] newArray(int size) {
+            return new MingguTemp[size];
+        }
+    };
     private ArrayList<Minggu> tempListMinggu;
+    private int position;
+
+    public MingguTemp() {
+    }
+
+    protected MingguTemp(Parcel in) {
+        this.tempListMinggu = in.createTypedArrayList(Minggu.CREATOR);
+        this.position = in.readInt();
+    }
 
     public ArrayList<Minggu> getTempListMinggu() {
         return tempListMinggu;
@@ -24,8 +44,6 @@ public class MingguTemp implements Parcelable {
         this.position = position;
     }
 
-    private int position;
-
     @Override
     public int describeContents() {
         return 0;
@@ -36,24 +54,4 @@ public class MingguTemp implements Parcelable {
         dest.writeTypedList(this.tempListMinggu);
         dest.writeInt(this.position);
     }
-
-    public MingguTemp() {
-    }
-
-    protected MingguTemp(Parcel in) {
-        this.tempListMinggu = in.createTypedArrayList(Minggu.CREATOR);
-        this.position = in.readInt();
-    }
-
-    public static final Parcelable.Creator<MingguTemp> CREATOR = new Parcelable.Creator<MingguTemp>() {
-        @Override
-        public MingguTemp createFromParcel(Parcel source) {
-            return new MingguTemp(source);
-        }
-
-        @Override
-        public MingguTemp[] newArray(int size) {
-            return new MingguTemp[size];
-        }
-    };
 }

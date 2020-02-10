@@ -6,14 +6,12 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Transformations;
 import androidx.lifecycle.ViewModel;
 
-import com.codates.plantie.model.Hari;
-
 public class PageViewModel extends ViewModel {
 
     private MutableLiveData<Integer> mIndex = new MutableLiveData<>();
 
 
-    private LiveData<Integer> positon = Transformations.map(mIndex, new Function<Integer,Integer>() {
+    private LiveData<Integer> positon = Transformations.map(mIndex, new Function<Integer, Integer>() {
 
         @Override
         public Integer apply(Integer input) {

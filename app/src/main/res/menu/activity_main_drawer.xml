@@ -6,38 +6,33 @@
     <group android:checkableBehavior="single">
         <item
             android:id="@+id/nav_home"
-            android:iconTint="@color/colorPrimary"
             android:icon="@drawable/ic_home_black_24dp"
+            android:iconTint="@color/colorPrimary"
             android:title="Beranda" />
         <item
             android:id="@+id/nav_my_plant"
             android:icon="@drawable/logo"
             android:iconTint="@color/colorPrimary"
-            android:title="Tanaman Ku"
-            />
+            android:title="Tanaman Ku" />
         <item
             android:id="@+id/nav_hama"
             android:icon="@drawable/ic_bug_black_24dp"
             android:iconTint="@color/colorPrimary"
-            android:title="Hama/Penyakit"
-            />
+            android:title="Hama/Penyakit" />
         <item
             android:id="@+id/nav_setting"
             android:icon="@drawable/ic_settings_black_24dp"
             android:iconTint="@color/colorPrimary"
-            android:title="Pengaturan"
-            />
+            android:title="Pengaturan" />
         <item
             android:id="@+id/nav_contact_us"
             android:icon="@drawable/ic_mail_black_24dp"
             android:iconTint="@color/colorPrimary"
-            android:title="Hubungi Kami"
-            />
+            android:title="Hubungi Kami" />
         <item
             android:id="@+id/nav_logout"
             android:icon="@drawable/ic_power_settings_new_black_24dp"
             android:iconTint="@color/colorPrimary"
-            android:title="Logout"
-            />
+            android:title="Logout" />
     </group>
 </menu>

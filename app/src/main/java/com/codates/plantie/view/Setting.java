@@ -8,14 +8,11 @@ import android.content.SharedPreferences;
 import android.graphics.Typeface;
 import android.os.Build;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
-
 
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
@@ -33,23 +30,19 @@ import java.util.Calendar;
 
 public class Setting extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
 
-    public int wpagi, wsore ;
-
-    private SharedPreferences sharedPreferences;
-
     public static final String EXTRA_POSISITION = "extra_posisition";
-    protected Spinner spinnerPagi, spinnerSore;
     private static final String PAGI = "pagi";
     private static final String SORE = "sore";
-
     private static final String[] pagi = {"07.00", "08.00", "09.00"};
     private static final String[] sore = {"15.00", "16.00", "17.00"};
+    public int wpagi, wsore;
+    protected Spinner spinnerPagi, spinnerSore;
     protected ArrayAdapter<String> adapterPagi;
     protected ArrayAdapter<String> adapterSore;
     String posisiPagi, posisiSore, menit, awalPagi, getPagi, getSore;
-
     TextView Waktupagi, Waktusore;
     FloatingActionButton btnSave;
+    private SharedPreferences sharedPreferences;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -62,13 +55,14 @@ public class Setting extends AppCompatActivity implements AdapterView.OnItemSele
         AwesomeBar bar = findViewById(R.id.bar);
         Waktupagi = findViewById(R.id.tv_waktu_2);
         Waktusore = findViewById(R.id.tv_waktu_1);
-        menit = ".00"; awalPagi = "0";
+        menit = ".00";
+        awalPagi = "0";
 
         getPagi = String.valueOf(getPreference(PAGI));
         getSore = String.valueOf(getPreference(SORE));
 
-        posisiPagi = awalPagi+getPreference(PAGI)+menit;
-        posisiSore = getPreference(SORE)+menit;
+        posisiPagi = awalPagi + getPreference(PAGI) + menit;
+        posisiSore = getPreference(SORE) + menit;
         Waktupagi.setText(posisiPagi);
         Waktusore.setText(posisiSore);
 
@@ -112,21 +106,21 @@ public class Setting extends AppCompatActivity implements AdapterView.OnItemSele
                         wpagi = 7;
                         setPreference(PAGI, wpagi);
                         String p = String.valueOf(getPreference(PAGI));
-                        String p1 = awalPagi+p+menit;
+                        String p1 = awalPagi + p + menit;
                         Waktupagi.setText(p1);
                         break;
                     case 1:
                         wpagi = 8;
                         setPreference(PAGI, wpagi);
                         String pp = String.valueOf(getPreference(PAGI));
-                        String p2 = awalPagi+pp+menit;
+                        String p2 = awalPagi + pp + menit;
                         Waktupagi.setText(p2);
                         break;
                     case 2:
                         wpagi = 9;
                         setPreference(PAGI, wpagi);
                         String ppp = String.valueOf(getPreference(PAGI));
-                        String p3 = awalPagi+ppp+menit;
+                        String p3 = awalPagi + ppp + menit;
                         Waktupagi.setText(p3);
                         break;
                 }
@@ -162,7 +156,7 @@ public class Setting extends AppCompatActivity implements AdapterView.OnItemSele
 
     }
 
-    public void click(){
+    public void click() {
         final Typeface faceMed = ResourcesCompat.getFont(this, R.font.montserratsemibold);
         final Typeface face = ResourcesCompat.getFont(this, R.font.montserrat);
 
@@ -171,13 +165,13 @@ public class Setting extends AppCompatActivity implements AdapterView.OnItemSele
 
         MaterialDialog dialog = new MaterialDialog.Builder(this)
                 .title("PENGATURAN")
-                .content("Pengingat Menyiram" + "\r\n- Pagi : " +awalPagi+ getPreference(PAGI) + ".00\r\n- Sore : " + getPreference(SORE) + menit )
+                .content("Pengingat Menyiram" + "\r\n- Pagi : " + awalPagi + getPreference(PAGI) + ".00\r\n- Sore : " + getPreference(SORE) + menit)
                 .cancelable(false)
                 .canceledOnTouchOutside(false)
                 .positiveText("OK")
                 .icon(getResources().getDrawable(R.mipmap.ic_logo))
                 .autoDismiss(true)
-                .typeface(faceMed,face)
+                .typeface(faceMed, face)
                 .show();
 
         View positiveBtn = dialog.getActionButton(DialogAction.POSITIVE);
@@ -198,7 +192,7 @@ public class Setting extends AppCompatActivity implements AdapterView.OnItemSele
     }
 
     @RequiresApi(api = Build.VERSION_CODES.M)
-    public void pengingatSore(long timeInMillis, Calendar c){
+    public void pengingatSore(long timeInMillis, Calendar c) {
         AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
         Intent intent = new Intent(Setting.this, AlarmAdapter.class);
         PendingIntent pendingIntent = PendingIntent.getBroadcast(Setting.this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
@@ -227,12 +221,12 @@ public class Setting extends AppCompatActivity implements AdapterView.OnItemSele
         final Typeface face = ResourcesCompat.getFont(this, R.font.montserrat);
         MaterialDialog dialog = new MaterialDialog.Builder(this)
                 .title("PENGATURAN Sore")
-                .content("c : " +hour+"."+min+" "+date+" "+mth+" "+yer+
-                        "\ncal : "+jam+"."+mnt+" "+tgl+" "+bln+" "+thn)
+                .content("c : " + hour + "." + min + " " + date + " " + mth + " " + yer +
+                        "\ncal : " + jam + "." + mnt + " " + tgl + " " + bln + " " + thn)
                 .positiveText("OK")
                 .icon(getResources().getDrawable(R.mipmap.ic_logo))
                 .autoDismiss(true)
-                .typeface(faceMed,face)
+                .typeface(faceMed, face)
                 .show();
 
         View positiveBtn = dialog.getActionButton(DialogAction.POSITIVE);
@@ -248,7 +242,7 @@ public class Setting extends AppCompatActivity implements AdapterView.OnItemSele
     }
 
     @RequiresApi(api = Build.VERSION_CODES.M)
-    public void pengingatPagi(long timeInMillis, Calendar c){
+    public void pengingatPagi(long timeInMillis, Calendar c) {
         AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
         Intent intent = new Intent(Setting.this, AlarmAdapter.class);
         PendingIntent pendingIntent = PendingIntent.getBroadcast(Setting.this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
@@ -261,7 +255,7 @@ public class Setting extends AppCompatActivity implements AdapterView.OnItemSele
 //        Toast.makeText(this, "JAM "+hour+" ."+mnt+" "+tgl+" "+bln+" "+thn, Toast.LENGTH_LONG).show();
     }
 
-    public Calendar calendarSore(){
+    public Calendar calendarSore() {
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(System.currentTimeMillis());
         calendar.set(Calendar.HOUR_OF_DAY, wsore);
@@ -282,14 +276,14 @@ public class Setting extends AppCompatActivity implements AdapterView.OnItemSele
 
         int tgl1 = tgl + 1;
 
-        if (hour < jam || hour == jam && date == tgl && mth == bln && yer == thn && min < mnt){
+        if (hour < jam || hour == jam && date == tgl && mth == bln && yer == thn && min < mnt) {
             calendar.set(Calendar.DATE, tgl1);
         }
 
         return calendar;
     }
 
-    public Calendar calendarPagi(){
+    public Calendar calendarPagi() {
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(System.currentTimeMillis());
         calendar.set(Calendar.HOUR_OF_DAY, wpagi);
@@ -310,7 +304,7 @@ public class Setting extends AppCompatActivity implements AdapterView.OnItemSele
 
         int tgl1 = tgl + 1;
 
-        if (hour < jam || hour == jam && date == tgl && mth == bln && yer == thn && min < mnt){
+        if (hour < jam || hour == jam && date == tgl && mth == bln && yer == thn && min < mnt) {
             calendar.set(Calendar.DATE, tgl1);
         }
 
@@ -335,21 +329,21 @@ public class Setting extends AppCompatActivity implements AdapterView.OnItemSele
                 wsore = 15;
                 setPreference(SORE, wsore);
                 String s = String.valueOf(getPreference(SORE));
-                String s1 = s+menit;
+                String s1 = s + menit;
                 Waktusore.setText(s1);
                 break;
             case 1:
                 wsore = 16;
                 setPreference(SORE, wsore);
                 String ss = String.valueOf(getPreference(SORE));
-                String s2 = ss+menit;
+                String s2 = ss + menit;
                 Waktusore.setText(s2);
                 break;
             case 2:
                 wsore = 17;
                 setPreference(SORE, wsore);
                 String sss = String.valueOf(getPreference(SORE));
-                String s3 = sss+menit;
+                String s3 = sss + menit;
                 Waktusore.setText(s3);
                 break;
         }

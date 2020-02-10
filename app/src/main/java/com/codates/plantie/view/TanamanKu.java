@@ -1,10 +1,5 @@
 package com.codates.plantie.view;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.os.Bundle;
@@ -12,6 +7,11 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.codates.plantie.R;
 import com.codates.plantie.adapter.TanamanAdapter;
@@ -37,8 +37,8 @@ import java.util.ArrayList;
 import id.arieridwan.lib.PageLoader;
 
 public class TanamanKu extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener {
-    private RecyclerView rvTanaman;
     FirebaseFirestore db = FirebaseFirestore.getInstance();
+    private RecyclerView rvTanaman;
     private GoogleApiClient googleApiClient;
     private GoogleSignInOptions gso;
     private ImageView imgEmpty;
@@ -64,41 +64,41 @@ public class TanamanKu extends AppCompatActivity implements GoogleApiClient.OnCo
                 .requestEmail()
                 .build();
         googleApiClient = new GoogleApiClient.Builder(this)
-                .enableAutoManage(this,this)
-                .addApi(Auth.GOOGLE_SIGN_IN_API,gso)
+                .enableAutoManage(this, this)
+                .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
                 .build();
         final FirebaseUser account = firebaseAuth.getCurrentUser();
-        assert  account != null;
+        assert account != null;
         rvTanaman = findViewById(R.id.recycler_view);
         imgEmpty = findViewById(R.id.img_empty);
         txtEmpty = findViewById(R.id.tv_empty);
         pageLoader = findViewById(R.id.progress_bar);
         setPageLoader(pageLoader);
-          db.collection("tanaman_user").whereEqualTo("uid",account.getUid()).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+        db.collection("tanaman_user").whereEqualTo("uid", account.getUid()).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
             @Override
             public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
                 final ArrayList<Tanaman> listTanaman = new ArrayList<>();
-                if(queryDocumentSnapshots.isEmpty()){
+                if (queryDocumentSnapshots.isEmpty()) {
                     pageLoader.stopProgress();
                     imgEmpty.setVisibility(View.VISIBLE);
                     txtEmpty.setVisibility(View.VISIBLE);
 
-                }else{
-                    for(final DocumentSnapshot document : queryDocumentSnapshots){
-                        DocumentReference tanamanReference  = (DocumentReference) document.get("idTanaman");
-                        assert  tanamanReference != null;
+                } else {
+                    for (final DocumentSnapshot document : queryDocumentSnapshots) {
+                        DocumentReference tanamanReference = (DocumentReference) document.get("idTanaman");
+                        assert tanamanReference != null;
                         tanamanReference.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                             @Override
                             public void onSuccess(DocumentSnapshot documentSnapshot) {
-                                try{
+                                try {
                                     Tanaman tanaman = documentSnapshot.toObject(Tanaman.class);
                                     tanaman.setIdTanaman(documentSnapshot.getId());
                                     listTanaman.add(tanaman);
                                     pageLoader.stopProgress();
                                     showRecyclerList(listTanaman);
-                                    Toast.makeText(getApplicationContext(),document.getId()+ "",Toast.LENGTH_SHORT).show();
-                                }catch (Exception e){
-                                    Toast.makeText(getApplicationContext(),e.getMessage(),Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(getApplicationContext(), document.getId() + "", Toast.LENGTH_SHORT).show();
+                                } catch (Exception e) {
+                                    Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
                                 }
                             }
                         });
@@ -109,6 +109,7 @@ public class TanamanKu extends AppCompatActivity implements GoogleApiClient.OnCo
             }
         });
     }
+
     private void setPageLoader(PageLoader pageLoader) {
         pageLoader.setImageLoading(R.drawable.logo);
         pageLoader.setLoadingAnimationMode("flip");
@@ -119,12 +120,13 @@ public class TanamanKu extends AppCompatActivity implements GoogleApiClient.OnCo
         pageLoader.setTextColor(ColorStateList.valueOf(0));
         pageLoader.startProgress();
     }
+
     private void showRecyclerList(ArrayList<Tanaman> tanaman) {
         TanamanAdapter tanamanAdapter = new TanamanAdapter(tanaman);
         rvTanaman.setAdapter(tanamanAdapter);
         rvTanaman.setLayoutManager(new LinearLayoutManager(this));
         rvTanaman.setHasFixedSize(true);
-        try{
+        try {
             tanamanAdapter.setOnItemClickCallback(new TanamanAdapter.OnItemClickCallback() {
                 @Override
                 public void onItemClicked(Tanaman tanaman) {
@@ -133,13 +135,13 @@ public class TanamanKu extends AppCompatActivity implements GoogleApiClient.OnCo
                     startActivity(intent);
                 }
             });
-        }catch (Exception e){
-            Toast.makeText(getApplicationContext(),e.getMessage(),Toast.LENGTH_SHORT).show();
+        } catch (Exception e) {
+            Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
         }
 
     }
 
-    private GoogleSignInAccount getAccount(){
+    private GoogleSignInAccount getAccount() {
         GoogleSignInResult result = User.setOptionalPendingResult(googleApiClient);
         if (result != null) {
             GoogleSignInAccount account = User.handleSignInResult(result);

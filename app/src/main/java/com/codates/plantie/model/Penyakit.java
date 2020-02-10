@@ -7,13 +7,47 @@ import androidx.annotation.NonNull;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 
 import java.util.ArrayList;
 
 public class Penyakit implements Parcelable {
+
+    public static final Parcelable.Creator<Penyakit> CREATOR = new Parcelable.Creator<Penyakit>() {
+        @Override
+        public Penyakit createFromParcel(Parcel source) {
+            return new Penyakit(source);
+        }
+
+        @Override
+        public Penyakit[] newArray(int size) {
+            return new Penyakit[size];
+        }
+    };
+    String idPenyakit;
+    String title;
+    String gambar_tanaman;
+    String jenis_penyakit;
+    String level;
+    int jumlah_view;
+    Content content;
+    ArrayList<Tanaman> jenis_tanaman = new ArrayList<>();
+    protected Penyakit(Parcel in) {
+        this.title = in.readString();
+        this.gambar_tanaman = in.readString();
+        this.jenis_penyakit = in.readString();
+        this.level = in.readString();
+        this.jumlah_view = in.readInt();
+        this.content = in.readParcelable(Content.class.getClassLoader());
+        this.jenis_tanaman = new ArrayList<Tanaman>();
+        in.readList(this.jenis_tanaman, DocumentReference.class.getClassLoader());
+
+    }
+
+    public Penyakit() {
+
+    }
 
     public String getIdPenyakit() {
         return idPenyakit;
@@ -22,15 +56,6 @@ public class Penyakit implements Parcelable {
     public void setIdPenyakit(String idPenyakit) {
         this.idPenyakit = idPenyakit;
     }
-
-    String idPenyakit;
-    String title;
-    String gambar_tanaman;
-    String jenis_penyakit;
-    String level;
-    int jumlah_view;
-    Content content;
-    ArrayList<Tanaman> jenis_tanaman=new ArrayList<>();
 
     public String getTitle() {
         return title;
@@ -86,7 +111,7 @@ public class Penyakit implements Parcelable {
 
     public void setJenis_tanaman(ArrayList<DocumentReference> documentReferences) {
 
-        for(int i=0;i<documentReferences.size();i++){
+        for (int i = 0; i < documentReferences.size(); i++) {
             documentReferences.get(i).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                 @Override
                 public void onComplete(@NonNull Task<DocumentSnapshot> task) {
@@ -98,22 +123,6 @@ public class Penyakit implements Parcelable {
                 }
             });
         }
-
-    }
-
-    protected Penyakit(Parcel in){
-        this.title = in.readString();
-        this.gambar_tanaman = in.readString();
-        this.jenis_penyakit = in.readString();
-        this.level = in.readString();
-        this.jumlah_view = in.readInt();
-        this.content = in.readParcelable(Content.class.getClassLoader());
-        this.jenis_tanaman = new ArrayList<Tanaman>();
-        in.readList(this.jenis_tanaman, DocumentReference.class.getClassLoader());
-
-    }
-
-    public Penyakit() {
 
     }
 
@@ -133,17 +142,5 @@ public class Penyakit implements Parcelable {
         dest.writeList(this.jenis_tanaman);
 
     }
-
-    public static final Parcelable.Creator<Penyakit> CREATOR = new Parcelable.Creator<Penyakit>(){
-        @Override
-        public Penyakit createFromParcel(Parcel source) {
-            return new Penyakit(source);
-        }
-
-        @Override
-        public Penyakit[] newArray(int size) {
-            return new Penyakit[size];
-        }
-    };
 
 }

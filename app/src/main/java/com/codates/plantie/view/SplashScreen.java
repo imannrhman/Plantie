@@ -1,25 +1,18 @@
 package com.codates.plantie.view;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.transition.Explode;
-import androidx.transition.Slide;
-
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
-import android.view.Gravity;
-import android.view.Window;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
-import android.view.animation.DecelerateInterpolator;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.codates.plantie.R;
 
 public class SplashScreen extends AppCompatActivity {
-private int time = 4000;
+    private int time = 4000;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,7 +34,7 @@ private int time = 4000;
 
             @Override
             public void onAnimationEnd(Animation animation) {
-                Intent login = new Intent(SplashScreen.this,OnBoardingActivity.class);
+                Intent login = new Intent(SplashScreen.this, OnBoardingActivity.class);
                 startActivity(login);
                 finish();
             }

@@ -2,13 +2,13 @@ package com.codates.plantie.model;
 
 import com.google.firebase.firestore.DocumentReference;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
-import java.util.Map;
 
 public class TanamanUser {
     String uid;
     DocumentReference idTanaman;
+    ArrayList<Minggu> minggu;
+    boolean selesai;
 
     public String getUid() {
         return uid;
@@ -41,10 +41,6 @@ public class TanamanUser {
     public void setSelesai(boolean selesai) {
         this.selesai = selesai;
     }
-
-    ArrayList<Minggu> minggu;
-    boolean selesai;
-
 
 
 }

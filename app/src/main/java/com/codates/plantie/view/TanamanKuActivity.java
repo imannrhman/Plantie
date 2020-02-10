@@ -1,8 +1,8 @@
 package com.codates.plantie.view;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.os.Bundle;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.codates.plantie.R;
 

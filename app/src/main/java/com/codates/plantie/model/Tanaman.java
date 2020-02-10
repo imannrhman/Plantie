@@ -11,6 +11,32 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 
 public class Tanaman implements Parcelable {
+    public static final Parcelable.Creator<Tanaman> CREATOR = new Parcelable.Creator<Tanaman>() {
+        @Override
+        public Tanaman createFromParcel(Parcel source) {
+            return new Tanaman(source);
+        }
+
+        @Override
+        public Tanaman[] newArray(int size) {
+            return new Tanaman[size];
+        }
+    };
+    String idTanaman;
+    String namaTanaman;
+    String minggu;
+    String gambar;
+    Tutorial idTutorial;
+    public Tanaman() {
+    }
+    protected Tanaman(Parcel in) {
+        this.idTanaman = in.readString();
+        this.namaTanaman = in.readString();
+        this.minggu = in.readString();
+        this.gambar = in.readString();
+        this.idTutorial = in.readParcelable(Tutorial.class.getClassLoader());
+    }
+
     public String getIdTanaman() {
         return idTanaman;
     }
@@ -18,16 +44,6 @@ public class Tanaman implements Parcelable {
     public void setIdTanaman(String idTanaman) {
         this.idTanaman = idTanaman;
     }
-
-    public void setGambar(String gambar) {
-        this.gambar = gambar;
-    }
-
-    String idTanaman;
-    String namaTanaman;
-    String minggu;
-    String gambar;
-    Tutorial idTutorial;
 
     public Tutorial getIdTutorial() {
         return idTutorial;
@@ -43,7 +59,6 @@ public class Tanaman implements Parcelable {
             }
         });
     }
-
 
     public String getNamaTanaman() {
         return namaTanaman;
@@ -65,6 +80,9 @@ public class Tanaman implements Parcelable {
         return gambar;
     }
 
+    public void setGambar(String gambar) {
+        this.gambar = gambar;
+    }
 
     @Override
     public int describeContents() {
@@ -79,27 +97,4 @@ public class Tanaman implements Parcelable {
         dest.writeString(this.gambar);
         dest.writeParcelable(this.idTutorial, flags);
     }
-
-    public Tanaman() {
-    }
-
-    protected Tanaman(Parcel in) {
-        this.idTanaman = in.readString();
-        this.namaTanaman = in.readString();
-        this.minggu = in.readString();
-        this.gambar = in.readString();
-        this.idTutorial = in.readParcelable(Tutorial.class.getClassLoader());
-    }
-
-    public static final Parcelable.Creator<Tanaman> CREATOR = new Parcelable.Creator<Tanaman>() {
-        @Override
-        public Tanaman createFromParcel(Parcel source) {
-            return new Tanaman(source);
-        }
-
-        @Override
-        public Tanaman[] newArray(int size) {
-            return new Tanaman[size];
-        }
-    };
 }

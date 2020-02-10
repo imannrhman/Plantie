@@ -1,5 +1,11 @@
 package com.codates.plantie.view;
 
+import android.graphics.Color;
+import android.os.Bundle;
+import android.view.MenuItem;
+import android.widget.ImageView;
+import android.widget.TextView;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -7,52 +13,35 @@ import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.content.Intent;
-import android.graphics.Color;
-import android.os.Bundle;
-import android.util.Log;
-import android.view.MenuItem;
-import android.widget.ImageView;
-import android.widget.TextView;
-import android.widget.Toast;
-
 import com.bumptech.glide.Glide;
 import com.codates.plantie.R;
 import com.codates.plantie.adapter.JenisTanamanAdapter;
-import com.codates.plantie.adapter.PenyakitAdapter;
 import com.codates.plantie.model.Penyakit;
 import com.codates.plantie.model.Tanaman;
-import com.codates.plantie.model.Tutorial;
 import com.codates.plantie.model.User;
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
-import com.google.android.gms.auth.api.signin.GoogleSignInOptionsExtension;
 import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.Task;
 import com.google.android.material.appbar.CollapsingToolbarLayout;
-import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 
 public class DetailPenyakit extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener {
 
     public static final String EXTRA_PENYAKIT = "extra_penyakit";
-    private RecyclerView recyclerViewJenisTanaman;
     ImageView imageView, imgJenis;
     TextView txt_judul, txt_deskripsi, txt_solusi, txt_jenis_penyakit;
     Toolbar toolbar;
     CollapsingToolbarLayout collapsingToolbarLayout;
     Penyakit penyakit;
+    FirebaseFirestore db = FirebaseFirestore.getInstance();
+    private RecyclerView recyclerViewJenisTanaman;
     private GoogleApiClient googleApiClient;
     private GoogleSignInOptions gso;
-    FirebaseFirestore db = FirebaseFirestore.getInstance();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -89,22 +78,22 @@ public class DetailPenyakit extends AppCompatActivity implements GoogleApiClient
 
         String jenis = penyakit.getJenis_penyakit();
         txt_jenis_penyakit.setText(jenis);
-        if (jenis.equals("bakteri")){
+        if (jenis.equals("bakteri")) {
 
             txt_jenis_penyakit.setTextColor(Color.parseColor("#F4A560"));
             imgJenis.setImageResource(R.drawable.ic_bakteri_penyakit);
 
-        } else if (jenis.equals("hewan/serangga")){
+        } else if (jenis.equals("hewan/serangga")) {
 
             txt_jenis_penyakit.setTextColor(Color.parseColor("#E14666"));
             imgJenis.setImageResource(R.drawable.ic_hewan_penyakit);
 
-        } else if (jenis.equals("virus")){
+        } else if (jenis.equals("virus")) {
 
             txt_jenis_penyakit.setTextColor(Color.parseColor("#00B3C9"));
             imgJenis.setImageResource(R.drawable.ic_virus_penyakit);
 
-        } else{
+        } else {
             txt_jenis_penyakit.setText("Tidak Terdefinisi");
             txt_jenis_penyakit.setTextColor(Color.parseColor("#4A4A4A"));
         }
@@ -115,12 +104,11 @@ public class DetailPenyakit extends AppCompatActivity implements GoogleApiClient
                 .requestEmail()
                 .build();
         googleApiClient = new GoogleApiClient.Builder(this)
-                .enableAutoManage(this,this)
-                .addApi(Auth.GOOGLE_SIGN_IN_API,gso)
+                .enableAutoManage(this, this)
+                .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
                 .build();
         final GoogleSignInAccount account = getAccount();
-        assert  account != null;
-
+        assert account != null;
 
 
         recyclerViewJenisTanaman = findViewById(R.id.recycler_view_jenis_tanaman);
@@ -128,7 +116,7 @@ public class DetailPenyakit extends AppCompatActivity implements GoogleApiClient
 
     }
 
-    private GoogleSignInAccount getAccount(){
+    private GoogleSignInAccount getAccount() {
         GoogleSignInResult result = User.setOptionalPendingResult(googleApiClient);
         if (result != null) {
             GoogleSignInAccount account = User.handleSignInResult(result);
@@ -153,7 +141,7 @@ public class DetailPenyakit extends AppCompatActivity implements GoogleApiClient
         }
     }
 
-    private void showRecyclerView(final ArrayList<Tanaman> tanaman){
+    private void showRecyclerView(final ArrayList<Tanaman> tanaman) {
         LinearLayoutManager llm = new LinearLayoutManager(this);
         llm.setOrientation(LinearLayoutManager.HORIZONTAL);
         JenisTanamanAdapter jenisTanamanAdapter = new JenisTanamanAdapter(tanaman);

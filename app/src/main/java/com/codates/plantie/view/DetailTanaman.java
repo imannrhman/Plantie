@@ -20,17 +20,12 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.codates.plantie.R;
 import com.codates.plantie.adapter.MingguAdapter;
-import com.codates.plantie.model.DeskripsiHari;
+import com.codates.plantie.model.Deskripsi;
 import com.codates.plantie.model.Minggu;
 import com.codates.plantie.model.MingguTemp;
 import com.codates.plantie.model.Tanaman;
 import com.codates.plantie.model.Tutorial;
-import com.codates.plantie.model.User;
 import com.codates.plantie.view_menanam.MenanamActivity;
-import com.google.android.gms.auth.api.Auth;
-import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
-import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
-import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -50,8 +45,8 @@ import java.util.ArrayList;
 
 public class DetailTanaman extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener {
     public static final String EXTRA_TANAMAN = "extra_tanaman";
-    ImageView gambar;
     public RecyclerView rvMinggu;
+    ImageView gambar;
     RelativeLayout rlCaraMenanam;
     Toolbar toolbar;
     CollapsingToolbarLayout collapsingToolbarLayout;
@@ -150,9 +145,9 @@ public class DetailTanaman extends AppCompatActivity implements GoogleApiClient.
                     for (int i = 0; i < listMinggu.size(); i++) {
                         for (int j = 0; j < listMinggu.get(i).getHari().size(); j++) {
                             for (int k = 0; k < listMinggu.get(i).getHari().get(j).getDeskripsi().size(); k++) {
-                                DeskripsiHari deskripsiHari = listMinggu.get(i).getHari().get(j).getDeskripsi().get(k);
+                                Deskripsi deskripsi = listMinggu.get(i).getHari().get(j).getDeskripsi().get(k);
                                 jumlahSemuaCeklis += 1;
-                                if (deskripsiHari.isSelesai()) {
+                                if (deskripsi.isSelesai()) {
                                     jumlahCeklis += 1;
                                 }
                             }

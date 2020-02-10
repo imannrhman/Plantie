@@ -7,6 +7,28 @@ import java.util.ArrayList;
 
 public class Tutorial implements Parcelable {
 
+    public static final Parcelable.Creator<Tutorial> CREATOR = new Parcelable.Creator<Tutorial>() {
+        @Override
+        public Tutorial createFromParcel(Parcel source) {
+            return new Tutorial(source);
+        }
+
+        @Override
+        public Tutorial[] newArray(int size) {
+            return new Tutorial[size];
+        }
+    };
+    ArrayList<String> bahan;
+    ArrayList<String> cara;
+
+    public Tutorial() {
+    }
+
+    protected Tutorial(Parcel in) {
+        this.bahan = in.createStringArrayList();
+        this.cara = in.createStringArrayList();
+    }
+
     public ArrayList<String> getBahan() {
         return bahan;
     }
@@ -23,9 +45,6 @@ public class Tutorial implements Parcelable {
         this.cara = cara;
     }
 
-    ArrayList<String> bahan;
-    ArrayList<String> cara;
-
     @Override
     public int describeContents() {
         return 0;
@@ -36,24 +55,4 @@ public class Tutorial implements Parcelable {
         dest.writeStringList(this.bahan);
         dest.writeStringList(this.cara);
     }
-
-    public Tutorial() {
-    }
-
-    protected Tutorial(Parcel in) {
-        this.bahan = in.createStringArrayList();
-        this.cara = in.createStringArrayList();
-    }
-
-    public static final Parcelable.Creator<Tutorial> CREATOR = new Parcelable.Creator<Tutorial>() {
-        @Override
-        public Tutorial createFromParcel(Parcel source) {
-            return new Tutorial(source);
-        }
-
-        @Override
-        public Tutorial[] newArray(int size) {
-            return new Tutorial[size];
-        }
-    };
 }

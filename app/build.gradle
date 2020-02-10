@@ -24,6 +24,7 @@ android {
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
+    implementation 'com.codesgood:justifiedtextview:1.1.0'
     implementation 'com.afollestad.material-dialogs:core:0.8.6.1'
     implementation 'com.afollestad.material-dialogs:commons:0.8.6.1'
     implementation 'androidx.appcompat:appcompat:1.1.0'

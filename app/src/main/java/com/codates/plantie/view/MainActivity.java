@@ -17,6 +17,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.navigation.ui.AppBarConfiguration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -166,7 +167,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
                     case R.id.nav_home:
                         home = new Intent(context, MainActivity.class);
                         startActivity(home);
-                        onBackPressed();
+                        finish();
                         break;
                     case R.id.nav_my_plant:
                         myPlant = new Intent(MainActivity.this, TanamanKu.class);
@@ -224,8 +225,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
         super.onResume();
         FirebaseUser account = firebaseAuth.getCurrentUser();
         showJumlahTanaman(account);
-        showListTanaman();
-    }
+      }
 
 
     @Override
@@ -233,8 +233,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
         super.onRestart();
         FirebaseUser account = firebaseAuth.getCurrentUser();
         showJumlahTanaman(account);
-        showListTanaman();
-    }
+       }
 
 
     @SuppressLint("WrongConstant")

@@ -1,9 +1,17 @@
 package com.codates.plantie.view;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.ColorStateList;
 import android.net.Uri;
+import android.nfc.Tag;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Gravity;
@@ -14,24 +22,30 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.drawerlayout.widget.DrawerLayout;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import com.bumptech.glide.Glide;
 import com.codates.plantie.R;
+//import com.codates.plantie.adapter.PenyakitAdapter;
 import com.codates.plantie.adapter.PenyakitAdapter;
+import com.codates.plantie.adapter.TanamanAdapter;
 import com.codates.plantie.model.Penyakit;
+import com.codates.plantie.model.User;
 import com.github.florent37.awesomebar.AwesomeBar;
+import com.google.android.gms.auth.api.Auth;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.auth.api.signin.GoogleSignInResult;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FieldPath;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
@@ -39,19 +53,20 @@ import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 
+import id.arieridwan.lib.PageLoader;
 
 public class ListPenyakit extends AppCompatActivity {
 
+    private RecyclerView recyclerViewOne;
+    private RecyclerView recyclerViewTwo;
+    private ArrayList<Penyakit> listPenyakit = new ArrayList<>();
+    private ArrayList<Penyakit> listPenyakit2 = new ArrayList<>();
     FirebaseFirestore db = FirebaseFirestore.getInstance();
     FirebaseFirestore db2 = FirebaseFirestore.getInstance();
     TextView tvName, tvEmail;
     ImageView imgProfile;
     Intent home, myPlant, setting, hama;
     Context context;
-    private RecyclerView recyclerViewOne;
-    private RecyclerView recyclerViewTwo;
-    private ArrayList<Penyakit> listPenyakit = new ArrayList<>();
-    private ArrayList<Penyakit> listPenyakit2 = new ArrayList<>();
     private FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
 
     @Override
@@ -67,48 +82,46 @@ public class ListPenyakit extends AppCompatActivity {
         context = this;
 
         AwesomeBar bar = findViewById(R.id.bar);
-
+        final PageLoader pageLoader = findViewById(R.id.progress_bar);
         bar.getSettings().setAnimateMenu(false);
-
-        final DrawerLayout drawerLayout = findViewById(R.id.drawer_layout);
+        bar.displayHomeAsUpEnabled(true);
 
         bar.setOnMenuClickedListener(new View.OnClickListener() {
-            @SuppressLint("WrongConstant")
             @Override
             public void onClick(View v) {
-                drawerLayout.openDrawer(Gravity.START);
+                onBackPressed();
             }
         });
-
-        bar.displayHomeAsUpEnabled(false);
         NavigationView navigationView = findViewById(R.id.nav_view);
         setupNavDrawer(navigationView);
         tvName = navigationView.getHeaderView(0).findViewById(R.id.tv_name);
         tvEmail = navigationView.getHeaderView(0).findViewById(R.id.tv_email);
         imgProfile = navigationView.getHeaderView(0).findViewById(R.id.img_profile);
 
+        setPageLoader(pageLoader);
 
         db.collection("penyakit").orderBy("jumlah_view", Query.Direction.DESCENDING).limit(10).get().addOnCompleteListener(
                 new OnCompleteListener<QuerySnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if (task.isSuccessful()) {
-                            for (QueryDocumentSnapshot documentSnapshot : task.getResult()) {
-                                try {
+                        if (task.isSuccessful()){
+                            for(QueryDocumentSnapshot documentSnapshot : task.getResult()){
+                                try{
                                     Log.d("success", documentSnapshot.getId() + " => " + documentSnapshot.getData());
                                     Penyakit penyakit = documentSnapshot.toObject(Penyakit.class);
                                     penyakit.setIdPenyakit(documentSnapshot.getId());
                                     System.out.println(penyakit.getTitle());
                                     listPenyakit.add(penyakit);
                                     showRecyclerView(listPenyakit);
-                                } catch (Exception ex) {
+                                } catch(Exception ex){
                                     Log.d("error", ex.getMessage());
 
                                     Toast.makeText(getApplicationContext(), ex.getMessage(), Toast.LENGTH_SHORT).show();
                                 }
                             }
 
-                        } else {
+                        }
+                        else {
                             Log.d("Main", "Error Getting Documents: ", task.getException());
                         }
                     }
@@ -120,6 +133,7 @@ public class ListPenyakit extends AppCompatActivity {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         if (task.isSuccessful()) {
+                            pageLoader.stopProgress();
                             for (QueryDocumentSnapshot documentSnapshot : task.getResult()) {
                                 try {
                                     Log.d("success", documentSnapshot.getId() + " => " + documentSnapshot.getData());
@@ -147,13 +161,23 @@ public class ListPenyakit extends AppCompatActivity {
         System.out.println("list kosong " + listPenyakit2.isEmpty());
     }
 
-    private void setupNavDrawer(NavigationView navigationView) {
+    private void setPageLoader(PageLoader pageLoader) {
+        pageLoader.setImageLoading(R.drawable.logo);
+        pageLoader.setLoadingAnimationMode("flip");
+        pageLoader.setTextLoading("Tunggu");
+        pageLoader.setTextSize(0);
+        pageLoader.setLoadingImageWidth(250);
+        pageLoader.setLoadingImageHeight(250);
+        pageLoader.setTextColor(ColorStateList.valueOf(0));
+        pageLoader.startProgress();
+    }
+
+    private void setupNavDrawer(NavigationView navigationView){
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @SuppressLint("WrongConstant")
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
-
-                switch (menuItem.getItemId()) {
+                switch (menuItem.getItemId()){
                     case R.id.nav_home:
                         home = new Intent(ListPenyakit.this, MainActivity.class);
                         startActivity(home);
@@ -180,8 +204,8 @@ public class ListPenyakit extends AppCompatActivity {
                         ));
 //                        intent.setType("text/plain");
 //                        startActivity(Intent.createChooser(intent, "Kritik & Saran"));
-                        intent.putExtra(Intent.EXTRA_EMAIL, new String[]{"codatescompany@gmail.com"});
-                        intent.putExtra(Intent.EXTRA_CC, new String[]{tvEmail.getText().toString()});
+                        intent.putExtra(Intent.EXTRA_EMAIL, new String[] {"codatescompany@gmail.com"});
+                        intent.putExtra(Intent.EXTRA_CC, new String[] {tvEmail.getText().toString()});
                         intent.putExtra(Intent.EXTRA_SUBJECT, "Kritik & Saran");
                         intent.putExtra(Intent.EXTRA_TEXT, "");
 
@@ -203,9 +227,9 @@ public class ListPenyakit extends AppCompatActivity {
         final DrawerLayout drawer = findViewById(R.id.drawer_layout);
 //        drawer.setDescendantFocusability(ViewGroup.FOCUS_BLOCK_DESCENDANTS);
 
-        if (drawer.isDrawerOpen(Gravity.START)) {
+        if (drawer.isDrawerOpen(Gravity.START)){
             drawer.closeDrawers();
-        } else {
+        }else {
             super.onBackPressed();
         }
     }
@@ -214,15 +238,15 @@ public class ListPenyakit extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
         FirebaseUser account = firebaseAuth.getCurrentUser();
-        if (account != null) {
-            tvName.setText(account.getDisplayName());
-            tvEmail.setText(account.getEmail());
-            if (account.getPhotoUrl() != null) {
-                Glide.with(this).load(account.getPhotoUrl()).into(imgProfile);
-            } else {
-                imgProfile.setImageResource(R.mipmap.ic_logo);
+            if (account != null) {
+                tvName.setText(account.getDisplayName());
+                tvEmail.setText(account.getEmail());
+                if(account.getPhotoUrl() != null){
+                    Glide.with(this).load(account.getPhotoUrl()).into(imgProfile);
+                }else{
+                    imgProfile.setImageResource(R.mipmap.ic_logo);
+                }
             }
-        }
 
     }
 
@@ -234,12 +258,13 @@ public class ListPenyakit extends AppCompatActivity {
     }
 
 
+
     private void gotoLoginActivity() {
-        Intent intent = new Intent(this, MainActivity.class);
+        Intent intent = new Intent(this,MainActivity.class);
         startActivity(intent);
     }
 
-    private void showRecyclerView(final ArrayList<Penyakit> penyakit) {
+    private void showRecyclerView(final ArrayList<Penyakit> penyakit){
         LinearLayoutManager llm = new LinearLayoutManager(this);
         llm.setOrientation(LinearLayoutManager.HORIZONTAL);
         PenyakitAdapter penyakitAdapter = new PenyakitAdapter(penyakit);
@@ -274,7 +299,7 @@ public class ListPenyakit extends AppCompatActivity {
         });
     }
 
-    private void showRecyclerViewTwo(ArrayList<Penyakit> penyakit) {
+    private void showRecyclerViewTwo(ArrayList<Penyakit> penyakit){
 
         LinearLayoutManager llm2 = new LinearLayoutManager(this);
         llm2.setOrientation(LinearLayoutManager.VERTICAL);

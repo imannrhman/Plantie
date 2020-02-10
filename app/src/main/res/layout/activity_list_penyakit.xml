@@ -31,6 +31,7 @@
 
 
         <androidx.core.widget.NestedScrollView
+            android:id="@+id/nestedscrollview"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             app:layout_behavior="@string/appbar_scrolling_view_behavior"
@@ -96,6 +97,17 @@
             </LinearLayout>
 
         </androidx.core.widget.NestedScrollView>
+
+        <id.arieridwan.lib.PageLoader
+            android:id="@+id/progress_bar"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_centerInParent="true"
+            app:setLoadingImage="@drawable/logo"
+            app:layout_constraintTop_toBottomOf="@+id/bar"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            android:gravity="center_horizontal"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

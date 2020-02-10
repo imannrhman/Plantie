@@ -68,7 +68,7 @@ public class ListTanaman extends AppCompatActivity {
                             }
                             try {
                                 showRecyclerList(list);
-                                bar.addAction(R.drawable.ic_search_black_24dp, "Cari");
+//                                bar.addAction(R.drawable.ic_search_black_24dp, "Cari");
                             } catch (Exception e) {
                                 Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
                             }
@@ -92,19 +92,19 @@ public class ListTanaman extends AppCompatActivity {
                 onBackPressed();
             }
         });
-        bar.setActionItemClickListener(new AwesomeBar.ActionItemClickListener() {
-            @Override
-            public void onActionItemClicked(int position, ActionItem actionItem) {
-                if (muncul) {
-                    search.setVisibility(View.VISIBLE);
-                    muncul = false;
-                } else {
-                    search.setVisibility(View.INVISIBLE);
-                    muncul = true;
-                }
-
-            }
-        });
+//        bar.setActionItemClickListener(new AwesomeBar.ActionItemClickListener() {
+//            @Override
+//            public void onActionItemClicked(int position, ActionItem actionItem) {
+//                if (muncul) {
+//                    search.setVisibility(View.VISIBLE);
+//                    muncul = false;
+//                } else {
+//                    search.setVisibility(View.INVISIBLE);
+//                    muncul = true;
+//                }
+//
+//            }
+//        });
 
         rvTanaman = findViewById(R.id.recycler_view);
         System.out.println("list kosong" + list.isEmpty());

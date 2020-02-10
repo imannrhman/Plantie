@@ -1,11 +1,14 @@
 package com.codates.plantie.adapter;
 
 import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -20,50 +23,85 @@ import java.util.ArrayList;
 public class PenyakitAdapter extends RecyclerView.Adapter<PenyakitAdapter.ViewHolder> {
 
     private OnItemClickCallback onItemClickCallback;
-    private ArrayList<Penyakit> listPenyakit;
-
-    public PenyakitAdapter(ArrayList<Penyakit> list) {
-        this.listPenyakit = list;
-    }
 
     public void setOnItemClickCallback(OnItemClickCallback onItemClickCallback) {
         this.onItemClickCallback = onItemClickCallback;
     }
 
+    public interface OnItemClickCallback{
+        void onItemClicked(Penyakit penyakit);
+    }
+
+    private ArrayList<Penyakit> listPenyakit;
+
+    public PenyakitAdapter(ArrayList<Penyakit> list){
+        this.listPenyakit = list;
+    }
+
     @NonNull
     @Override
     public PenyakitAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_penyakit, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_penyakit,parent,false);
         return new PenyakitAdapter.ViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull final PenyakitAdapter.ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull final PenyakitAdapter.ViewHolder holder, int position){
         Penyakit penyakit = listPenyakit.get(position);
         String jenis = penyakit.getJenis_penyakit();
-        holder.txt_title.setText(penyakit.getTitle());
-        try {
-            holder.txt_jenis_penyakit.setText(jenis);
-            if (jenis.equals("bakteri")) {
+        String level = penyakit.getLevel();
 
-                holder.txt_jenis_penyakit.setTextColor(Color.parseColor("#F4A560"));
+        try{
+            holder.txt_title.setText(penyakit.getTitle());
+            holder.txt_jenis_penyakit.setText(jenis);
+            if (jenis.equals("bakteri")){
+
+                holder.txt_jenis_penyakit.setTextColor(Color.parseColor("#6FCF97"));
                 holder.imgJenis.setImageResource(R.drawable.ic_bakteri_penyakit);
 
-            } else if (jenis.equals("hewan/serangga")) {
+            } else if (jenis.equals("hewan/serangga")){
 
-                holder.txt_jenis_penyakit.setTextColor(Color.parseColor("#E14666"));
+                holder.txt_jenis_penyakit.setTextColor(Color.parseColor("#EB5757"));
                 holder.imgJenis.setImageResource(R.drawable.ic_hewan_penyakit);
 
-            } else if (jenis.equals("virus")) {
+            } else if (jenis.equals("virus")){
 
-                holder.txt_jenis_penyakit.setTextColor(Color.parseColor("#00B3C9"));
+                holder.txt_jenis_penyakit.setTextColor(Color.parseColor("#2F80ED"));
                 holder.imgJenis.setImageResource(R.drawable.ic_virus_penyakit);
 
-            } else {
+            } else if (jenis.equals("jamur")){
+
+                holder.txt_jenis_penyakit.setTextColor(Color.parseColor("#F2994A"));
+                holder.imgJenis.setImageResource(R.drawable.ic_jamur_penyakit);
+
+            }else{
+
                 holder.txt_jenis_penyakit.setText("Tidak Terdefinisi");
                 holder.txt_jenis_penyakit.setTextColor(Color.parseColor("#4A4A4A"));
+
             }
-            holder.txt_level.setText(penyakit.getLevel());
+
+
+            if (level.equals("1")){
+                holder.txt_level.setText("Rendah");
+                holder.txt_level.setTextColor(Color.parseColor("#6FCF97"));
+                holder.rl_level.setBackgroundColor(Color.parseColor("#D4EDDA"));
+            } else if (level.equals("2")){
+                holder.txt_level.setText("Sedang");
+                holder.txt_level.setTextColor(Color.parseColor("#2F80ED"));
+                holder.rl_level.setBackgroundColor(Color.parseColor("#CCE5FF"));
+            } else if (level.equals("3")){
+                holder.txt_level.setText("Serius");
+                holder.txt_level.setTextColor(Color.parseColor("#F2994A"));
+                holder.rl_level.setBackgroundColor(Color.parseColor("#FCE5D2"));
+            } else if(level.equals("4")){
+                holder.txt_level.setText("Bahaya");
+                holder.txt_level.setTextColor(Color.parseColor("#EB5757"));
+                holder.rl_level.setBackgroundColor(Color.parseColor("#F8D7DA"));
+            } else{
+                holder.txt_level.setText(level);
+            }
+
             Glide.with(holder.itemView.getContext()).load(penyakit.getGambar_tanaman()).into(holder.imgPenyakit);
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -71,7 +109,7 @@ public class PenyakitAdapter extends RecyclerView.Adapter<PenyakitAdapter.ViewHo
                     onItemClickCallback.onItemClicked(listPenyakit.get(holder.getAdapterPosition()));
                 }
             });
-        } catch (Exception ex) {
+        } catch (Exception ex){
             ex.printStackTrace();
         }
 
@@ -82,21 +120,18 @@ public class PenyakitAdapter extends RecyclerView.Adapter<PenyakitAdapter.ViewHo
         return listPenyakit.size();
     }
 
-    public interface OnItemClickCallback {
-        void onItemClicked(Penyakit penyakit);
-    }
-
-    public class ViewHolder extends RecyclerView.ViewHolder {
+    public class ViewHolder extends RecyclerView.ViewHolder{
         TextView txt_title, txt_jenis_penyakit, txt_level;
         ImageView imgPenyakit, imgJenis;
-
-        public ViewHolder(@NonNull View itemView) {
+        RelativeLayout rl_level;
+        public ViewHolder(@NonNull View itemView){
             super(itemView);
             txt_title = itemView.findViewById(R.id.txt_penyakit);
             txt_jenis_penyakit = itemView.findViewById(R.id.txt_jenis_tanaman);
             txt_level = itemView.findViewById(R.id.txt_level);
             imgPenyakit = itemView.findViewById(R.id.img_penyakit);
             imgJenis = itemView.findViewById(R.id.img_jenis_penyakit);
+            rl_level = itemView.findViewById(R.id.relative_layout_level);
         }
     }
 

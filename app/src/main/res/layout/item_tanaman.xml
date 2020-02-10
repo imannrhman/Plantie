@@ -15,37 +15,37 @@
         <ImageView
             android:id="@+id/img_gambar"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:src="@drawable/gambar"
             android:scaleType="centerCrop"
-            android:src="@drawable/gambar" />
+            android:layout_height="match_parent"
+             />
 
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
-
             <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentEnd="true"
                 android:layout_margin="16dp"
-                android:orientation="horizontal">
-
+                android:layout_width="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                >
                 <TextView
                     android:id="@+id/tv_waktu"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:fontFamily="@font/montserratsemibold"
-                    android:text="30d"
                     android:textColor="#fff"
-                    android:textSize="16dp" />
-
+                    android:fontFamily="@font/montserratsemibold"
+                    android:textSize="16dp"
+                    android:text="30d"
+                    />
                 <View
+                    android:layout_gravity="center"
                     android:id="@+id/icon_alarm"
                     android:layout_width="17dp"
                     android:layout_height="17dp"
                     android:layout_alignEnd="@+id/tv_waktu"
-                    android:layout_gravity="center"
-                    android:background="@drawable/ic_alarm_black_24dp" />
+                    android:background="@drawable/ic_alarm_black_24dp"/>
 
             </LinearLayout>
 
@@ -53,12 +53,13 @@
                 android:id="@+id/tv_tanaman"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentBottom="true"
-                android:layout_margin="16dp"
-                android:fontFamily="@font/montserratsemibold"
                 android:text="Tanaman Cabe Rawit"
                 android:textColor="#fff"
-                android:textSize="20dp" />
+                android:layout_margin="16dp"
+                android:layout_alignParentBottom="true"
+                android:textSize="20dp"
+                android:fontFamily="@font/montserratsemibold"
+                />
         </RelativeLayout>
 
     </FrameLayout>

@@ -4,26 +4,21 @@ import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
-import android.app.Person;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
-import android.graphics.drawable.Icon;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.provider.Settings;
 import androidx.core.app.NotificationCompat;
-import androidx.core.graphics.drawable.IconCompat;
-import androidx.legacy.content.WakefulBroadcastReceiver;
 import com.codates.plantie.R;
 import com.codates.plantie.view.DetailTanaman;
 
 import static android.content.Context.NOTIFICATION_SERVICE;
 
 public class AlarmAdapter extends BroadcastReceiver {
-    private String CHANNEL_ID;
 
     @Override
     public void onReceive(Context context, Intent intent) {
@@ -32,10 +27,10 @@ public class AlarmAdapter extends BroadcastReceiver {
 
         String NOTIFICATION_CHANNEL_ID = "codates_plantie";
         NotificationManager notificationManager = (NotificationManager) context.getSystemService(NOTIFICATION_SERVICE);
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
-            String channelName = "PLANTIE";
-            int importance = NotificationManager.IMPORTANCE_HIGH;
+        String channelName = "PLANTIE";
+        int importance = NotificationManager.IMPORTANCE_HIGH;
 
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
                 NotificationChannel mChannel = new NotificationChannel(NOTIFICATION_CHANNEL_ID, channelName, importance);
                 mChannel.enableLights(true);
                 mChannel.setLightColor(Color.GREEN);
@@ -43,9 +38,6 @@ public class AlarmAdapter extends BroadcastReceiver {
                 mChannel.setLockscreenVisibility(Notification.VISIBILITY_PUBLIC);
                 notificationManager.createNotificationChannel(mChannel);
             }
-            NotificationChannel mChannel = new NotificationChannel(NOTIFICATION_CHANNEL_ID, channelName, importance);
-            notificationManager.createNotificationChannel(mChannel);
-        
 
         Intent mIntent = new Intent(context, DetailTanaman.class);
         Bundle bundle = new Bundle();

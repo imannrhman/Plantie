@@ -3,12 +3,30 @@ package com.codates.plantie.model;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import java.util.List;
-
 public class Content implements Parcelable {
 
+    public static final Parcelable.Creator<Content> CREATOR = new Parcelable.Creator<Content>() {
+        @Override
+        public Content createFromParcel(Parcel source) {
+            return new Content(source);
+        }
+
+        @Override
+        public Content[] newArray(int size) {
+            return new Content[size];
+        }
+    };
     String deskripsi;
     String solusi;
+
+    public Content() {
+
+    }
+
+    protected Content(Parcel in) {
+        this.deskripsi = in.readString();
+        this.solusi = in.readString();
+    }
 
     public String getDeskripsi() {
         return deskripsi;
@@ -26,15 +44,6 @@ public class Content implements Parcelable {
         this.solusi = solusi;
     }
 
-    public Content(){
-
-    }
-
-    protected Content(Parcel in){
-        this.deskripsi = in.readString();
-        this.solusi = in.readString();
-    }
-
     @Override
     public int describeContents() {
         return 0;
@@ -45,17 +54,5 @@ public class Content implements Parcelable {
         dest.writeString(deskripsi);
         dest.writeString(solusi);
     }
-
-    public static final Parcelable.Creator<Content> CREATOR = new Parcelable.Creator<Content>() {
-        @Override
-        public Content createFromParcel(Parcel source) {
-            return new Content(source);
-        }
-
-        @Override
-        public Content[] newArray(int size) {
-            return new Content[size];
-        }
-    };
 
 }

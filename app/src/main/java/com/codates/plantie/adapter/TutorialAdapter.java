@@ -13,16 +13,16 @@ import com.codates.plantie.R;
 import java.util.ArrayList;
 
 public class TutorialAdapter extends RecyclerView.Adapter<TutorialAdapter.ViewHolder> {
+    ArrayList<String> tutorial;
+
     public TutorialAdapter(ArrayList<String> tutorial) {
         this.tutorial = tutorial;
     }
 
-    ArrayList<String> tutorial;
-
     @NonNull
     @Override
     public TutorialAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_tutorial,parent,false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_tutorial, parent, false);
         return new TutorialAdapter.ViewHolder(view);
     }
 
@@ -36,8 +36,9 @@ public class TutorialAdapter extends RecyclerView.Adapter<TutorialAdapter.ViewHo
         return tutorial.size();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder{
+    public class ViewHolder extends RecyclerView.ViewHolder {
         TextView tvTutorial;
+
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             tvTutorial = itemView.findViewById(R.id.text_detail_alat);

@@ -1,14 +1,12 @@
 package com.codates.plantie.view;
 
-import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.os.Bundle;
 import android.view.View;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.codates.plantie.R;
 import com.github.florent37.awesomebar.AwesomeBar;
-import com.google.android.material.appbar.AppBarLayout;
 
 public class PengembanganActivity extends AppCompatActivity {
 

@@ -9,24 +9,23 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.codates.plantie.R;
-import com.codates.plantie.model.DeskripsiHari;
+import com.codates.plantie.model.Deskripsi;
 import com.codates.plantie.model.Hari;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.Locale;
 
 public class HariAdapter extends RecyclerView.Adapter<HariAdapter.ViewHolder> {
-    public HariAdapter(ArrayList<DeskripsiHari> listHari, Hari hari) {
+    Hari hari;
+    ArrayList<Deskripsi> listDeskripsi;
+    private OnItemClickCallback onItemClickCallback;
+
+    public HariAdapter(ArrayList<Deskripsi> listHari, Hari hari) {
         this.listDeskripsi = listHari;
         this.hari = hari;
     }
-
-    Hari hari;
-    private OnItemClickCallback onItemClickCallback;
-    ArrayList<DeskripsiHari> listDeskripsi;
 
     @NonNull
     @Override
@@ -39,14 +38,9 @@ public class HariAdapter extends RecyclerView.Adapter<HariAdapter.ViewHolder> {
         this.onItemClickCallback = onItemClickCallback;
     }
 
-    public interface OnItemClickCallback {
-        void onItemClicked(int posisition);
-    }
-
     @Override
     public void onBindViewHolder(@NonNull HariAdapter.ViewHolder holder, final int position) {
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
-
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMdd");
         System.out.println(hari.getDate());
         try {
@@ -76,6 +70,10 @@ public class HariAdapter extends RecyclerView.Adapter<HariAdapter.ViewHolder> {
     @Override
     public int getItemCount() {
         return listDeskripsi.size();
+    }
+
+    public interface OnItemClickCallback {
+        void onItemClicked(int posisition);
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {

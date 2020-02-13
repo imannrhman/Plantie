@@ -4,11 +4,29 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 import java.util.ArrayList;
-import java.util.Date;
 
 public class Minggu implements Parcelable {
+    public static final Parcelable.Creator<Minggu> CREATOR = new Parcelable.Creator<Minggu>() {
+        @Override
+        public Minggu createFromParcel(Parcel source) {
+            return new Minggu(source);
+        }
+
+        @Override
+        public Minggu[] newArray(int size) {
+            return new Minggu[size];
+        }
+    };
     public ArrayList<Hari> hari;
     public boolean selesai;
+
+    public Minggu() {
+    }
+
+    protected Minggu(Parcel in) {
+        this.hari = in.createTypedArrayList(Hari.CREATOR);
+        this.selesai = in.readByte() != 0;
+    }
 
     public ArrayList<Hari> getHari() {
         return hari;
@@ -36,24 +54,4 @@ public class Minggu implements Parcelable {
         dest.writeTypedList(this.hari);
         dest.writeByte(this.selesai ? (byte) 1 : (byte) 0);
     }
-
-    public Minggu() {
-    }
-
-    protected Minggu(Parcel in) {
-        this.hari = in.createTypedArrayList(Hari.CREATOR);
-        this.selesai = in.readByte() != 0;
-    }
-
-    public static final Parcelable.Creator<Minggu> CREATOR = new Parcelable.Creator<Minggu>() {
-        @Override
-        public Minggu createFromParcel(Parcel source) {
-            return new Minggu(source);
-        }
-
-        @Override
-        public Minggu[] newArray(int size) {
-            return new Minggu[size];
-        }
-    };
 }

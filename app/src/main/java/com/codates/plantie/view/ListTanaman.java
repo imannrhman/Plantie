@@ -1,10 +1,5 @@
 package com.codates.plantie.view;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.os.Bundle;
@@ -13,10 +8,14 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.codates.plantie.R;
-import com.codates.plantie.model.Tanaman;
 import com.codates.plantie.adapter.TanamanAdapter;
-import com.codates.plantie.model.Tutorial;
+import com.codates.plantie.model.Tanaman;
 import com.github.florent37.awesomebar.ActionItem;
 import com.github.florent37.awesomebar.AwesomeBar;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -31,11 +30,10 @@ import java.util.ArrayList;
 import id.arieridwan.lib.PageLoader;
 
 public class ListTanaman extends AppCompatActivity {
-    private RecyclerView rvTanaman;
     boolean muncul = true;
-    private ArrayList<Tanaman> list = new ArrayList<>();
     FirebaseFirestore db = FirebaseFirestore.getInstance();
-
+    private RecyclerView rvTanaman;
+    private ArrayList<Tanaman> list = new ArrayList<>();
 
     @Override
     public boolean onSupportNavigateUp() {
@@ -47,7 +45,7 @@ public class ListTanaman extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list_tanaman);
-      
+
         final AwesomeBar bar = findViewById(R.id.bar);
         final PageLoader pageLoader = findViewById(R.id.progress_bar);
         setPageLoader(pageLoader);

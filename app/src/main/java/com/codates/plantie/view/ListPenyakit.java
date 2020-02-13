@@ -82,21 +82,16 @@ public class ListPenyakit extends AppCompatActivity {
         context = this;
 
         AwesomeBar bar = findViewById(R.id.bar);
-
-        bar.getSettings().setAnimateMenu(false);
-
-        final DrawerLayout drawerLayout = findViewById(R.id.drawer_layout);
         final PageLoader pageLoader = findViewById(R.id.progress_bar);
+        bar.getSettings().setAnimateMenu(false);
+        bar.displayHomeAsUpEnabled(true);
 
         bar.setOnMenuClickedListener(new View.OnClickListener() {
-            @SuppressLint("WrongConstant")
             @Override
             public void onClick(View v) {
-                drawerLayout.openDrawer(Gravity.START);
+                onBackPressed();
             }
         });
-
-        bar.displayHomeAsUpEnabled(false);
         NavigationView navigationView = findViewById(R.id.nav_view);
         setupNavDrawer(navigationView);
         tvName = navigationView.getHeaderView(0).findViewById(R.id.tv_name);
@@ -182,7 +177,6 @@ public class ListPenyakit extends AppCompatActivity {
             @SuppressLint("WrongConstant")
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
-
                 switch (menuItem.getItemId()){
                     case R.id.nav_home:
                         home = new Intent(ListPenyakit.this, MainActivity.class);

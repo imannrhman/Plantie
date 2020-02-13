@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -17,10 +16,10 @@
             android:id="@+id/card_alat"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:layout_constraintTop_toTopOf="parent"
+            app:cardCornerRadius="4dp"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            app:cardCornerRadius="4dp">
+            app:layout_constraintTop_toTopOf="parent">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -35,24 +34,24 @@
                         android:id="@+id/img_alat"
                         android:layout_width="60dp"
                         android:layout_height="60dp"
-                        android:src="@drawable/ic_wheelbarrow"
                         android:layout_alignParentStart="true"
                         android:layout_alignParentLeft="true"
                         android:layout_alignParentTop="true"
                         android:layout_alignParentBottom="true"
                         android:layout_centerVertical="true"
-                        android:layout_margin="20dp"/>
+                        android:layout_margin="20dp"
+                        android:src="@drawable/ic_wheelbarrow" />
 
                     <TextView
                         android:id="@+id/textview_alat"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Alat dan Bahan"
-                        android:textColor="#787878"
-                        android:textSize="20sp"
                         android:layout_alignParentRight="true"
                         android:layout_centerVertical="true"
-                        android:layout_toRightOf="@id/img_alat"/>
+                        android:layout_toRightOf="@id/img_alat"
+                        android:text="Alat dan Bahan"
+                        android:textColor="#787878"
+                        android:textSize="20sp" />
 
                 </RelativeLayout>
 
@@ -65,15 +64,14 @@
                     <RelativeLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="20dp"
-                        android:layout_marginHorizontal="20dp">
+                        android:layout_marginHorizontal="20dp"
+                        android:layout_marginBottom="20dp">
 
                         <androidx.recyclerview.widget.RecyclerView
                             android:id="@+id/rv_tutorial"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
-                            tools:listitem="@layout/item_tutorial"
-                            />
+                            tools:listitem="@layout/item_tutorial" />
                     </RelativeLayout>
 
                 </LinearLayout>
@@ -85,18 +83,19 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            app:layout_constraintTop_toBottomOf="@id/card_alat"
+            android:layout_marginTop="20dp"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            android:layout_marginTop="20dp">
+            app:layout_constraintTop_toBottomOf="@id/card_alat">
+
             <TextView
                 android:id="@+id/link_tokped"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:text="Belum punya alat / bahan ?"
+                android:textAlignment="textEnd"
                 android:textColor="#50B278"
-                android:textSize="16sp"
-                android:textAlignment="textEnd"/>
+                android:textSize="16sp" />
         </RelativeLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>

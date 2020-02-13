@@ -184,17 +184,88 @@ public class Setting extends AppCompatActivity implements AdapterView.OnItemSele
         positiveBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                Intent home = new Intent(Setting.this, MainActivity.class);
-//                startActivity(home);
+                Intent home = new Intent(Setting.this, MainActivity.class);
+                startActivity(home);
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                     pengingatSore(calendarSore().getTimeInMillis(), calendarSore());
                 }
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                     pengingatPagi(calendarPagi().getTimeInMillis(), calendarPagi());
                 }
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P){
+                    pengingatSoreP(calendarSore().getTimeInMillis(), calendarSore());
+                }
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P){
+                    pengingatPagiP(calendarPagi().getTimeInMillis(), calendarPagi());
+                }
 
             }
         });
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.P)
+    public void pengingatSoreP(long timeInMillis, Calendar c){
+        AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+        Intent intent = new Intent(Setting.this, AlarmAdapter.class);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(Setting.this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+        assert alarmManager != null;
+        alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, timeInMillis, pendingIntent);
+//        alarmManager.setExact(AlarmManager.RTC_WAKEUP, timeInMillis, pendingIntent);
+//        alarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP, timeInMillis, AlarmManager.INTERVAL_DAY, pendingIntent);
+//        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, timeInMillis, AlarmManager.INTERVAL_DAY, pendingIntent);
+
+//        Toast.makeText(this, String.valueOf(timeInMillis), Toast.LENGTH_LONG).show();
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.P)
+    public void pengingatPagiP(long timeInMillis, Calendar c){
+        AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+        Intent intent = new Intent(Setting.this, AlarmAdapter.class);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(Setting.this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+        assert alarmManager != null;
+        alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, timeInMillis, pendingIntent);
+//        alarmManager.setExact(AlarmManager.RTC_WAKEUP, timeInMillis, pendingIntent);
+//        alarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP, timeInMillis, AlarmManager.INTERVAL_DAY, pendingIntent);
+//        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, timeInMillis, AlarmManager.INTERVAL_DAY, pendingIntent);
+
+        //       ini percobaan
+//        int hour = c.get(Calendar.HOUR);
+//        int date = c.get(Calendar.DATE);
+//        int mth = c.get(Calendar.MONTH);
+//        int yer = c.get(Calendar.YEAR);
+//        int min = c.get(Calendar.MINUTE);
+//
+//        Calendar cal = Calendar.getInstance();
+//        int jam = cal.get(Calendar.HOUR);
+//        int tgl = cal.get(Calendar.DATE);
+//        int bln = cal.get(Calendar.MONTH);
+//        int thn = cal.get(Calendar.YEAR);
+//        int mnt = cal.get(Calendar.MINUTE);
+//
+//
+//        final Typeface faceMed = ResourcesCompat.getFont(this, R.font.montserratsemibold);
+//        final Typeface face = ResourcesCompat.getFont(this, R.font.montserrat);
+//        MaterialDialog dialog = new MaterialDialog.Builder(this)
+//                .title("PENGATURAN Pagi")
+//                .content("c : " +hour+"."+min+" "+date+" "+mth+" "+yer+
+//                        "\ncal : "+jam+"."+mnt+" "+tgl+" "+bln+" "+thn)
+//                .positiveText("OK")
+//                .icon(getResources().getDrawable(R.mipmap.ic_logo))
+//                .autoDismiss(true)
+//                .typeface(faceMed,face)
+//                .show();
+//
+//        View positiveBtn = dialog.getActionButton(DialogAction.POSITIVE);
+//        positiveBtn.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Intent home = new Intent(Setting.this, MainActivity.class);
+//                startActivity(home);
+//            }
+//        });
+//        sini-sini
+
+//        Toast.makeText(this, "JAM "+hour+" ."+mnt+" "+tgl+" "+bln+" "+thn, Toast.LENGTH_LONG).show();
     }
 
     @RequiresApi(api = Build.VERSION_CODES.M)
@@ -344,7 +415,7 @@ public class Setting extends AppCompatActivity implements AdapterView.OnItemSele
         int mnt = cal.get(Calendar.MINUTE);
 
         int tgl1 = tgl + 1;
-
+//
         if (hour < jam || hour == jam && date == tgl && mth == bln && yer == thn && min < mnt || min == mnt){
             calendar.set(Calendar.DATE, tgl1);
         }

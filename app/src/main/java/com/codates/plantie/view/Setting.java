@@ -8,13 +8,11 @@ import android.content.SharedPreferences;
 import android.graphics.Typeface;
 import android.os.Build;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
 
 
 import androidx.annotation.Nullable;
@@ -37,7 +35,7 @@ public class Setting extends AppCompatActivity implements AdapterView.OnItemSele
 
     private SharedPreferences sharedPreferences;
 
-    public static final String EXTRA_POSISITION = "extra_posisition";
+//    public static final String EXTRA_POSISITION = "extra_posisition";
     protected Spinner spinnerPagi, spinnerSore;
     private static final String PAGI = "pagi";
     private static final String SORE = "sore";
@@ -86,7 +84,6 @@ public class Setting extends AppCompatActivity implements AdapterView.OnItemSele
             }
         });
 
-//        int position = getIntent().getIntExtra(EXTRA_POSISITION, 0);
         bar.getSettings().setAnimateMenu(false);
         bar.displayHomeAsUpEnabled(true);
 
@@ -97,8 +94,6 @@ public class Setting extends AppCompatActivity implements AdapterView.OnItemSele
             }
         });
 
-//        Waktupagi.setText(posisiPagi);
-//        Waktusore.setText(posisiSore);
         spinnerPagi = findViewById(R.id.spinnerWaktuPagi);
         adapterPagi = new ArrayAdapter<>(Setting.this, android.R.layout.simple_spinner_item, pagi);
         adapterPagi.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -149,8 +144,6 @@ public class Setting extends AppCompatActivity implements AdapterView.OnItemSele
         spinnerSore.setSelection(adapterSore.getPosition(posisiSore));
         spinnerSore.setOnItemSelectedListener(this);
 
-//        final Typeface faceMed = ResourcesCompat.getFont(this, R.font.montserratsemibold);
-//        final Typeface face = ResourcesCompat.getFont(this, R.font.montserrat);
 
         btnSave = findViewById(R.id.btnSetting);
         btnSave.setOnClickListener(new View.OnClickListener() {
@@ -187,16 +180,16 @@ public class Setting extends AppCompatActivity implements AdapterView.OnItemSele
                 Intent home = new Intent(Setting.this, MainActivity.class);
                 startActivity(home);
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                    pengingatSore(calendarSore().getTimeInMillis(), calendarSore());
+                    pengingatSore(calendarSore().getTimeInMillis() /* calendarSore() */);
                 }
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                    pengingatPagi(calendarPagi().getTimeInMillis(), calendarPagi());
+                    pengingatPagi(calendarPagi().getTimeInMillis() /* calendarPagi() */);
                 }
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P){
-                    pengingatSoreP(calendarSore().getTimeInMillis(), calendarSore());
+                    pengingatSoreP(calendarSore().getTimeInMillis() /* calendarSore() */);
                 }
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P){
-                    pengingatPagiP(calendarPagi().getTimeInMillis(), calendarPagi());
+                    pengingatPagiP(calendarPagi().getTimeInMillis() /* calendarPagi() */);
                 }
 
             }
@@ -204,39 +197,53 @@ public class Setting extends AppCompatActivity implements AdapterView.OnItemSele
     }
 
     @RequiresApi(api = Build.VERSION_CODES.P)
-    public void pengingatSoreP(long timeInMillis, Calendar c){
+    public void pengingatSoreP(long timeInMillis /* ,Calendar c */){
         AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
         Intent intent = new Intent(Setting.this, AlarmAdapter.class);
         PendingIntent pendingIntent = PendingIntent.getBroadcast(Setting.this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
         assert alarmManager != null;
         alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, timeInMillis, pendingIntent);
-//        alarmManager.setExact(AlarmManager.RTC_WAKEUP, timeInMillis, pendingIntent);
-//        alarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP, timeInMillis, AlarmManager.INTERVAL_DAY, pendingIntent);
-//        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, timeInMillis, AlarmManager.INTERVAL_DAY, pendingIntent);
-
-//        Toast.makeText(this, String.valueOf(timeInMillis), Toast.LENGTH_LONG).show();
+        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, timeInMillis, AlarmManager.INTERVAL_DAY, pendingIntent);
     }
 
     @RequiresApi(api = Build.VERSION_CODES.P)
-    public void pengingatPagiP(long timeInMillis, Calendar c){
+    public void pengingatPagiP(long timeInMillis /* ,Calendar c */){
         AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
         Intent intent = new Intent(Setting.this, AlarmAdapter.class);
         PendingIntent pendingIntent = PendingIntent.getBroadcast(Setting.this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
         assert alarmManager != null;
         alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, timeInMillis, pendingIntent);
-//        alarmManager.setExact(AlarmManager.RTC_WAKEUP, timeInMillis, pendingIntent);
-//        alarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP, timeInMillis, AlarmManager.INTERVAL_DAY, pendingIntent);
-//        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, timeInMillis, AlarmManager.INTERVAL_DAY, pendingIntent);
+        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, timeInMillis, AlarmManager.INTERVAL_DAY, pendingIntent);
+    }
 
-        //       ini percobaan
-//        int hour = c.get(Calendar.HOUR);
+    @RequiresApi(api = Build.VERSION_CODES.M)
+    public void pengingatSore(long timeInMillis /* ,Calendar c */){
+        AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+        Intent intent = new Intent(Setting.this, AlarmAdapter.class);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(Setting.this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+        assert alarmManager != null;
+        alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, timeInMillis, pendingIntent);
+        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, timeInMillis, AlarmManager.INTERVAL_DAY, pendingIntent);
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.M)
+    public void pengingatPagi(long timeInMillis /* ,Calendar c */){
+        AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+        Intent intent = new Intent(Setting.this, AlarmAdapter.class);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(Setting.this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+        assert alarmManager != null;
+        alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, timeInMillis, pendingIntent);
+        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, timeInMillis, AlarmManager.INTERVAL_DAY, pendingIntent);
+
+        //        ini percobaan
+//        int hour = c.get(Calendar.HOUR_OF_DAY);
 //        int date = c.get(Calendar.DATE);
 //        int mth = c.get(Calendar.MONTH);
 //        int yer = c.get(Calendar.YEAR);
 //        int min = c.get(Calendar.MINUTE);
 //
 //        Calendar cal = Calendar.getInstance();
-//        int jam = cal.get(Calendar.HOUR);
+//        int jam = cal.get(Calendar.HOUR_OF_DAY);
 //        int tgl = cal.get(Calendar.DATE);
 //        int bln = cal.get(Calendar.MONTH);
 //        int thn = cal.get(Calendar.YEAR);
@@ -265,106 +272,6 @@ public class Setting extends AppCompatActivity implements AdapterView.OnItemSele
 //        });
 //        sini-sini
 
-//        Toast.makeText(this, "JAM "+hour+" ."+mnt+" "+tgl+" "+bln+" "+thn, Toast.LENGTH_LONG).show();
-    }
-
-    @RequiresApi(api = Build.VERSION_CODES.M)
-    public void pengingatSore(long timeInMillis, Calendar c){
-        AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
-        Intent intent = new Intent(Setting.this, AlarmAdapter.class);
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(Setting.this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
-        assert alarmManager != null;
-        alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, timeInMillis, pendingIntent);
-//        alarmManager.setExact(AlarmManager.RTC_WAKEUP, timeInMillis, pendingIntent);
-//        alarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP, timeInMillis, AlarmManager.INTERVAL_DAY, pendingIntent);
-//        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, timeInMillis, AlarmManager.INTERVAL_DAY, pendingIntent);
-
-//       ini percobaan
-//        int hour = c.get(Calendar.HOUR);
-//        int date = c.get(Calendar.DATE);
-//        int mth = c.get(Calendar.MONTH);
-//        int yer = c.get(Calendar.YEAR);
-//        int min = c.get(Calendar.MINUTE);
-//
-//        Calendar cal = Calendar.getInstance();
-//        int jam = cal.get(Calendar.HOUR);
-//        int tgl = cal.get(Calendar.DATE);
-//        int bln = cal.get(Calendar.MONTH);
-//        int thn = cal.get(Calendar.YEAR);
-//        int mnt = cal.get(Calendar.MINUTE);
-//
-//
-//        final Typeface faceMed = ResourcesCompat.getFont(this, R.font.montserratsemibold);
-//        final Typeface face = ResourcesCompat.getFont(this, R.font.montserrat);
-//        MaterialDialog dialog = new MaterialDialog.Builder(this)
-//                .title("PENGATURAN Sore")
-//                .content("c : " +hour+"."+min+" "+date+" "+mth+" "+yer+
-//                        "\ncal : "+jam+"."+mnt+" "+tgl+" "+bln+" "+thn)
-//                .positiveText("OK")
-//                .icon(getResources().getDrawable(R.mipmap.ic_logo))
-//                .autoDismiss(true)
-//                .typeface(faceMed,face)
-//                .show();
-//
-//        View positiveBtn = dialog.getActionButton(DialogAction.POSITIVE);
-//        positiveBtn.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-////                Intent home = new Intent(Setting.this, MainActivity.class);
-////                startActivity(home);
-//            }
-//        });
-//        sini-sini
-//        Toast.makeText(this, String.valueOf(timeInMillis), Toast.LENGTH_LONG).show();
-    }
-
-    @RequiresApi(api = Build.VERSION_CODES.M)
-    public void pengingatPagi(long timeInMillis, Calendar c){
-        AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
-        Intent intent = new Intent(Setting.this, AlarmAdapter.class);
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(Setting.this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
-        assert alarmManager != null;
-        alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, timeInMillis, pendingIntent);
-//        alarmManager.setExact(AlarmManager.RTC_WAKEUP, timeInMillis, pendingIntent);
-//        alarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP, timeInMillis, AlarmManager.INTERVAL_DAY, pendingIntent);
-//        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, timeInMillis, AlarmManager.INTERVAL_DAY, pendingIntent);
-
-//        int hour = c.get(Calendar.HOUR);
-//        int date = c.get(Calendar.DATE);
-//        int mth = c.get(Calendar.MONTH);
-//        int yer = c.get(Calendar.YEAR);
-//        int min = c.get(Calendar.MINUTE);
-//
-//        Calendar cal = Calendar.getInstance();
-//        int jam = cal.get(Calendar.HOUR);
-//        int tgl = cal.get(Calendar.DATE);
-//        int bln = cal.get(Calendar.MONTH);
-//        int thn = cal.get(Calendar.YEAR);
-//        int mnt = cal.get(Calendar.MINUTE);
-//
-//
-//        final Typeface faceMed = ResourcesCompat.getFont(this, R.font.montserratsemibold);
-//        final Typeface face = ResourcesCompat.getFont(this, R.font.montserrat);
-//        MaterialDialog dialog = new MaterialDialog.Builder(this)
-//                .title("PENGATURAN Pagi")
-//                .content("c : " +hour+"."+min+" "+date+" "+mth+" "+yer+
-//                        "\ncal : "+jam+"."+mnt+" "+tgl+" "+bln+" "+thn)
-//                .positiveText("OK")
-//                .icon(getResources().getDrawable(R.mipmap.ic_logo))
-//                .autoDismiss(true)
-//                .typeface(faceMed,face)
-//                .show();
-//
-//        View positiveBtn = dialog.getActionButton(DialogAction.POSITIVE);
-//        positiveBtn.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                Intent home = new Intent(Setting.this, MainActivity.class);
-//                startActivity(home);
-//            }
-//        });
-
-//        Toast.makeText(this, "JAM "+hour+" ."+mnt+" "+tgl+" "+bln+" "+thn, Toast.LENGTH_LONG).show();
     }
 
     public Calendar calendarSore(){
@@ -373,14 +280,14 @@ public class Setting extends AppCompatActivity implements AdapterView.OnItemSele
         calendar.set(Calendar.HOUR_OF_DAY, wsore);
         calendar.set(Calendar.MINUTE, 0);
 
-        int hour = calendar.get(Calendar.HOUR);
+        int hour = calendar.get(Calendar.HOUR_OF_DAY);
         int date = calendar.get(Calendar.DATE);
         int mth = calendar.get(Calendar.MONTH);
         int yer = calendar.get(Calendar.YEAR);
         int min = calendar.get(Calendar.MINUTE);
 
         Calendar cal = Calendar.getInstance();
-        int jam = cal.get(Calendar.HOUR);
+        int jam = cal.get(Calendar.HOUR_OF_DAY);
         int tgl = cal.get(Calendar.DATE);
         int bln = cal.get(Calendar.MONTH);
         int thn = cal.get(Calendar.YEAR);
@@ -400,22 +307,24 @@ public class Setting extends AppCompatActivity implements AdapterView.OnItemSele
         calendar.setTimeInMillis(System.currentTimeMillis());
         calendar.set(Calendar.HOUR_OF_DAY, wpagi);
         calendar.set(Calendar.MINUTE, 0);
+//        calendar.set(Calendar.HOUR_OF_DAY, calendar.get(Calendar.HOUR_OF_DAY));
+//        calendar.set(Calendar.MINUTE, calendar.get(Calendar.MINUTE) +1);
 
-        int hour = calendar.get(Calendar.HOUR);
+        int hour = calendar.get(Calendar.HOUR_OF_DAY);
         int date = calendar.get(Calendar.DATE);
         int mth = calendar.get(Calendar.MONTH);
         int yer = calendar.get(Calendar.YEAR);
         int min = calendar.get(Calendar.MINUTE);
 
         Calendar cal = Calendar.getInstance();
-        int jam = cal.get(Calendar.HOUR);
+        int jam = cal.get(Calendar.HOUR_OF_DAY);
         int tgl = cal.get(Calendar.DATE);
         int bln = cal.get(Calendar.MONTH);
         int thn = cal.get(Calendar.YEAR);
         int mnt = cal.get(Calendar.MINUTE);
 
         int tgl1 = tgl + 1;
-//
+
         if (hour < jam || hour == jam && date == tgl && mth == bln && yer == thn && min < mnt || min == mnt){
             calendar.set(Calendar.DATE, tgl1);
         }

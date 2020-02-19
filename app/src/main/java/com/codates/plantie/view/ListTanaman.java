@@ -81,7 +81,7 @@ public class ListTanaman extends AppCompatActivity {
         );
 
 
-        final ImageView search = findViewById(R.id.searchbar);
+//        final ImageView search = findViewById(R.id.searchbar);
 
         bar.getSettings().setAnimateMenu(false);
         bar.displayHomeAsUpEnabled(true);

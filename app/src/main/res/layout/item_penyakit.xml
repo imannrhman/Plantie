@@ -30,6 +30,7 @@
             android:orientation="vertical">
 
             <TextView
+                android:fontFamily="@font/montserratmedium"
                 android:id="@+id/txt_penyakit"
                 android:layout_width="wrap_content"
                 android:layout_height="40dp"

@@ -36,25 +36,30 @@
         android:layout_height="207dp"
         android:layout_alignParentBottom="true"
         android:layout_alignParentEnd="true"
-        android:background="@drawable/vector_daun_bottom"
+        android:background="@drawable/vector_daun_bottom" />
+    <TextView
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="20dp"
+        android:layout_below="@+id/bar"
+        android:textSize="20sp"
+        android:fontFamily="@font/montserratsemibold"
+        android:id="@+id/txt_pilih_tanaman"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/choose_tanaman"
         />
-
-<!--    ini punya recycle-->
-<!--    android:layout_below="@id/searchbar"-->
-<!--    android:layout_marginTop="20dp"-->
-
     <androidx.recyclerview.widget.RecyclerView
-        android:layout_below="@id/bar"
+        android:layout_below="@id/txt_pilih_tanaman"
         android:id="@+id/recycler_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:listitem="@layout/item_tanaman"
-        />
+        tools:listitem="@layout/item_tanaman" />
+
     <id.arieridwan.lib.PageLoader
         android:id="@+id/progress_bar"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_centerInParent="true"
-        app:setLoadingImage="@drawable/logo"
-        />
+        app:setLoadingImage="@drawable/logo" />
+
 </RelativeLayout>

@@ -64,7 +64,7 @@
                     <RelativeLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginHorizontal="20dp"
+                        android:layout_marginHorizontal="6dp"
                         android:layout_marginBottom="20dp">
 
                         <androidx.recyclerview.widget.RecyclerView
@@ -95,6 +95,7 @@
                 android:text="Belum punya alat / bahan ?"
                 android:textAlignment="textEnd"
                 android:textColor="#50B278"
+                android:layout_marginBottom="100dp"
                 android:textSize="16sp" />
         </RelativeLayout>
 

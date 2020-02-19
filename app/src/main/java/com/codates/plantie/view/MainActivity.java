@@ -114,7 +114,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
     }
 
     private void showListTanaman() {
-        db.collection("tanaman").get().addOnCompleteListener(
+        db.collection("tanaman").limit(5).get().addOnCompleteListener(
                 new OnCompleteListener<QuerySnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {

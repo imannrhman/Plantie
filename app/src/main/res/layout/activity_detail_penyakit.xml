@@ -65,8 +65,8 @@
                     android:layout_marginTop="16dp"
                     android:layout_marginBottom="16dp"
                     android:text="Judul Artikel Penyakit"
-                    android:textSize="18sp"
-                    android:textStyle="bold" />
+                    android:fontFamily="@font/montserratsemibold"
+                    android:textSize="18sp" />
 
             </RelativeLayout>
 
@@ -129,7 +129,7 @@
                     android:text="Jenis Tanaman yang Sering Terjangkit"
                     android:textColor="#000"
                     android:textSize="14sp"
-                    android:textStyle="bold"
+                    android:fontFamily="@font/montserratsemibold"
                     android:layout_marginLeft="16dp"
                     android:layout_marginTop="16dp"
                     android:layout_marginBottom="8dp"
@@ -148,16 +148,18 @@
             </LinearLayout>
 
             <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Deskripsi"
-            android:textColor="#000"
-            android:textSize="14sp"
-            android:textStyle="bold"
-            android:layout_marginLeft="16dp"
-            android:layout_marginRight="16dp"
-            android:layout_marginTop="16dp"
-            android:layout_marginBottom="16dp"/>
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Deskripsi"
+                android:textColor="#000"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="16dp"
+                android:fontFamily="@font/montserratsemibold"
+                />
 
             <TextView
                 android:id="@+id/txt_deskripsi"
@@ -166,6 +168,7 @@
                 android:text="Deskripsi"
                 android:textColor="#000"
                 android:textSize="14sp"
+                android:fontFamily="@font/montserrat"
                 android:layout_marginLeft="16dp"
                 android:layout_marginRight="16dp"/>
 
@@ -175,7 +178,7 @@
                 android:text="Solusi"
                 android:textColor="#000"
                 android:textSize="14sp"
-                android:textStyle="bold"
+                android:fontFamily="@font/montserratsemibold"
                 android:layout_margin="16dp"
                 android:layout_marginRight="16dp"/>
 
@@ -184,6 +187,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Solusi"
+                android:fontFamily="@font/montserrat"
                 android:textColor="#000"
                 android:textSize="14sp"
                 android:layout_marginLeft="16dp"
@@ -199,6 +203,7 @@
                 android:textAlignment="textEnd"
                 android:layout_marginHorizontal="16dp"
                 android:layout_marginTop="26dp"
+                android:fontFamily="@font/montserratmedium"
                 android:layout_marginBottom="10dp"/>
 
             <LinearLayout
@@ -217,7 +222,7 @@
                     android:layout_height="wrap_content"
                     android:text="Pilih Sosial Media"
                     android:textSize="13sp"
-                    android:textStyle="bold"
+                    android:fontFamily="@font/montserratsemibold"
                     android:textColor="#fff"
                     android:layout_marginBottom="10dp"/>
 
